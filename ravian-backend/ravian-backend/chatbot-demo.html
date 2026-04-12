@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UnderStand UPSC — AI Chatbot Widget Demo</title>
+
+  <!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  ClariAI Embeddable Chatbot Widget — Demo File                 ║
+  ║                                                                ║
+  ║  HOW TO EMBED ON ANY WEBSITE:                                  ║
+  ║  Just copy everything inside <script> and <style> tags and     ║
+  ║  paste before the closing </body> tag of any website.          ║
+  ║                                                                ║
+  ║  Or include this file via:                                     ║
+  ║  <script src="chatbot-demo.html"></script>                     ║
+  ╚══════════════════════════════════════════════════════════════════╝
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & base (for standalone demo page only) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e2e8f0;
+    }
+
+    /* ── Demo landing content ── */
+    .demo-landing {
+      text-align: center;
+      max-width: 600px;
+      padding: 40px;
+    }
+    .demo-landing h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f97316 0%, #fb923c 50%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .demo-landing p {
+      font-size: 1.05rem;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+    .demo-landing .arrow-hint {
+      margin-top: 32px;
+      font-size: 0.9rem;
+      color: #64748b;
+      animation: bounce 2s infinite;
+    }
+    .demo-landing .arrow-hint span {
+      font-size: 1.5rem;
+      display: block;
+      margin-top: 8px;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CHATBOT WIDGET STYLES — copy from here for embedding
+       ══════════════════════════════════════════════════════════════ */
+
+    /* Floating action button */
+    #clari-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      z-index: 2147483647;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow:
+        0 4px 14px rgba(249, 115, 22, 0.4),
+        0 0 40px rgba(249, 115, 22, 0.15);
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      animation: fab-pulse 3s ease-in-out infinite;
+    }
+    #clari-fab:hover {
+      transform: scale(1.1) rotate(8deg);
+      box-shadow:
+        0 6px 24px rgba(249, 115, 22, 0.5),
+        0 0 60px rgba(249, 115, 22, 0.25);
+    }
+    #clari-fab.open {
+      transform: scale(0.9) rotate(180deg);
+    }
+    #clari-fab svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.3s;
+    }
+    @keyframes fab-pulse {
+      0%, 100% { box-shadow: 0 4px 14px rgba(249,115,22,0.4), 0 0 40px rgba(249,115,22,0.15); }
+      50% { box-shadow: 0 4px 20px rgba(249,115,22,0.6), 0 0 60px rgba(249,115,22,0.25); }
+    }
+
+    /* Notification badge */
+    #clari-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 18px;
+      height: 18px;
+      background: #ef4444;
+      border-radius: 50%;
+      border: 2px solid #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      animation: badge-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes badge-pop {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+
+    /* Chat window */
+    #clari-chat {
+      position: fixed;
+      bottom: 100px;
+      right: 24px;
+      width: 400px;
+      max-width: calc(100vw - 32px);
+      height: 580px;
+      max-height: calc(100vh - 140px);
+      border-radius: 20px;
+      z-index: 2147483646;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+    #clari-chat.open {
+      display: flex;
+      animation: chat-slide-up 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes chat-slide-up {
+      from { opacity: 0; transform: translateY(24px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Header */
+    .clari-header {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #fff;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .clari-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .clari-header-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .clari-header-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .clari-header-info h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .clari-header-info .clari-status {
+      font-size: 12px;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+    }
+    .clari-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      display: inline-block;
+      animation: status-blink 2s ease-in-out infinite;
+    }
+    @keyframes status-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .clari-close-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .clari-close-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Messages area */
+    .clari-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .clari-messages::-webkit-scrollbar {
+      width: 5px;
+    }
+    .clari-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .clari-messages::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    /* Message bubbles */
+    .clari-msg {
+      display: flex;
+      gap: 8px;
+      max-width: 88%;
+      animation: msg-appear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes msg-appear {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .clari-msg.bot {
+      align-self: flex-start;
+    }
+    .clari-msg.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+    .clari-msg-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .clari-msg.bot .clari-msg-avatar {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+    }
+    .clari-msg.user .clari-msg-avatar {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+    }
+    .clari-msg-bubble {
+      padding: 11px 15px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.55;
+      word-break: break-word;
+      position: relative;
+    }
+    .clari-msg.bot .clari-msg-bubble {
+      background: #ffffff;
+      color: #1e293b;
+      border: 1px solid #e2e8f0;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .clari-msg.user .clari-msg-bubble {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+    }
+    .clari-msg-time {
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 4px;
+      text-align: right;
+    }
+    .clari-msg.bot .clari-msg-time {
+      text-align: left;
+    }
+
+    /* Typing indicator */
+    .clari-typing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 16px;
+    }
+    .clari-typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #94a3b8;
+      animation: typing-bounce 1.4s ease-in-out infinite;
+    }
+    .clari-typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .clari-typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .clari-typing-dot:nth-child(3) { animation-delay: 0s; }
+    @keyframes typing-bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Quick replies / suggestions */
+    .clari-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 16px 12px;
+    }
+    .clari-suggestion-btn {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: 12.5px;
+      color: #f97316;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      font-weight: 500;
+    }
+    .clari-suggestion-btn:hover {
+      background: #fff7ed;
+      border-color: #f97316;
+      transform: translateY(-1px);
+    }
+
+    /* Input area */
+    .clari-input-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: #fff;
+      border-top: 1px solid #f1f5f9;
+    }
+    .clari-input {
+      flex: 1;
+      padding: 11px 16px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+    .clari-input:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+      background: #fff;
+    }
+    .clari-input::placeholder {
+      color: #94a3b8;
+    }
+    .clari-send-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .clari-send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+    }
+    .clari-send-btn:active {
+      transform: scale(0.95);
+    }
+    .clari-send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .clari-send-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Powered by footer */
+    .clari-powered {
+      text-align: center;
+      padding: 6px;
+      background: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+      font-size: 10.5px;
+      color: #94a3b8;
+    }
+    .clari-powered a {
+      color: #f97316;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .clari-powered a:hover {
+      text-decoration: underline;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 480px) {
+      #clari-chat {
+        width: calc(100vw - 16px);
+        height: calc(100vh - 100px);
+        bottom: 80px;
+        right: 8px;
+        border-radius: 16px;
+      }
+      #clari-fab {
+        bottom: 16px;
+        right: 16px;
+        width: 56px;
+        height: 56px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Demo landing page content — remove this when embedding on a real website -->
+  <div class="demo-landing">
+    <h1>🎓 UnderStand UPSC × ClariAI</h1>
+    <p>
+      This is a live demo of the AI-powered chatbot widget that can be embedded on
+      <strong>understandupsc.com</strong>. The chatbot answers queries about UPSC courses,
+      admissions, study plans, and more — powered by ClariAI.
+    </p>
+    <div class="arrow-hint">
+      Click the chat button to try it out
+      <span>↘</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       CHATBOT WIDGET — Everything below can be embedded on any site
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- FAB (Floating Action Button) -->
+  <button id="clari-fab" aria-label="Open chat">
+    <span id="clari-badge">1</span>
+    <svg viewBox="0 0 24 24">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  </button>
+
+  <!-- Chat Window -->
+  <div id="clari-chat">
+    <div class="clari-header">
+      <div class="clari-header-avatar">🎓</div>
+      <div class="clari-header-info">
+        <h3 id="clari-title">UnderStand UPSC Assistant</h3>
+        <div class="clari-status">
+          <span class="clari-status-dot"></span>
+          <span>Online • Powered by ClariAI</span>
+        </div>
+      </div>
+      <button class="clari-close-btn" id="clari-close" aria-label="Close chat">✕</button>
+    </div>
+
+    <div class="clari-messages" id="clari-messages"></div>
+
+    <div class="clari-suggestions" id="clari-suggestions"></div>
+
+    <div class="clari-input-area">
+      <input
+        type="text"
+        class="clari-input"
+        id="clari-input"
+        placeholder="Ask about UPSC courses, admissions..."
+        autocomplete="off"
+      />
+      <button class="clari-send-btn" id="clari-send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+
+    <div class="clari-powered">
+      Powered by <a href="#">ClariAI</a> — Intelligent Admissions
+    </div>
+  </div>
+
+  <script>
+    // ╔════════════════════════════════════════════════════════════════╗
+    // ║  DEMO CONFIGURATION — Edit these values for each company     ║
+    // ╚════════════════════════════════════════════════════════════════╝
+    const DEMO_CONFIG = {
+      // Company details
+      companyName: "UnderStand UPSC",
+      headerTitle: "UnderStand UPSC Assistant",
+      headerEmoji: "🎓",
+
+      // Backend connection
+      apiBaseUrl: "http://127.0.0.1:8001",
+      tenantId: "0f1162ba-3b8a-46ab-b334-dbb251ccde3b",
+
+      // Chatbot personality
+      greeting: "Namaste! 🙏 Welcome to UnderStand UPSC.\n\nI'm your AI assistant. I can help you with:\n\n📚 Course information (Prelims, Mains, Foundation)\n📝 Admission & enrollment queries\n📅 Batch schedules & pricing\n🎯 Study strategy guidance\n\nHow can I help you today?",
+
+      // Suggested quick replies (shown after greeting)
+      suggestions: [
+        "What courses do you offer?",
+        "Tell me about Prelims batch",
+        "How to start UPSC preparation?",
+        "Fee structure & pricing"
+      ],
+    };
+
+    // ── State ─────────────────────────────────────────────────────
+    let isOpen = false;
+    let isFirstOpen = true;
+    let isSending = false;
+    let visitorId = null;
+
+    // Generate or retrieve visitor ID
+    try {
+      const key = '_clariai_visitor_id';
+      visitorId = localStorage.getItem(key);
+      if (!visitorId) {
+        visitorId = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        localStorage.setItem(key, visitorId);
+      }
+    } catch { visitorId = `${Date.now()}-${Math.random().toString(16).slice(2)}`; }
+
+    // ── DOM references ────────────────────────────────────────────
+    const fab       = document.getElementById('clari-fab');
+    const badge     = document.getElementById('clari-badge');
+    const chat      = document.getElementById('clari-chat');
+    const closeBtn  = document.getElementById('clari-close');
+    const messages  = document.getElementById('clari-messages');
+    const input     = document.getElementById('clari-input');
+    const sendBtn   = document.getElementById('clari-send');
+    const sugBox    = document.getElementById('clari-suggestions');
+
+    // ── Toggle chat ───────────────────────────────────────────────
+    fab.addEventListener('click', () => {
+      isOpen = !isOpen;
+      if (isOpen) {
+        chat.classList.add('open');
+        fab.classList.add('open');
+        badge.style.display = 'none';
+        input.focus();
+        if (isFirstOpen) {
+          isFirstOpen = false;
+          addMessage('bot', DEMO_CONFIG.greeting);
+          showSuggestions(DEMO_CONFIG.suggestions);
+        }
+      } else {
+        chat.classList.remove('open');
+        fab.classList.remove('open');
+      }
+    });
+
+    closeBtn.addEventListener('click', () => {
+      isOpen = false;
+      chat.classList.remove('open');
+      fab.classList.remove('open');
+    });
+
+    // ── Send message ──────────────────────────────────────────────
+    async function sendMessage(text) {
+      if (!text || !text.trim() || isSending) return;
+      text = text.trim();
+      isSending = true;
+      sendBtn.disabled = true;
+      input.value = '';
+      hideSuggestions();
+      addMessage('user', text);
+      showTyping();
+
+      try {
+        const res = await fetch(`${DEMO_CONFIG.apiBaseUrl}/api/v1/chatbot/message`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: text,
+            tenant_id: DEMO_CONFIG.tenantId,
+            visitor_id: visitorId,
+          }),
+        });
+
+        hideTyping();
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const data = await res.json();
+
+        if (data.lead_captured) {
+          addMessage('bot', data.response || 'Thank you! Our team will contact you soon.');
+        } else {
+          addMessage('bot', data.response || data.message || "I'm sorry, I didn't understand that. Could you please rephrase?");
+        }
+      } catch (err) {
+        console.error('[ClariAI] Error:', err);
+        hideTyping();
+        addMessage('bot', "I apologize for the inconvenience. Our team will get back to you shortly. Meanwhile, you can reach us at info@understandupsc.com or call +91 8377072252.");
+      }
+
+      isSending = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+
+    sendBtn.addEventListener('click', () => sendMessage(input.value));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage(input.value);
+      }
+    });
+
+    // ── Add a message bubble ──────────────────────────────────────
+    function addMessage(role, text) {
+      const now = new Date();
+      const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `clari-msg ${role}`;
+
+      const avatarDiv = document.createElement('div');
+      avatarDiv.className = 'clari-msg-avatar';
+      avatarDiv.textContent = role === 'bot' ? DEMO_CONFIG.headerEmoji : '👤';
+
+      const contentDiv = document.createElement('div');
+
+      // Format text: convert newlines to <br>
+      const formatted = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\n/g, '<br>');
+
+      contentDiv.innerHTML = `
+        <div class="clari-msg-bubble">${formatted}</div>
+        <div class="clari-msg-time">${time}</div>
+      `;
+
+      msgDiv.appendChild(avatarDiv);
+      msgDiv.appendChild(contentDiv);
+      messages.appendChild(msgDiv);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // ── Typing indicator ──────────────────────────────────────────
+    function showTyping() {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'clari-msg bot';
+      typingDiv.id = 'clari-typing-indicator';
+
+      typingDiv.innerHTML = `
+        <div class="clari-msg-avatar">${DEMO_CONFIG.headerEmoji}</div>
+        <div>
+          <div class="clari-msg-bubble clari-typing">
+            <div class="clari-typing-dot"></div>
+            <div class="clari-typing-dot"></div>
+            <div class="clari-typing-dot"></div>
+          </div>
+        </div>
+      `;
+
+      messages.appendChild(typingDiv);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function hideTyping() {
+      const t = document.getElementById('clari-typing-indicator');
+      if (t) t.remove();
+    }
+
+    // ── Suggestions ───────────────────────────────────────────────
+    function showSuggestions(items) {
+      sugBox.innerHTML = '';
+      items.forEach(text => {
+        const btn = document.createElement('button');
+        btn.className = 'clari-suggestion-btn';
+        btn.textContent = text;
+        btn.addEventListener('click', () => sendMessage(text));
+        sugBox.appendChild(btn);
+      });
+    }
+
+    function hideSuggestions() {
+      sugBox.innerHTML = '';
+    }
+
+    // ── Log initialization ────────────────────────────────────────
+    console.log(`[ClariAI] Widget initialized for ${DEMO_CONFIG.companyName}`);
+    console.log(`[ClariAI] API: ${DEMO_CONFIG.apiBaseUrl}`);
+    console.log(`[ClariAI] Tenant: ${DEMO_CONFIG.tenantId}`);
+  </script>
+
+</body>
+</html>

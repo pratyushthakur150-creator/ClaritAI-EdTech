@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClaritAI Orbitra Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#A855F7", // Purple/Magenta accent
+                        accent: "#D946EF", // Pink/Magenta for highlights
+                        "background-dark": "#0B0B12", // Base bg
+                        "sidebar-dark": "#0F0E17", // Sidebar bg
+                        "card-dark": "#13121E", // Card bg
+                        "border-dark": "#1E1D2E", // Sidebar Border color
+                        "card-border": "#2A2840", // Card Border color
+                        "text-main": "#F1F0FF",
+                        "text-muted": "#9CA3AF",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 40px rgba(168, 85, 247, 0.15)',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3)',
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B0B12;
+            color: #F1F0FF;
+        }.ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background-color: #0B0B12;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        .ambient-glow-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(11, 11, 18, 0) 70%);
+            filter: blur(60px);
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        .ambient-glow-2 {
+            position: absolute;
+            top: 20%;
+            left: 30%;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(217, 70, 239, 0.08) 0%, rgba(11, 11, 18, 0) 70%);
+            filter: blur(80px);
+            transform: translateZ(0);
+            will-change: transform;
+        }.noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .glass-sidebar {
+            background: rgba(15, 14, 23, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-right: 1px solid #1E1D2E;
+        }
+        .nav-item-active {
+            background: linear-gradient(90deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.02) 100%);
+            border-left: 3px solid #A855F7;
+            box-shadow: inset 0 0 15px rgba(168, 85, 247, 0.05);
+        }
+        .card-premium {
+            background-color: #13121E;
+            border: 1px solid #2A2840;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .card-premium:hover {
+            border-color: #3f3c57;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A2840; 
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4B5563; 
+        }
+        .stripe-pattern {
+            background-image: repeating-linear-gradient(
+                45deg,
+                #D946EF,
+                #D946EF 2px,
+                #A855F7 2px,
+                #A855F7 4px
+            );
+        }.content-scroll-container {
+            perspective: 1px;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-text-main h-screen overflow-hidden flex selection:bg-primary selection:text-white">
+<div class="ambient-bg">
+<div class="ambient-glow-1"></div>
+<div class="ambient-glow-2"></div>
+</div>
+<div class="noise-overlay"></div>
+<aside class="w-64 glass-sidebar flex flex-col h-full shrink-0 z-30 relative">
+<div class="h-16 flex items-center px-6 border-b border-white/5">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold shadow-lg shadow-purple-500/20">
+                    C
+                </div>
+<div>
+<h1 class="font-bold text-lg tracking-tight text-white">ClaritAI</h1>
+<p class="text-[10px] uppercase tracking-widest text-text-muted/70">Premium Plan</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-6 space-y-1">
+<div class="px-4 mb-2">
+<p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-2 mb-2">Main</p>
+</div>
+<a class="nav-item-active flex items-center gap-3 px-6 py-3 text-primary transition-all duration-200 group" href="#">
+<span class="material-icons-outlined text-[20px] group-hover:text-accent transition-colors">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<div class="px-4 mt-6 mb-2">
+<p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-2 mb-2">Account</p>
+</div>
+<a class="flex items-center gap-3 px-6 py-3 text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-icons-outlined text-[20px]">school</span>
+<span class="text-sm font-medium">My Courses</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-icons-outlined text-[20px]">schedule</span>
+<span class="text-sm font-medium">Schedule</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-icons-outlined text-[20px]">assignment</span>
+<span class="text-sm font-medium">Assignments</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-icons-outlined text-[20px]">quiz</span>
+<span class="text-sm font-medium">Exams</span>
+</a>
+<div class="px-4 mt-6 mb-2">
+<p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-2 mb-2">Learning</p>
+</div>
+<a class="flex items-center gap-3 px-6 py-3 text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-icons-outlined text-[20px]">folder_open</span>
+<span class="text-sm font-medium">Materials</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-icons-outlined text-[20px]">forum</span>
+<span class="text-sm font-medium">Discussion</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/5 bg-black/20 backdrop-blur-sm">
+<a class="flex items-center gap-3 px-2 py-2 text-gray-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden relative z-10">
+<header class="h-16 px-8 flex items-center justify-between z-20 border-b border-white/5 bg-[#0F0E17]/60 backdrop-blur-md sticky top-0">
+<div class="flex items-center gap-2 text-sm text-gray-500">
+<span class="material-icons-outlined text-[16px]">home</span>
+<span>/</span>
+<span>Overview</span>
+<span>/</span>
+<span class="text-white font-medium">Dashboard</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative w-64 hidden md:block group">
+<span class="absolute left-3 top-2.5 text-gray-500 material-icons-outlined text-[18px] group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-[#13121E] border border-white/10 rounded-lg py-2 pl-10 pr-4 text-sm text-gray-300 placeholder-gray-600 focus:ring-1 focus:ring-primary focus:border-primary transition-all" placeholder="Search data scheduled..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-gray-400">
+<button class="hover:text-white transition-colors relative w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5">
+<span class="material-icons-outlined">mail</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-accent rounded-full border-2 border-[#0F0E17]"></span>
+</button>
+<button class="hover:text-white transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5">
+<span class="material-icons-outlined">grid_view</span>
+</button>
+<button class="w-9 h-9 rounded-full bg-gray-600 overflow-hidden border border-white/10 ring-2 ring-transparent hover:ring-primary/50 transition-all">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB37wdQdwCULZdAGRm1VwCsLCziaNiik1ww8mVpOGkrX1E8EnLEsqLVIMY8lDShFpf1-kIwMrazdVQpLTtivaaYYmcQftB-s2gA573MeDE2K9vIkWpziDRs2khZb5Vc1OE69Uv3aYbt7qCM9d756SrfaEzNGx68SeNBIZ7DXEkOCQGsHdkPOVCARLyIx1Zeih3LkI0nEwiF1Abk2Ulx8yHZnDgzAf4tASwrDemR461R87O9_h-hFTjbzpUS2ubwW1kz21X8eDZ17wU"/>
+</button>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-8 z-10 scroll-smooth content-scroll-container">
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-white mb-1 tracking-tight">Welcome back, Jason!</h2>
+<p class="text-sm text-gray-500">Last update: January 22, 2024 : 11:56 AM</p>
+</div>
+<div class="grid grid-cols-12 gap-6 mb-6">
+<div class="col-span-12 lg:col-span-4 flex flex-col">
+<div class="card-premium rounded-2xl p-6 h-full relative overflow-hidden group">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700"></div>
+<div class="flex items-center justify-between mb-8 relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-purple-900/40">
+<span class="material-icons-outlined text-white text-lg">lightbulb</span>
+</div>
+<h3 class="font-semibold text-white text-lg">Insight</h3>
+</div>
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-icons-outlined">more_horiz</span></button>
+</div>
+<div class="flex flex-col h-full justify-between relative z-10">
+<div>
+<div class="text-6xl font-bold text-white mb-6 tracking-tight">92<span class="text-3xl text-gray-500 font-normal ml-1">%</span></div>
+<div class="flex gap-2 mb-8">
+<span class="px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium border border-green-500/20 shadow-[0_0_10px_rgba(74,222,128,0.1)]">On Track</span>
+<span class="px-3 py-1 rounded-full bg-gray-700/30 text-gray-300 text-xs font-medium border border-gray-600/30">Good</span>
+</div>
+<p class="text-sm text-gray-400 leading-relaxed mb-8">
+                                    Learning engagement is <span class="text-white font-medium">trending positively</span> this week, showing consistent study momentum.
+                                </p>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-1.5 w-full">
+<div class="h-2 flex-1 bg-gray-800 rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-gradient-to-r from-primary to-accent w-full shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+</div>
+<div class="h-2 flex-1 bg-gray-800 rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-gradient-to-r from-primary to-accent w-full shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+</div>
+<div class="h-2 flex-1 bg-gray-800 rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-gradient-to-r from-primary to-accent w-full shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+</div>
+<div class="h-2 flex-1 bg-gray-800 rounded-full border border-white/5"></div>
+<div class="h-2 flex-1 bg-gray-800 rounded-full border border-white/5"></div>
+</div>
+<div class="flex justify-between text-xs text-gray-600 pt-1">
+<span class="material-icons-outlined text-sm cursor-pointer hover:text-primary transition-colors">chevron_left</span>
+<span class="material-icons-outlined text-sm cursor-pointer hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="card-premium rounded-2xl p-6 relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<h4 class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Study Consistency</h4>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<div class="text-3xl font-bold text-white">73.40<span class="text-xl text-gray-500 font-normal">%</span></div>
+<div class="flex items-center gap-1 mt-2 text-xs text-green-400 font-medium bg-green-900/10 px-2 py-1 rounded w-fit border border-green-500/10">
+<span class="material-icons-outlined text-[14px]">arrow_upward</span>
+<span>4.2% this month</span>
+</div>
+</div>
+<div class="h-12 w-28 relative">
+<div class="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-primary/10 to-transparent opacity-50"></div>
+<svg class="w-full h-full overflow-visible drop-shadow-[0_0_6px_rgba(168,85,247,0.4)]" viewBox="0 0 100 40">
+<path d="M0 35 Q 10 30, 20 32 T 40 20 T 60 10 T 80 15 T 100 5" fill="none" stroke="#A855F7" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M0 35 L 100 35" stroke="rgba(168, 85, 247, 0.2)" stroke-dasharray="2 2" stroke-width="1"></path>
+</svg>
+</div>
+</div>
+</div>
+<div class="card-premium rounded-2xl p-6 relative">
+<div class="flex justify-between items-start mb-4">
+<h4 class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Subject Activity</h4>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<div class="text-3xl font-bold text-white">88.24<span class="text-xl text-gray-500 font-normal">%</span></div>
+<div class="flex items-center gap-1 mt-2 text-xs text-green-400 font-medium bg-green-900/10 px-2 py-1 rounded w-fit border border-green-500/10">
+<span class="material-icons-outlined text-[14px]">arrow_upward</span>
+<span>12% this month</span>
+</div>
+</div>
+<div class="h-12 w-32 flex items-end justify-end gap-1.5">
+<div class="w-1.5 h-3 bg-gray-700/50 rounded-sm"></div>
+<div class="w-1.5 h-5 bg-gray-700/50 rounded-sm"></div>
+<div class="w-1.5 h-4 bg-gray-700/50 rounded-sm"></div>
+<div class="w-1.5 h-7 bg-gray-600/70 rounded-sm"></div>
+<div class="w-1.5 h-6 bg-gray-600/70 rounded-sm"></div>
+<div class="w-1.5 h-8 bg-gray-500 rounded-sm"></div>
+<div class="w-1.5 h-5 bg-gray-500 rounded-sm"></div>
+<div class="w-1.5 h-9 bg-gray-400 rounded-sm shadow-[0_0_8px_rgba(255,255,255,0.2)]"></div>
+</div>
+</div>
+</div>
+<div class="card-premium rounded-2xl p-6 relative">
+<div class="flex justify-between items-start mb-4">
+<h4 class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Engagement Level</h4>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<div class="text-3xl font-bold text-white">81.35<span class="text-xl text-gray-500 font-normal">%</span></div>
+<div class="flex items-center gap-1 mt-2 text-xs text-red-400 font-medium bg-red-900/10 px-2 py-1 rounded w-fit border border-red-500/10">
+<span class="material-icons-outlined text-[14px]">arrow_downward</span>
+<span>0.1% this month</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 w-32">
+<div class="flex gap-1 h-2 justify-end">
+<div class="w-2 bg-gray-800 rounded-full"></div>
+<div class="w-2 bg-gray-800 rounded-full"></div>
+<div class="w-5 bg-accent rounded-full shadow-[0_0_10px_rgba(217,70,239,0.6)]"></div>
+<div class="w-10 bg-gray-800 rounded-full"></div>
+</div>
+<div class="flex gap-1 h-2 justify-end">
+<div class="w-8 bg-gray-800 rounded-full"></div>
+<div class="w-3 bg-accent rounded-full shadow-[0_0_10px_rgba(217,70,239,0.6)]"></div>
+<div class="w-8 bg-gray-800 rounded-full"></div>
+</div>
+<div class="flex gap-1 h-2 justify-end">
+<div class="w-5 bg-gray-800 rounded-full"></div>
+<div class="w-5 bg-gray-800 rounded-full"></div>
+<div class="w-5 bg-accent rounded-full shadow-[0_0_10px_rgba(217,70,239,0.6)]"></div>
+<div class="w-3 bg-gray-800 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 flex flex-col">
+<div class="card-premium rounded-2xl p-6 h-full relative">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-purple-900/40">
+<span class="material-icons-outlined text-white text-lg">notifications_active</span>
+</div>
+<h3 class="font-semibold text-white text-sm leading-tight">Class<br/>Activity Feed</h3>
+</div>
+<div class="flex bg-black/40 rounded-lg p-1 border border-white/5">
+<button class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-primary text-white shadow-md shadow-primary/30">All</button>
+<button class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider text-gray-500 hover:text-white transition-colors">Submissions</button>
+</div>
+</div>
+<div class="space-y-7 pr-2">
+<div class="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-4">Today</div>
+<div class="flex gap-4 group cursor-pointer">
+<div class="relative">
+<img alt="Avatar" class="w-10 h-10 rounded-full border border-gray-600 ring-2 ring-transparent group-hover:ring-primary/50 transition-all object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJjSATSqcG-Jtwwq0T-pjPhoIcPRka9zPZDtK2zDFWpcayyZVCnJ_baH4bMyaullZJP4XFzC65sk4u5pKVYwQ_QeI-InKqgI-HVJJCpVnitlSfYFGwRJAh6LqLtW7y6spFD78gpgQMfdmMRNd_2jH3MJdteC6-EVyh8_I7PJvkcXwb9w0pWhk1FWi9pkU76_t5jDD2Ufwc9cFjUY0sOJKMP2CbDtBB1EyUUI5JInznGyyyJOGbVPxYsBf1slJM1muDwGO0oAgzDJs"/>
+<span class="absolute -bottom-1 -right-1 bg-[#13121E] rounded-full p-0.5">
+<span class="block w-2.5 h-2.5 bg-green-500 rounded-full border border-[#13121E]"></span>
+</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-sm font-semibold text-white group-hover:text-primary transition-colors">Rizky Maulana</h4>
+<span class="text-[10px] text-gray-500 font-medium">5m ago</span>
+</div>
+<p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">Submitted <span class="text-white font-medium bg-white/5 px-1 rounded">Assignment 3</span> in Programming Fundamentals.</p>
+</div>
+</div>
+<div class="flex gap-4 group cursor-pointer">
+<div class="relative">
+<img alt="Avatar" class="w-10 h-10 rounded-full border border-gray-600 ring-2 ring-transparent group-hover:ring-primary/50 transition-all object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqOFTw0zfs4eCoE2whfeu-GwVXHEU9GGLvppMg-h4dMP13fNa7z3O0MFDnnEPjpb59KDR6h2vi5nue9mZtu0KiuZaleQPN4mOR6QHJqnudrbUo17Cf_dHwNOBRdVlORNJSqj0KAjc02cgYHiukf6_iCm0UsFkzHI-nSD85-JPoRJimZR8VySGR-F8PTi6P3sz2AGDa2IgGDf36K97kPbl1bEAmNknGwy0dvfm_QAorpgcXbgVNjwte2HbfVRP4u4kIRJJ3EZMp7Uw"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-sm font-semibold text-white group-hover:text-primary transition-colors">Daniel Cho</h4>
+<span class="text-[10px] text-gray-500 font-medium">42m ago</span>
+</div>
+<p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">Updated quiz deadline for <span class="text-white font-medium bg-white/5 px-1 rounded">Statistics</span>.</p>
+</div>
+</div>
+<div class="flex gap-4 group cursor-pointer">
+<div class="relative">
+<img alt="Avatar" class="w-10 h-10 rounded-full border border-gray-600 ring-2 ring-transparent group-hover:ring-primary/50 transition-all object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv_6E3EzrVi4K6ueNI6XcANJrFtfNaQyoUQwwZehTf-N-25jccgGJgKOEa3LJ5ZvGQWprhY88qm8RcskmHnDfnykhW8r5FMfANS8Bv_T7Sd_YBzc4S-PgLV5OUT__OvKAoCLUfQWyLGmRYl8jkXKK4fFFaXxjA8QxP8qTFDyaEybTCqpZWdt1qKmyVYR_6ntHpXcg2tZEKqfJ1TScADusyjlO81h0AZ_ophJQP0hDcd5mW-Zj8Z_Mxlb7P1HIWsR5jX7W68EpIeC4"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-sm font-semibold text-white group-hover:text-primary transition-colors">Nadia Putri</h4>
+<span class="text-[10px] text-gray-500 font-medium">2h ago</span>
+</div>
+<p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">Commented on discussion in <span class="text-white font-medium bg-white/5 px-1 rounded">Data Structures</span>.</p>
+</div>
+</div>
+<div class="text-[10px] uppercase tracking-wider text-gray-500 font-bold pt-4 border-t border-dashed border-gray-800">Yesterday</div>
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-10 h-10 rounded-full border border-gray-600 bg-gray-800/50 flex items-center justify-center ring-2 ring-transparent group-hover:ring-primary/50 transition-all">
+<span class="material-icons-outlined text-sm text-gray-400">lightbulb</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-sm font-semibold text-white group-hover:text-primary transition-colors">Reminder</h4>
+<span class="text-[10px] text-gray-500 font-medium">2:30 PM</span>
+</div>
+<p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">Lab session for <span class="text-white font-medium">Algorithms</span> starts in <span class="text-primary font-medium">30 minutes</span>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-6 pb-6">
+<div class="col-span-12 lg:col-span-5">
+<div class="card-premium rounded-2xl p-6 h-full relative overflow-hidden">
+<div class="flex justify-between items-center mb-6 relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-purple-900/30">
+<span class="material-icons-outlined text-white text-lg">show_chart</span>
+</div>
+<h3 class="font-semibold text-white">Learning Progress</h3>
+</div>
+<div class="flex bg-black/40 rounded-lg p-1 text-[10px] border border-white/5">
+<button class="px-2.5 py-1 text-gray-400 hover:text-white transition-colors">Week</button>
+<button class="px-2.5 py-1 text-gray-400 hover:text-white transition-colors">Month</button>
+<button class="px-2.5 py-1 bg-gray-700 text-white rounded shadow-sm">Max</button>
+</div>
+</div>
+<div class="h-48 w-full relative z-10">
+<svg class="w-full h-full drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]" preserveAspectRatio="none" viewBox="0 0 300 150">
+<defs>
+<linearGradient id="gradientArea" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#A855F7" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#A855F7" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M0 130 C 30 120, 50 125, 80 110 S 120 100, 150 90 S 200 85, 240 60 S 280 40, 300 30 V 150 H 0 Z" fill="url(#gradientArea)"></path>
+<path d="M0 130 C 30 120, 50 125, 80 110 S 120 100, 150 90 S 200 85, 240 60 S 280 40, 300 30" fill="none" stroke="#D946EF" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-medium text-gray-600 px-1 border-t border-white/5 pt-3">
+<span>2021</span>
+<span>2022</span>
+<span>2023</span>
+<span>2024</span>
+<span>2025</span>
+<span>2026</span>
+</div>
+<div class="grid grid-cols-3 gap-4 mt-6 pt-2 border-t border-white/5">
+<div class="text-center group cursor-pointer">
+<div class="text-[10px] uppercase tracking-wider text-gray-500 mb-1 group-hover:text-primary transition-colors">Activities</div>
+<div class="text-xl font-bold text-white">842</div>
+</div>
+<div class="text-center border-l border-r border-white/5 group cursor-pointer">
+<div class="text-[10px] uppercase tracking-wider text-gray-500 mb-1 group-hover:text-primary transition-colors">Modules</div>
+<div class="text-xl font-bold text-white">126</div>
+</div>
+<div class="text-center group cursor-pointer">
+<div class="text-[10px] uppercase tracking-wider text-gray-500 mb-1 group-hover:text-primary transition-colors">Quizzes</div>
+<div class="text-xl font-bold text-white">214</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-7">
+<div class="card-premium rounded-2xl p-6 h-full relative overflow-hidden">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-purple-900/30">
+<span class="material-icons-outlined text-white text-lg">bar_chart</span>
+</div>
+<h3 class="font-semibold text-white">Subject Traffic</h3>
+</div>
+</div>
+<div class="flex items-end gap-6 mb-6">
+<div class="flex gap-6 border-b border-white/10 w-full pb-0">
+<button class="text-sm text-white font-medium border-b-2 border-primary pb-3 -mb-px">Overview</button>
+<button class="text-sm text-gray-500 hover:text-gray-300 pb-3 transition-colors">Distributed</button>
+<button class="text-sm text-gray-500 hover:text-gray-300 pb-3 transition-colors">Classes</button>
+</div>
+</div>
+<div class="flex flex-col lg:flex-row gap-8 h-[240px]">
+<div class="w-full lg:w-1/3 flex flex-col justify-center">
+<div class="text-5xl font-bold text-white mb-3 tracking-tight">2,879</div>
+<div class="flex items-center gap-1.5 text-xs text-green-400 mb-8 font-medium">
+<span class="material-icons-outlined text-[14px] bg-green-500/10 rounded-full p-0.5">arrow_upward</span>
+<span>+14.6% vs last month</span>
+</div>
+<p class="text-xs text-gray-400 leading-relaxed mb-4">
+                                    Most student activity is concentrated in three core subjects: <span class="text-white">Algo, Watch, and Phys.</span>
+</p>
+<div class="mt-auto flex items-center gap-4 text-[10px] text-gray-500 uppercase tracking-wide">
+<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_rgba(217,70,239,0.5)]"></span> Completed</div>
+<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-gray-600"></span> Scheduled</div>
+</div>
+</div>
+<div class="w-full lg:w-2/3 h-full flex items-end justify-between px-2 gap-3 pb-2">
+<div class="w-full flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-full bg-gray-800/50 rounded-t-md relative h-24 group-hover:bg-gray-700/50 transition-colors duration-300 border-t border-x border-white/5">
+<div class="absolute top-0 w-full h-1/2 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMjgyNjMzIi8+CjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxIiBmaWxsPSIjM2EzYTQ3Ii8+Cjwvc3ZnPg==')] opacity-20 rounded-t-md bg-cover"></div>
+</div>
+<span class="text-[10px] font-bold text-gray-600 uppercase tracking-wider group-hover:text-gray-400 transition-colors">Calc</span>
+</div>
+<div class="w-full flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-full bg-gray-800/50 rounded-t-md relative h-32 group-hover:bg-gray-700/50 transition-colors duration-300 border-t border-x border-white/5">
+<div class="absolute top-0 w-full h-1/3 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMjgyNjMzIi8+CjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxIiBmaWxsPSIjM2EzYTQ3Ii8+Cjwvc3ZnPg==')] opacity-20 rounded-t-md bg-cover"></div>
+</div>
+<span class="text-[10px] font-bold text-gray-600 uppercase tracking-wider group-hover:text-gray-400 transition-colors">Watch</span>
+</div>
+<div class="w-full flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-full bg-gray-800/50 rounded-t-md relative h-40 group-hover:bg-gray-700/50 transition-colors duration-300 border-t border-x border-white/5">
+<div class="absolute top-0 w-full h-1/4 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMjgyNjMzIi8+CjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxIiBmaWxsPSIjM2EzYTQ3Ii8+Cjwvc3ZnPg==')] opacity-20 rounded-t-md bg-cover"></div>
+</div>
+<span class="text-[10px] font-bold text-gray-600 uppercase tracking-wider group-hover:text-gray-400 transition-colors">Phys</span>
+</div>
+<div class="w-full flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-full bg-gray-800/50 rounded-t-md relative h-28 group-hover:bg-gray-700/50 transition-colors duration-300 border-t border-x border-white/5">
+<div class="absolute top-0 w-full h-1/3 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMjgyNjMzIi8+CjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxIiBmaWxsPSIjM2EzYTQ3Ii8+Cjwvc3ZnPg==')] opacity-20 rounded-t-md bg-cover"></div>
+</div>
+<span class="text-[10px] font-bold text-gray-600 uppercase tracking-wider group-hover:text-gray-400 transition-colors">Stat</span>
+</div>
+<div class="w-full flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-full bg-gray-800/50 rounded-t-md relative h-24 group-hover:bg-gray-700/50 transition-colors duration-300 border-t border-x border-white/5">
+<div class="absolute top-0 w-full h-1/2 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMjgyNjMzIi8+CjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxIiBmaWxsPSIjM2EzYTQ3Ii8+Cjwvc3ZnPg==')] opacity-20 rounded-t-md bg-cover"></div>
+</div>
+<span class="text-[10px] font-bold text-gray-600 uppercase tracking-wider group-hover:text-gray-400 transition-colors">Struct</span>
+</div>
+<div class="w-full flex flex-col items-center gap-3 group cursor-pointer relative">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] py-1.5 px-3 rounded border border-white/10 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 z-20 shadow-lg">
+                                        Algo: <span class="text-accent font-bold">Top Subject</span>
+</div>
+<div class="w-full stripe-pattern rounded-t-md relative h-56 shadow-[0_0_25px_rgba(217,70,239,0.3)] border-t border-x border-white/20 hover:brightness-110 transition-all">
+<div class="absolute top-0 w-full h-[15%] bg-white/30 rounded-t-md"></div>
+</div>
+<span class="text-[10px] font-bold text-white uppercase tracking-wider text-accent drop-shadow-[0_0_8px_rgba(217,70,239,0.8)]">Algo</span>
+</div>
+<div class="w-full flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-full bg-gray-800/50 rounded-t-md relative h-20 group-hover:bg-gray-700/50 transition-colors duration-300 border-t border-x border-white/5">
+<div class="absolute top-0 w-full h-1/2 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMjgyNjMzIi8+CjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxIiBmaWxsPSIjM2EzYTQ3Ii8+Cjwvc3ZnPg==')] opacity-20 rounded-t-md bg-cover"></div>
+</div>
+<span class="text-[10px] font-bold text-gray-600 uppercase tracking-wider group-hover:text-gray-400 transition-colors">Eng</span>
+</div>
+<div class="w-full flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-full bg-gray-800/50 rounded-t-md relative h-36 group-hover:bg-gray-700/50 transition-colors duration-300 border-t border-x border-white/5">
+<div class="absolute top-0 w-full h-1/3 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMjgyNjMzIi8+CjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxIiBmaWxsPSIjM2EzYTQ3Ii8+Cjwvc3ZnPg==')] opacity-20 rounded-t-md bg-cover"></div>
+</div>
+<span class="text-[10px] font-bold text-gray-600 uppercase tracking-wider group-hover:text-gray-400 transition-colors">DB</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClariAI Chatbot - Connection Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #4f46e5;
+      margin-bottom: 10px;
+      font-size: 2.5em;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
+
+    .status-box {
+      background: #f8f9ff;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border-left: 4px solid #4f46e5;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .status-item:last-child {
+      border-bottom: none;
+    }
+
+    .status-label {
+      flex: 1;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .status-value {
+      padding: 5px 15px;
+      border-radius: 5px;
+      font-size: 0.9em;
+    }
+
+    .status-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .course {
+      background: #f8f9ff;
+      padding: 15px 20px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border-left: 4px solid #4f46e5;
+    }
+
+    .note {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 8px;
+    }
+
+    .test-button {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      margin: 10px 10px 10px 0;
+    }
+
+    .test-button:hover {
+      background: #4338ca;
+    }
+
+    #console-log {
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+    }
+
+    .log-success {
+      color: #4ade80;
+    }
+
+    .log-error {
+      color: #f87171;
+    }
+
+    .log-info {
+      color: #60a5fa;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>&#127891; ClariAI Institute</h1>
+    <p class="subtitle">Chatbot Connection Diagnostics &amp; Test Page</p>
+
+    <div class="status-box">
+      <h2 style="margin-bottom: 15px; color: #4f46e5;">&#128269; Connection Status</h2>
+      <div class="status-item">
+        <span class="status-label">Backend API (http://127.0.0.1:8001)</span>
+        <span class="status-value status-pending" id="backend-status">Testing...</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Chatbot Widget Script</span>
+        <span class="status-value status-pending" id="widget-status">Loading...</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Chatbot Initialization</span>
+        <span class="status-value status-pending" id="init-status">Waiting...</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">CORS Configuration</span>
+        <span class="status-value status-pending" id="cors-status">Testing...</span>
+      </div>
+    </div>
+
+    <div>
+      <h2 style="color: #4f46e5; margin-bottom: 15px;">&#129514; Manual Tests</h2>
+      <button class="test-button" onclick="testBackendConnection()">Test Backend</button>
+      <button class="test-button" onclick="testChatbotAPI()">Test Chatbot API</button>
+      <button class="test-button" onclick="clearConsole()">Clear Console</button>
+    </div>
+
+    <div id="console-log">
+      <div class="log-entry log-info">Console initialized. Running diagnostics...</div>
+    </div>
+
+    <h2 style="color: #4f46e5; margin-top: 30px; margin-bottom: 15px;">&#128218; Our Courses</h2>
+
+    <div class="course">
+      <h3>&#128013; Python Programming &amp; Development</h3>
+      <p>6 months &bull; Learn Python, Django, Flask, and more</p>
+    </div>
+    <div class="course">
+      <h3>&#127760; Full Stack Web Development (MERN)</h3>
+      <p>4 months &bull; MongoDB, Express, React, Node.js</p>
+    </div>
+    <div class="course">
+      <h3>&#128202; Data Science &amp; Machine Learning</h3>
+      <p>8 months &bull; Python, Pandas, TensorFlow, Scikit-learn</p>
+    </div>
+    <div class="course">
+      <h3>&#128188; MBA in Digital Marketing</h3>
+      <p>12 months &bull; SEO, SEM, Social Media, Analytics</p>
+    </div>
+
+    <div class="note">
+      &#128172; <strong>Chat with us!</strong><br>
+      Look for the purple chat icon in the <strong>bottom-right corner</strong>.
+    </div>
+  </div>
+
+  <script src="/chatbot.js"></script>
+  <script>
+    function log(message, type) {
+      type = type || 'info';
+      var c = document.getElementById('console-log');
+      var entry = document.createElement('div');
+      entry.className = 'log-entry log-' + type;
+      entry.textContent = '[' + new Date().toLocaleTimeString() + '] ' + message;
+      c.appendChild(entry);
+      c.scrollTop = c.scrollHeight;
+    }
+
+    function updateStatus(elementId, status, text) {
+      var el = document.getElementById(elementId);
+      el.className = 'status-value status-' + status;
+      el.textContent = text;
+    }
+
+    function clearConsole() {
+      document.getElementById('console-log').innerHTML = '<div class="log-entry log-info">Console cleared.</div>';
+    }
+
+    async function testBackendConnection() {
+      log('Testing backend connection...', 'info');
+      try {
+        var response = await fetch('http://127.0.0.1:8001/health');
+        if (response.ok) {
+          log('Backend is reachable!', 'success');
+          updateStatus('backend-status', 'success', 'Connected');
+          return true;
+        } else {
+          log('Backend returned status ' + response.status, 'error');
+          updateStatus('backend-status', 'error', 'Error ' + response.status);
+          return false;
+        }
+      } catch (error) {
+        log('Backend connection failed: ' + error.message, 'error');
+        updateStatus('backend-status', 'error', 'Offline');
+        return false;
+      }
+    }
+
+    async function testChatbotAPI() {
+      log('Testing chatbot API endpoints...', 'info');
+      var endpoints = [
+        '/api/v1/chatbot/stats?tenant_id=0f1162ba-3b8a-46ab-b334-dbb251ccde3b',
+        '/api/v1/chatbot/sessions?tenant_id=0f1162ba-3b8a-46ab-b334-dbb251ccde3b'
+      ];
+      var allOk = true;
+      for (var i = 0; i < endpoints.length; i++) {
+        var endpoint = endpoints[i];
+        try {
+          var response = await fetch('http://127.0.0.1:8001' + endpoint);
+          if (response.ok) {
+            log('OK: ' + endpoint, 'success');
+          } else {
+            log('FAIL: ' + endpoint + ' - Status ' + response.status, 'error');
+            allOk = false;
+          }
+        } catch (error) {
+          log('ERROR: ' + endpoint + ' - ' + error.message, 'error');
+          allOk = false;
+        }
+      }
+      if (allOk) {
+        updateStatus('cors-status', 'success', 'Working');
+      } else {
+        updateStatus('cors-status', 'error', 'Issues Detected');
+      }
+    }
+
+    window.addEventListener('load', async function () {
+      await testBackendConnection();
+
+      if (typeof EdTechChatbot !== 'undefined') {
+        log('Chatbot widget script loaded', 'success');
+        updateStatus('widget-status', 'success', 'Loaded');
+        try {
+          EdTechChatbot.init({
+            tenantId: "0f1162ba-3b8a-46ab-b334-dbb251ccde3b",  // Updated to match frontend tenant
+            apiBaseUrl: "http://127.0.0.1:8001",
+            theme: {
+              primaryColor: "#4F46E5",
+              position: "bottom-right",
+              greeting: "Hi! How can I help you with your admission today?"
+            }
+          });
+          log('Chatbot initialized successfully!', 'success');
+          updateStatus('init-status', 'success', 'Ready');
+        } catch (error) {
+          log('Chatbot initialization failed: ' + error.message, 'error');
+          updateStatus('init-status', 'error', 'Failed');
+        }
+      } else {
+        log('Chatbot widget script not loaded!', 'error');
+        updateStatus('widget-status', 'error', 'Missing');
+        updateStatus('init-status', 'error', 'N/A');
+      }
+
+      setTimeout(testChatbotAPI, 2000);
+    });
+  </script>
+</body>
+
+</html>

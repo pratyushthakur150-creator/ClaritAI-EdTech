@@ -1,0 +1,222 @@
+=== NEET EXAM OVERVIEW ===
+Full form: National Eligibility cum Entrance Test
+Conducting body: NTA (National Testing Agency)
+Purpose: Admission to MBBS, BDS, AYUSH, Veterinary, and Nursing courses in India
+Frequency: Once a year (usually in May)
+Total attempts: No limit on number of attempts
+Age limit: Minimum 17 years as of December 31 of admission year; no upper age limit (as per Supreme Court ruling)
+Eligibility: Passed Class 12 with Physics, Chemistry, and Biology/Biotechnology
+Minimum marks in Class 12: 50% aggregate in PCB (40% for OBC, 40% for SC/ST)
+Total MBBS seats in India: ~1,08,000+ (Government + Private)
+Total BDS seats: ~27,000+
+Total AIIMS/JIPMER seats: Now merged into NEET counseling
+
+=== NEET EXAM PATTERN ===
+Total Questions: 200 (attempt any 180)
+- Physics: 35 MCQs (Section A) + 15 MCQs (Section B, attempt any 10) = 45 questions, attempt 45
+- Chemistry: 35 MCQs (Section A) + 15 MCQs (Section B, attempt any 10) = 45 questions, attempt 45
+- Biology (Botany): 35 MCQs (Section A) + 15 MCQs (Section B, attempt any 10) = 45 questions, attempt 45
+- Biology (Zoology): 35 MCQs (Section A) + 15 MCQs (Section B, attempt any 10) = 45 questions, attempt 45
+Total marks: 720 (180 questions x 4 marks each)
+Duration: 3 hours 20 minutes
+Negative marking: -1 for each wrong answer
+Mode: Pen and paper (OMR sheet based) — NOT computer based
+Language: Available in 13 languages including English, Hindi, and regional languages
+
+=== NEET SYLLABUS ===
+Physics:
+Class 11 Topics:
+- Physical World and Measurement, Kinematics
+- Laws of Motion, Work, Energy and Power
+- Motion of System of Particles and Rigid Body
+- Gravitation, Properties of Bulk Matter
+- Thermodynamics, Behaviour of Perfect Gas and Kinetic Theory
+- Oscillations and Waves
+
+Class 12 Topics:
+- Electrostatics, Current Electricity
+- Magnetic Effects of Current and Magnetism
+- Electromagnetic Induction and Alternating Currents
+- Electromagnetic Waves, Optics (Ray and Wave)
+- Dual Nature of Matter and Radiation
+- Atoms and Nuclei, Electronic Devices
+
+Chemistry:
+Physical Chemistry:
+- Some Basic Concepts of Chemistry, Structure of Atom
+- Classification of Elements, Chemical Bonding
+- States of Matter, Thermodynamics
+- Equilibrium, Redox Reactions
+- Electrochemistry, Chemical Kinetics
+- Surface Chemistry, Solutions
+
+Organic Chemistry:
+- Basic Principles and Techniques, Hydrocarbons
+- Haloalkanes and Haloarenes, Alcohols, Phenols, Ethers
+- Aldehydes, Ketones, Carboxylic Acids
+- Organic Compounds containing Nitrogen
+- Biomolecules, Polymers, Chemistry in Everyday Life
+
+Inorganic Chemistry:
+- Hydrogen, s-Block Elements, p-Block Elements
+- d and f Block Elements, Coordination Compounds
+- Environmental Chemistry, General Principles of Metallurgy
+
+Biology:
+Botany:
+- Diversity in Living World, Structural Organisation in Plants
+- Cell Structure and Function, Plant Physiology
+- Plant Kingdom, Morphology, Anatomy
+- Reproduction in Plants (Sexual and Asexual)
+- Genetics and Evolution (Mendel's Laws, Molecular Basis)
+- Ecology and Environment, Biodiversity
+- Biotechnology: Principles and Processes, Applications
+
+Zoology:
+- Animal Kingdom Classification
+- Structural Organisation in Animals
+- Human Physiology: Digestion, Breathing, Body Fluids, Excretory System, Locomotion, Neural Control, Chemical Coordination
+- Reproduction in Organisms, Human Reproduction
+- Reproductive Health, Genetics, Evolution
+- Human Health and Disease, Microbes
+- Biotechnology Applications, Organisms and Populations
+- Ecosystem, Biodiversity and Conservation
+
+=== NEET STRATEGY ===
+Timeline: Ideally 2 years (start in Class 11)
+For Class 12 students (1 year): Focus on high-weightage topics
+For repeaters/droppers: 10-12 month intensive plan
+
+Study Priority:
+Biology is the most important subject (360 out of 720 marks = 50%)
+- NCERT is the BIBLE for Biology — read line by line
+- Many questions are directly from NCERT (sometimes exact lines)
+Chemistry: NCERT is very important, especially for Inorganic and Organic
+Physics: NCERT for theory + additional practice for numerical problems
+
+Phase-wise Plan:
+Phase 1 (Months 1-5): Complete syllabus, NCERT reading, basic practice
+Phase 2 (Months 5-8): Topic-wise previous year questions, module practice
+Phase 3 (Months 8-10): Revision + Mock tests (full-length weekly)
+Phase 4 (Last 2 months): NCERT revision (3-4 readings), daily mocks, weak areas
+
+Daily Schedule (recommended):
+- 3-4 hours Biology (most weightage)
+- 2 hours Chemistry
+- 2-3 hours Physics (most time-consuming for practice)
+- 1 hour revision and mock analysis
+- Total: 8-10 hours for serious aspirants
+
+=== NEET HIGH WEIGHTAGE TOPICS ===
+Biology (most important):
+- Genetics and Evolution (highest scoring chapter in entire NEET)
+- Human Physiology (many questions every year)
+- Ecology and Environment (easy and scoring)
+- Plant Physiology and Reproduction
+- Cell Biology and Molecular Biology
+- Biotechnology
+
+Chemistry:
+- Chemical Bonding and Molecular Structure
+- Coordination Compounds
+- Organic Chemistry reactions and mechanisms
+- Thermodynamics and Equilibrium
+- p-Block elements (Class 12)
+
+Physics:
+- Mechanics (Kinematics, Laws of Motion, Work-Energy)
+- Electrostatics and Current Electricity (highest weightage in Physics)
+- Optics (Ray and Wave)
+- Modern Physics
+- Thermodynamics and KTG
+
+=== NEET CUTOFF TRENDS ===
+Government Medical Colleges (approx):
+- General: 600-650+ for top colleges, 500+ for average
+- OBC: 480-550 for good colleges
+- SC/ST: 350-450 for government colleges
+- All India Quota vs State Quota: AIQ typically higher cutoff
+- AIIMS Delhi equivalent: 690+ (now through NEET)
+- Good private colleges: 500-580
+
+=== NEET COURSE OFFERINGS ===
+2-Year Foundation Course (Class 11 start):
+- Complete NEET preparation from basics
+- Board exam integration
+- Weekly topic tests + monthly full tests
+- NCERT-focused teaching methodology
+- Daily Practice Problems (DPPs)
+- Biology specimen/practical sessions
+
+1-Year Intensive Course (Class 12 / Repeater):
+- Accelerated syllabus completion
+- Focus on NCERT mastery
+- Daily tests and problem practice
+- Bi-weekly full-length mock tests
+- Personalized weakness analysis
+
+Crash Course (3-6 months):
+- Rapid revision of entire syllabus
+- NCERT intensive reading program
+- Focus on high-yield topics
+- 40+ mock tests with analysis
+
+NEET Test Series:
+- 40 full-length mock tests (NEET pattern)
+- Sectional tests for each subject
+- Previous year paper analysis tests
+- All India rank comparison
+- Detailed performance analytics
+
+NCERT Mastery Program:
+- Line-by-line NCERT reading (Biology focus)
+- NCERT-based MCQ practice
+- Chapter-wise NCERT tests
+- Assertion-Reasoning practice
+- Diagram-based question practice
+
+Online Live Interactive Classes:
+- Live sessions with doubt clearing
+- Recorded lectures for revision
+- Digital study material
+- Virtual lab demonstrations for Biology
+
+=== NEET FEES ===
+2-Year Foundation Course (Offline): Rs 1,20,000 - Rs 2,00,000
+2-Year Foundation Course (Online): Rs 60,000 - Rs 1,20,000
+1-Year Intensive Course (Offline): Rs 80,000 - Rs 1,50,000
+1-Year Intensive Course (Online): Rs 45,000 - Rs 80,000
+Crash Course (3-6 months): Rs 25,000 - Rs 50,000
+Test Series Only: Rs 5,000 - Rs 12,000
+NCERT Mastery Program: Rs 8,000 - Rs 15,000
+Online Live Classes: Rs 40,000 - Rs 75,000
+Scholarship: Up to 100% for top performers in scholarship test
+EMI options: Available for courses above Rs 15,000
+
+=== COMMON NEET QUESTIONS AND ANSWERS ===
+Q: Is NCERT enough for NEET?
+A: For Biology, NCERT is absolutely essential and almost sufficient — read it line by line, understand every diagram and example. About 80-90% of Biology questions come directly from NCERT. For Chemistry, NCERT is very important for Inorganic and Physical Chemistry. For Physics, NCERT gives the foundation but you need additional practice books like HC Verma, DC Pandey for numerical practice.
+
+Q: How many hours should I study for NEET daily?
+A: Serious NEET aspirants study 8-10 hours daily. Biology should get the maximum time since it carries 50% weightage (360/720 marks). A good split is 3-4 hours Biology, 2-3 hours Physics, 2 hours Chemistry, 1 hour revision. Quality matters more than quantity — active problem solving is better than passive reading.
+
+Q: What is the best strategy for Biology in NEET?
+A: 1) Read NCERT line by line — many questions are from exact NCERT lines. 2) Make your own notes while reading. 3) Practice diagrams — label them accurately. 4) Solve previous 10 years' NEET Biology questions. 5) Focus on Genetics, Human Physiology, and Ecology — these are the highest-scoring chapters. 6) Revise NCERT at least 5-6 times before the exam.
+
+Q: Can I get MBBS in a government college through NEET?
+A: Yes, with a NEET score of 500+ (General category), you have a good chance at government medical colleges across India. Top government colleges like AIIMS, Maulana Azad, KEM require 650+. State quota seats have varying cutoffs. 54,000+ MBBS seats are in government colleges across India.
+
+Q: Should I take a drop year for NEET?
+A: If you scored within 50-100 marks of the cutoff and have identified specific areas to improve, a drop year can be very effective. Many NEET toppers are repeaters. Key is to have a structured plan, join a good coaching/test series, and maintain discipline. Also consider parallel options like state medical exams (where applicable).
+
+Q: What is the difference between NEET All India Quota and State Quota?
+A: 15% of government MBBS seats (+ all AIIMS/JIPMER/ESIC etc.) are filled through All India Quota (AIQ) counseling by MCC. Remaining 85% state quota seats are filled through state-level counseling based on domicile. Some states like Andhra Pradesh, Telangana have their own quota patterns. AIQ counseling gives you options across India.
+
+Q: Is NEET physics numerical or conceptual?
+A: NEET Physics is more conceptual than JEE but still has numerical problems. About 60% questions are conceptual/theory-based and 40% are numerical. Most numerical problems are straightforward formula applications, not multi-step complex problems. Focus on understanding concepts through NCERT and practice basic numericals.
+
+Q: How to manage board exams and NEET preparation together?
+A: Since NEET syllabus overlaps significantly with Class 11-12 CBSE syllabus, studying for NEET automatically helps in boards. Use NCERT for both. For boards, practice CBSE-style long answer questions. For NEET, focus on MCQ practice. In the 2 months before boards, shift slightly towards board preparation, then return to NEET-specific practice immediately after.
+
+Q: What are the career options after MBBS through NEET?
+A: After MBBS: 1) MD/MS postgraduation (again through NEET PG), 2) Direct practice as a general physician, 3) Government medical officer through UPSC CMS, 4) Research and academia, 5) Hospital administration, 6) Public health and WHO/NGO work, 7) Specializations like Surgery, Cardiology, Orthopedics, Dermatology etc.

@@ -1,0 +1,53 @@
+# Environment files (contain secrets!)
+.env
+.env.local
+.env.production
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+backend.log
+
+# ChromaDB local storage (rebuilt at startup)
+chroma_db/
+
+# Storage (audio, documents — generated at runtime)
+storage/
+
+# Google Calendar credentials (service account key)
+google-calendar-key.json
+
+# Test / debug scripts
+debug_*.py
+check_*.py
+test_*.py
+verify_*.py
+reset_*.py
+*_fix.py
+*_debug.py
+*.backup*
+*_output.txt
+tenant_check_output.txt

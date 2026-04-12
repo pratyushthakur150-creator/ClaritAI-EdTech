@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@ravian_api_url",
+    "NEXT_PUBLIC_API_BASE_URL": "@ravian_api_base_url",
+    "NEXT_PUBLIC_VAPI_ASSISTANT_ID": "@ravian_vapi_assistant_id"
+  },
+  "headers": [
+    {
+      "source": "/widget.js",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=3600" },
+        { "key": "Content-Type", "value": "application/javascript" }
+      ]
+    },
+    {
+      "source": "/chatbot.js",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=3600" },
+        { "key": "Content-Type", "value": "application/javascript" }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/proxy/:path*",
+      "destination": "https://ravian-backend-production.railway.app/api/v1/:path*"
+    }
+  ]
+}

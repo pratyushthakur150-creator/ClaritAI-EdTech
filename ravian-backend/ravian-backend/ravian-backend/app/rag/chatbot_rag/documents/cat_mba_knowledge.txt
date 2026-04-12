@@ -1,0 +1,135 @@
+=== CAT / MBA EXAM OVERVIEW ===
+Full form: Common Admission Test
+Conducting body: IIMs (rotational — different IIM hosts each year)
+Purpose: Admission to MBA/PGDM at IIMs and 1200+ B-Schools
+Frequency: Once a year (last Sunday of November)
+Total attempts: No limit
+Age limit: No upper age limit
+Eligibility: Bachelor's degree with minimum 50% marks (45% for SC/ST/PwD)
+Total IIM seats: ~5,000+ across all IIMs
+Total MBA seats accepting CAT: ~4,00,000+
+
+=== CAT EXAM PATTERN ===
+Section 1 - VARC (Verbal Ability and Reading Comprehension):
+- 24 questions, 40 minutes
+- RC passages: 4-5 passages with 3-4 questions each
+- VA: Para Jumbles, Para Summary, Odd Sentence Out
+- MCQ + TITA (Type In The Answer) mix
+
+Section 2 - DILR (Data Interpretation and Logical Reasoning):
+- 20 questions, 40 minutes
+- DI sets (graphs, tables, caselets) and LR sets (arrangements, puzzles)
+- 4-5 sets with 4-5 questions each
+- Known as the most unpredictable section
+
+Section 3 - QA (Quantitative Ability):
+- 22 questions, 40 minutes
+- Arithmetic, Algebra, Number Systems, Geometry, Mensuration, Combinatorics
+
+Total: 66 questions, 198 marks, 2 hours
+Negative marking: -1 for wrong MCQs; No negative for TITA
+Mode: Computer Based Test (CBT)
+
+=== CAT SYLLABUS ===
+VARC: Reading Comprehension, Para Jumbles, Para Summary, Odd Sentence Out
+DILR Data Interpretation: Tables, Bar Graphs, Pie Charts, Line Graphs, Caselets
+DILR Logical Reasoning: Seating Arrangements, Blood Relations, Puzzles, Games, Tournaments
+QA Arithmetic: Percentages, Profit-Loss, SI/CI, Time-Speed-Distance, Time-Work, Ratios
+QA Algebra: Equations, Inequalities, Functions, Progressions
+QA Number Systems: Divisibility, Remainders, HCF/LCM, Factors
+QA Geometry: Triangles, Circles, Coordinate Geometry, Mensuration
+QA Combinatorics: Permutations, Combinations, Probability
+
+=== CAT STRATEGY ===
+Timeline: 6-12 months of dedicated preparation
+For working professionals: 4-6 hours daily for 8-10 months
+
+Phase 1 (Months 1-3): Build fundamentals — reading habits, math basics, DI/LR sets
+Phase 2 (Months 4-6): Intensive practice — 200+ questions per QA topic, daily RC
+Phase 3 (Months 7-9): Weekly full-length mocks with thorough analysis
+Phase 4 (Last 2 months): 2-3 mocks per week, time management optimization
+
+Key Tips:
+- Reading habit is non-negotiable for VARC — read daily for 1 hour
+- In DILR, set selection is crucial — skip the toughest set
+- Mock test analysis is MORE important than taking the mock
+- CAT tests speed and accuracy equally
+
+=== CAT PERCENTILE AND IIM CUTOFFS ===
+IIM Ahmedabad: 99+ percentile
+IIM Bangalore: 99+ percentile
+IIM Calcutta: 99+ percentile
+IIM Lucknow: 97-98 percentile
+IIM Indore: 97-98 percentile
+New IIMs: 92-96 percentile
+Top non-IIM (FMS, XLRI, IIFT): 98-99 percentile
+Good private (SPJIMR, MDI): 95-98 percentile
+Note: IIMs also consider Academics + Work Experience + WAT/PI
+
+=== OTHER MBA ENTRANCE EXAMS ===
+XAT: For XLRI Jamshedpur and 160+ colleges
+SNAP: For Symbiosis colleges (SIBM, SCMHRD)
+NMAT: For NMIMS and partner colleges
+CMAT: Government test for AICTE colleges
+GMAT: For international MBA and ISB, IIM EPGP
+MAT: For various B-Schools
+
+=== CAT COURSE OFFERINGS ===
+Comprehensive CAT Course (8-10 months):
+- Complete VARC, DILR, QA coverage, 200+ hours lectures
+- 3000+ practice questions, 30+ mock tests
+- Weekly doubt clearing, reading material for RC
+
+Crash Course (3-4 months):
+- High-yield topics, shortcuts, 20+ mocks, previous year analysis
+
+Test Series: 40+ full-length mocks, sectional tests, percentile prediction
+
+VARC Booster: Daily reading material, RC practice, VA drills
+DILR Special: 500+ sets, difficulty-graded, time management training
+QA Mastery: Topic-wise modules, shortcut techniques, 1000+ problems
+
+GD/PI/WAT Preparation:
+- Group Discussion practice, PI mock rounds, WAT practice
+- Resume and SOP building, IIM-specific preparation
+
+=== CAT FEES ===
+Comprehensive Course (Offline): Rs 45,000 - Rs 80,000
+Comprehensive Course (Online): Rs 25,000 - Rs 50,000
+Crash Course: Rs 15,000 - Rs 30,000
+Test Series Only: Rs 3,000 - Rs 10,000
+Individual Modules: Rs 5,000 - Rs 12,000
+GD/PI/WAT: Rs 10,000 - Rs 25,000
+Scholarship: Up to 100% based on diagnostic test
+EMI options available
+
+=== COMMON CAT QUESTIONS AND ANSWERS ===
+Q: Can I prepare for CAT while working full-time?
+A: Absolutely. Many CAT toppers are working professionals. Work experience (2-4 years) is valued by IIMs. Dedicate 3-4 focused hours daily. Weekends for full mocks. Being systematic is key.
+
+Q: What percentile is needed for IIM?
+A: Top old IIMs (A,B,C) need 99+. New IIMs need 92-97. But CAT score is only 30-40% of selection — academics, work experience, diversity, and PI matter too. A 97 percentile with good work experience can beat 99 at some IIMs.
+
+Q: How to improve RC for CAT?
+A: Read diverse content daily — newspapers, The Economist, non-fiction books. Practice active reading. Solve 3-5 passages daily. CAT RC tests understanding of tone and argument structure, not fact memorization.
+
+Q: Is CAT tougher than other MBA exams?
+A: CAT is tougher than SNAP, CMAT, MAT but comparable to XAT. DILR section is unique and challenging. Good CAT prep automatically prepares you for most other MBA exams.
+
+Q: Do IIMs consider 10th and 12th marks?
+A: Yes! Most IIMs include 10th, 12th, and graduation marks in shortlisting. For IIM-A, academics carry about 25-30% weight. Weak academics need higher CAT percentile to compensate.
+
+Q: What is the ROI of MBA from IIM?
+A: Top IIM graduates earn Rs 25-40 LPA average starting salary. Fee is Rs 20-25 lakhs for 2 years. Most recover investment in 1-2 years. Even newer IIMs offer 12-18 LPA average. MBA from a good B-School has among the highest ROI in education.
+
+Q: How many mock tests should I take?
+A: Minimum 25-30 full-length mocks over 4-5 months. But analysis is more important than quantity. Track accuracy, time per question, and section-wise trends. Spend equal time analyzing as taking each mock.
+
+Q: What is WAT (Written Ability Test)?
+A: WAT replaced GD at most IIMs. You get a topic and 15-20 minutes to write a structured essay (250-300 words). Topics are abstract, social, or economic. Shows structured thinking.
+
+Q: When to start CAT preparation?
+A: Ideally 8-10 months before the exam. With strong quant/verbal background, 5-6 months can suffice. Starting in January-March for November CAT is ideal timing.
+
+Q: Can I crack CAT without coaching?
+A: Yes, many toppers are self-prepared. However, coaching provides structured guidance, mock tests, and peer benchmarking. At minimum, a good test series is essential.

@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aria — AI Academic Advisor | ClaritAI</title>
+  <meta name="description"
+    content="AI-powered academic advisor chatbot for competitive exam coaching — UPSC, NEET, JEE, CAT, GMAT" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e2e8f0;
+    }
+
+    .demo-landing {
+      text-align: center;
+      max-width: 640px;
+      padding: 40px;
+    }
+
+    .demo-landing h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f97316 0%, #fb923c 50%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .demo-landing p {
+      font-size: 1.05rem;
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+
+    .demo-landing .arrow-hint {
+      margin-top: 32px;
+      font-size: .9rem;
+      color: #64748b;
+      animation: bounce 2s infinite;
+    }
+
+    .demo-landing .arrow-hint span {
+      font-size: 1.5rem;
+      display: block;
+      margin-top: 8px;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(8px)
+      }
+    }
+
+    .demo-badge-top {
+      display: inline-block;
+      background: rgba(249, 115, 22, .15);
+      color: #f97316;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(249, 115, 22, .3);
+    }
+
+    /* ═══ WIDGET STYLES ═══ */
+    #aria-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      z-index: 2147483647;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
+      box-shadow: 0 4px 14px rgba(249, 115, 22, .4), 0 0 40px rgba(249, 115, 22, .15);
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      animation: fab-pulse 3s ease-in-out infinite;
+    }
+
+    #aria-fab:hover {
+      transform: scale(1.1) rotate(8deg);
+      box-shadow: 0 6px 24px rgba(249, 115, 22, .5), 0 0 60px rgba(249, 115, 22, .25);
+    }
+
+    #aria-fab.open {
+      transform: scale(.9) rotate(180deg);
+    }
+
+    #aria-fab svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform .3s;
+    }
+
+    @keyframes fab-pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 4px 14px rgba(249, 115, 22, .4), 0 0 40px rgba(249, 115, 22, .15)
+      }
+
+      50% {
+        box-shadow: 0 4px 20px rgba(249, 115, 22, .6), 0 0 60px rgba(249, 115, 22, .25)
+      }
+    }
+
+    #aria-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 18px;
+      height: 18px;
+      background: #ef4444;
+      border-radius: 50%;
+      border: 2px solid #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      animation: badge-pop .3s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    @keyframes badge-pop {
+      from {
+        transform: scale(0)
+      }
+
+      to {
+        transform: scale(1)
+      }
+    }
+
+    #aria-chat {
+      position: fixed;
+      bottom: 100px;
+      right: 24px;
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      height: 520px;
+      max-height: calc(100vh - 140px);
+      border-radius: 20px;
+      z-index: 2147483646;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, .3), 0 0 0 1px rgba(255, 255, 255, .05);
+    }
+
+    #aria-chat.open {
+      display: flex;
+      animation: chat-slide-up .35s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    @keyframes chat-slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(24px) scale(.95)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+    }
+
+    .aria-header {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #fff;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .aria-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .aria-header-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .2);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .aria-header-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .aria-header-info h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .aria-header-info .aria-status {
+      font-size: 12px;
+      opacity: .85;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+    }
+
+    .aria-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      display: inline-block;
+      animation: status-blink 2s ease-in-out infinite;
+    }
+
+    @keyframes status-blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .5
+      }
+    }
+
+    .aria-close-btn {
+      background: rgba(255, 255, 255, .15);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .aria-close-btn:hover {
+      background: rgba(255, 255, 255, .25);
+    }
+
+    .aria-demo-pill {
+      background: rgba(255, 255, 255, .2);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      letter-spacing: .5px;
+      margin-left: 6px;
+    }
+
+    .aria-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .aria-messages::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .aria-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .aria-messages::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .aria-msg {
+      display: flex;
+      gap: 8px;
+      max-width: 88%;
+      animation: msg-appear .3s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    @keyframes msg-appear {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .aria-msg.bot {
+      align-self: flex-start;
+    }
+
+    .aria-msg.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .aria-msg-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .aria-msg.bot .aria-msg-avatar {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+    }
+
+    .aria-msg.user .aria-msg-avatar {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+    }
+
+    .aria-msg-bubble {
+      padding: 11px 15px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.55;
+      word-break: break-word;
+      position: relative;
+    }
+
+    .aria-msg.bot .aria-msg-bubble {
+      background: #fff;
+      color: #1e293b;
+      border: 1px solid #e2e8f0;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+    }
+
+    .aria-msg.user .aria-msg-bubble {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 8px rgba(249, 115, 22, .25);
+    }
+
+    .aria-msg-time {
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .aria-msg.bot .aria-msg-time {
+      text-align: left;
+    }
+
+    .aria-typing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 16px;
+    }
+
+    .aria-typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #94a3b8;
+      animation: typing-bounce 1.4s ease-in-out infinite;
+    }
+
+    .aria-typing-dot:nth-child(1) {
+      animation-delay: -.32s
+    }
+
+    .aria-typing-dot:nth-child(2) {
+      animation-delay: -.16s
+    }
+
+    .aria-typing-dot:nth-child(3) {
+      animation-delay: 0s
+    }
+
+    @keyframes typing-bounce {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(.6);
+        opacity: .4
+      }
+
+      40% {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .aria-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .aria-option-btn {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all .2s;
+      font-family: inherit;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .aria-option-btn:hover {
+      background: #fff7ed;
+      border-color: #f97316;
+      color: #f97316;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(249, 115, 22, .1);
+    }
+
+    .aria-input-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: #fff;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .aria-input {
+      flex: 1;
+      padding: 11px 16px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+
+    .aria-input:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, .1);
+      background: #fff;
+    }
+
+    .aria-input::placeholder {
+      color: #94a3b8;
+    }
+
+    .aria-send-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+
+    .aria-send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(249, 115, 22, .35);
+    }
+
+    .aria-send-btn:active {
+      transform: scale(.95);
+    }
+
+    .aria-send-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .aria-send-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .aria-powered {
+      text-align: center;
+      padding: 6px;
+      background: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+      font-size: 10.5px;
+      color: #94a3b8;
+    }
+
+    .aria-powered a {
+      color: #f97316;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .aria-powered a:hover {
+      text-decoration: underline;
+    }
+
+    /* Lead form removed — leads captured through conversation */
+
+    /* Confetti removed — no longer needed */
+
+    /* Mobile */
+    @media(max-width:480px) {
+      #aria-chat {
+        width: calc(100vw - 16px);
+        height: calc(100vh - 100px);
+        bottom: 80px;
+        right: 8px;
+        border-radius: 16px;
+      }
+
+      #aria-fab {
+        bottom: 16px;
+        right: 16px;
+        width: 56px;
+        height: 56px;
+      }
+
+      .aria-lead-form .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="demo-landing" id="demo-landing-content">
+    <div class="demo-badge-top" id="demo-badge-landing">🔬 DEMO MODE</div>
+    <h1>🎓 Pinnacle IAS × ClaritAI</h1>
+    <p>
+      Live demo of <strong>Aria — AI Academic Advisor</strong>, an intelligent lead-capture chatbot
+      for competitive exam coaching institutes. Powered by ClaritAI.
+    </p>
+    <div class="arrow-hint">Click the chat button to try it out<span>↘</span></div>
+  </div>
+
+  <button id="aria-fab" aria-label="Open chat">
+    <span id="aria-badge" style="display:none;">1</span>
+    <svg viewBox="0 0 24 24">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  </button>
+
+  <div id="aria-chat">
+    <div class="aria-header">
+      <div class="aria-header-avatar">🎓</div>
+      <div class="aria-header-info">
+        <h3>Aria — AI Advisor <span class="aria-demo-pill" id="aria-demo-pill">DEMO</span></h3>
+        <div class="aria-status"><span class="aria-status-dot"></span><span>Online · Powered by ClaritAI</span>
+        </div>
+      </div>
+      <button class="aria-close-btn" id="aria-close" aria-label="Close chat">✕</button>
+    </div>
+    <div class="aria-messages" id="aria-messages"></div>
+    <div class="aria-input-area">
+      <input type="text" class="aria-input" id="aria-input" placeholder="Type your question..." autocomplete="off" />
+      <button class="aria-send-btn" id="aria-send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+    <div class="aria-powered">Powered by <a href="https://claritai.in" target="_blank">ClaritAI</a> · claritai.in
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const DEMO_MODE = true;
+      const CONFIG = {
+        apiBaseUrl: 'http://127.0.0.1:8001',
+        tenantId: '0f1162ba-3b8a-46ab-b334-dbb251ccde3b',
+        instituteName: DEMO_MODE ? 'Pinnacle IAS & Competitive Coaching' : 'Your Institute'
+      };
+      // Use API for AI when backend is available (understands context). Set false to use local KB only.
+      const USE_API_FOR_AI = true;
+
+      const EXAM_BUTTONS = [
+        { id: 'UPSC', label: 'UPSC', emoji: '🎯' },
+        { id: 'NEET', label: 'NEET', emoji: '⚗️' },
+        { id: 'JEE', label: 'JEE', emoji: '🔢' },
+        { id: 'CAT', label: 'CAT/MBA', emoji: '📊' },
+        { id: 'GMAT', label: 'GMAT', emoji: '🌍' },
+        { id: 'Other', label: 'Other', emoji: '📚' }
+      ];
+      const STAGE_BUTTONS = [
+        { id: 'Just Starting', label: 'Just Starting' },
+        { id: 'Preparing 1+ Year', label: 'Preparing 1+ Year' },
+        { id: 'Appearing This Year', label: 'Appearing This Year' },
+        { id: 'Dropper', label: 'Dropper' }
+      ];
+
+      const EXAM_KNOWLEDGE = {
+        UPSC: [
+          { q: /fee|fees|price|cost|charges|kitna|pay/i, a: 'UPSC batch fees depend on duration (foundation 12–24 months, crash 3–6 months). We offer instalments and merit-based discounts. Our counselor can share exact figures—shall I get them to call you?' },
+          { q: /syllabus|subject|what to study/i, a: 'The UPSC CSE syllabus has 3 stages:\n\n📋 PRELIMS (Objective):\n• Paper 1 (GS): History, Geography, Polity, Economy, Environment, Science & Tech, Current Affairs\n• Paper 2 (CSAT): Comprehension, Reasoning, Maths (qualifying)\n\n📝 MAINS (Descriptive - 9 papers):\n• Essay, GS1 (History+Society), GS2 (Governance+IR), GS3 (Economy+Environment+Security), GS4 (Ethics)\n• Optional Subject (2 papers) — you choose 1 from 48 subjects\n• 2 language papers (qualifying)\n\n🎤 INTERVIEW: 275 marks personality test\n\nTotal marks that count: 1750 (Mains 1475 + Interview 275)\n\nWhich part would you like to know more about — Prelims strategy, Mains, or Optional subject selection? 🎯' },
+          { q: /prelims|mains|interview|structure|timeline/i, a: 'UPSC has three stages: Prelims (MCQ), Mains (written), and Interview. Prelims is usually in May-June, Mains in Sept-Oct, Interview in Jan-May. Timeline is roughly 1–2 years of serious prep.' },
+          { q: /optional|optional subject/i, a: 'You choose one optional subject for Mains. Popular options: Geography, History, Public Administration, Sociology. Pick one that aligns with your background and interest.' },
+          { q: /job|working|professional|can i crack/i, a: 'Absolutely! Many working professionals crack UPSC with disciplined 3–4 hour daily study. Weekend revision and answer writing help. Our UPSC batch is designed for working professionals with flexible schedules.' },
+          { q: /age|attempts|limit/i, a: 'General: 32 years (max 6 attempts). OBC: 35 (9 attempts). SC/ST: 37 (unlimited). Age is calculated as on 1st August of the exam year.' },
+          { q: /batch|monthly|mcq|answer writing/i, a: 'Our UPSC batch starts monthly. It includes daily MCQ practice for Prelims and regular answer writing for Mains. Faculty are ex-UPSC and current bureaucrats.' },
+          { q: /strategy|how to start|beginner/i, a: 'Start with NCERTs (6–12), then move to standard books. Join a test series for Prelims and Mains. Consistency matters more than hours—2–3 hours daily for 18 months beats 8 hours for 3 months.' }
+        ],
+        NEET: [
+          { q: /fee|fees|price|cost|charges|kitna|pay/i, a: 'NEET batch and crash course fees vary by duration. We have instalment options and scholarships. Our counselor can share exact amounts—want me to get them to call you?' },
+          { q: /syllabus|subject|what to study/i, a: 'NEET syllabus (NCERT Class 11–12): Physics (45 Q, 180 marks), Chemistry (45 Q, 180), Biology (90 Q, 360 marks — 50% of paper). Read every line of NCERT Biology. Which subject do you want to strengthen first?' },
+          { q: /720|marks|biology|weightage/i, a: 'NEET is 720 marks: Physics 180, Chemistry 180, Biology 360. Biology is 50%—so NCERT Biology is the bible. Focus on concepts and previous years’ MCQs.' },
+          { q: /state quota|aiq|all india quota/i, a: '15% of state seats go to AIQ (All India Quota); 85% stay with the state. So you can compete on both. State quota cutoffs are often lower than AIQ for the same college.' },
+          { q: /failed|dropper|retake|improve|by 20 marks|what should i do/i, a: 'Falling short by a few marks is common—many droppers crack NEET with a clear plan. Focus on weak topics, join a crash course, and give full-length mocks every week. We’d love to offer you a free counseling session to chalk out a strategy. Can I get your name and number? 📱' },
+          { q: /ncert|book|syllabus/i, a: 'NCERT is non-negotiable for NEET. Biology: read every line. Physics/Chemistry: concepts from NCERT, then practice numericals from other books. Don’t skip any chapter.' },
+          { q: /crash course|3 month|batch/i, a: 'Our NEET crash course covers the full syllabus in 3 months with daily live classes and tests. Ideal for droppers or those who’ve finished one reading.' }
+        ],
+        JEE: [
+          { q: /main|advanced|difference/i, a: 'JEE Main is the gateway; rank gets you NITs/IIITs. JEE Advanced is for IITs (only top 2.5L from Main can appear). Advanced is tougher and more conceptual.' },
+          { q: /class 11|foundation|dropper batch/i, a: 'Class 11 foundation is critical for JEE. For droppers, we have a dedicated batch focusing on Advanced-level problem-solving and mock tests. Our JEE Advanced batch produced strong IIT selections in 2024.' },
+          { q: /syllabus|subject|what to study/i, a: 'JEE syllabus: Maths (Calculus, Algebra, Trig, Coordinate Geo), Physics (Mechanics, EM, Optics, Modern), Chemistry (Physical, Inorganic, Organic). Equal weight 33.33% each. 30 Q per subject in Main (20 MCQ + 10 numerical). Which part — Main or Advanced?' },
+          { q: /physics|chemistry|maths|weightage/i, a: 'Equal weightage: 33.33% each. NTA pattern: 30 questions per subject (20 MCQs + 10 numerical). Negative marking only for MCQs. Practice speed and accuracy.' },
+          { q: /fee|fees|scholarship|batch/i, a: 'JEE batch fees vary by duration (6–24 months). We offer merit-based scholarships and instalment options. Our counselor can share exact figures and scholarship criteria.' },
+          { q: /nta|pattern|exam/i, a: 'JEE Main is conducted by NTA multiple times a year. Paper is computer-based. Focus on NTA mock papers and previous years’ patterns for best preparation.' }
+        ],
+        CAT: [
+          { q: /syllabus|subject|what to study|qa|varc|dilr|section/i, a: 'CAT has 3 sections: VARC (RC, Para jumbles, Verbal), DILR (sets, puzzles, DI), QA (Arithmetic, Algebra, Geometry). Each has a time limit. Strong DILR and QA often decide 99+ percentile. Which section do you want to focus on?' },
+          { q: /percentile|cutoff|iim/i, a: 'IIM cutoffs vary (often 98–99+ for top IIMs). Percentile is relative—you’re ranked against all test-takers. Our CAT batch guarantees 95+ percentile or free repeat—check terms with our counselor.' },
+          { q: /batch|preparation|fee/i, a: 'Our CAT batch covers all three sections with mocks and strategy. Duration typically 4–6 months. Fee and scholarship details can be shared by our counselor based on your profile.' }
+        ],
+        GMAT: [
+          { q: /syllabus|subject|what to study|quant|verbal|ir|section/i, a: 'GMAT has 4 sections:\n\n🔢 QUANTITATIVE REASONING: Problem Solving, Data Sufficiency — arithmetic, algebra, geometry.\n\n📖 VERBAL REASONING: Reading Comprehension, Critical Reasoning, Sentence Correction.\n\n📊 INTEGRATED REASONING: Multi-source, table/graph analysis, two-part analysis (12 Q).\n\n✍️ AWA (Analytical Writing): One essay — optional at some schools.\n\nTotal score 200–800 (Quant + Verbal). IR and AWA are separate. We cover all sections with official-style practice. Which section do you want to focus on?' },
+          { q: /fee|fees|price|cost|charges|kitna|pay/i, a: 'GMAT prep fees depend on course length and format. We offer score guarantees and instalments. Our counselor can share exact pricing—shall I get them to call you?' },
+          { q: /675|score|top b.?school|mba|strategy|timeline/i, a: '675+ is competitive for top global MBA programs. Quant + Verbal + IR all matter. Our GMAT prep focuses on these sections with official-style practice. Timeline: 2–4 months with regular mocks.' },
+          { q: /online|test centre|exam/i, a: 'You can take GMAT online or at a test centre. Format is similar; choose based on comfort and availability. We have practice tests for both.' }
+        ],
+        Other: [
+          { q: /price|fee|fees|cost|each course/i, a: 'Fees vary by exam (UPSC, NEET, JEE, CAT, GMAT). Which exam are you targeting? I’ll share the relevant fee range and scholarship options.' },
+          { q: /.*/, a: 'We offer guidance across competitive exams. Tell me which exam you’re targeting (UPSC, NEET, JEE, CAT, GMAT) and I’ll share specific info, or I can get a counselor to share a personalized plan—can I get your name and WhatsApp number?' }
+        ]
+      };
+
+      function isHinglish(text) {
+        const kw = ['kya', 'hai', 'kaise', 'aap', 'main', 'mera', 'mujhe', 'bhi', 'aur', 'lekin', 'toh', 'fir', 'achha', 'theek', 'nahi', 'haan', 'ji', 'sir', 'mam'];
+        return kw.some(k => text.toLowerCase().includes(k));
+      }
+
+      function detectExamFromText(text) {
+        const t = (text || '').trim().toUpperCase().replace(/\s+/g, ' ');
+        if (/^(UPSC|NEET|JEE|CAT|GMAT|OTHER)$/.test(t)) return t === 'OTHER' ? 'Other' : t;
+        if (/^CAT\/?MBA$|^MBA$/.test(t)) return 'CAT';
+        if (/^JEE\s*MAIN$|^JEE\s*ADVANCED$/.test(t)) return 'JEE';
+        const lower = (text || '').trim().toLowerCase();
+        if (lower === 'upsc' || lower === 'neet' || lower === 'jee' || lower === 'cat' || lower === 'gmat' || lower === 'other') return lower === 'other' ? 'Other' : (lower === 'cat' ? 'CAT' : lower.toUpperCase());
+        if (lower === 'mba' || lower === 'cat/mba') return 'CAT';
+        return null;
+      }
+
+      function detectStageFromText(text) {
+        const t = (text || '').trim().toLowerCase();
+        const stages = ['just starting', 'preparing 1+ year', 'appearing this year', 'dropper'];
+        for (let i = 0; i < STAGE_BUTTONS.length; i++) {
+          if (t === STAGE_BUTTONS[i].id.toLowerCase() || t === stages[i]) return STAGE_BUTTONS[i].id;
+        }
+        if (/just\s*start|beginner/.test(t)) return 'Just Starting';
+        if (/preparing|1\+?\s*year|one year/.test(t)) return 'Preparing 1+ Year';
+        if (/appearing|this year|exam this/.test(t)) return 'Appearing This Year';
+        if (/dropper|drop/.test(t)) return 'Dropper';
+        return null;
+      }
+
+      function isGreeting(text) {
+        const t = (text || '').trim().toLowerCase();
+        return /^(hi|hii|hiii|hello|hey|helo|namaste|good morning|good afternoon|good evening)$/.test(t) || t.length <= 3 && /^[hH]+i*$/.test(t);
+      }
+
+      function getAnswer(message, examTarget) {
+        const key = examTarget && EXAM_KNOWLEDGE[examTarget] ? examTarget : 'Other';
+        const list = EXAM_KNOWLEDGE[key];
+        const lower = message.toLowerCase();
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].q.test(message) || list[i].q.test(lower)) return list[i].a;
+        }
+        return EXAM_KNOWLEDGE.Other[0].a;
+      }
+
+      // Lead form removed — Aria captures leads conversationally through the chat
+      // The backend extracts name/email/phone from conversation messages automatically
+
+      let state = {
+        step: 'welcome',
+        examTarget: null,
+        preparationStage: null,
+        messageCount: 0,
+        qaQuestionCount: 0,
+        visitorId: 'aria-' + Math.random().toString(36).slice(2, 12),
+        leadCaptured: false
+      };
+
+
+      const messagesEl = document.getElementById('aria-messages');
+      const inputEl = document.getElementById('aria-input');
+      const sendBtn = document.getElementById('aria-send');
+      const fab = document.getElementById('aria-fab');
+      const chat = document.getElementById('aria-chat');
+      const closeBtn = document.getElementById('aria-close');
+      const demoPill = document.getElementById('aria-demo-pill');
+      const demoBadgeLanding = document.getElementById('demo-badge-landing');
+      const landingTitle = document.querySelector('.demo-landing h1');
+      const landingContent = document.querySelector('.demo-landing p');
+
+      if (DEMO_MODE && demoPill) demoPill.style.display = 'inline';
+      else if (demoPill) demoPill.style.display = 'none';
+      if (DEMO_MODE && demoBadgeLanding) demoBadgeLanding.textContent = 'DEMO MODE';
+      if (!DEMO_MODE && landingTitle) landingTitle.textContent = CONFIG.instituteName + ' × ClaritAI';
+      if (!DEMO_MODE && landingContent) landingContent.innerHTML = 'Live demo of <strong>Aria — AI Academic Advisor</strong>. Powered by ClaritAI.';
+
+      function scrollToBottom() {
+        if (messagesEl) messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function appendBotMessage(text, options) {
+        const wrap = document.createElement('div');
+        wrap.className = 'aria-msg bot';
+        wrap.innerHTML = '<div class="aria-msg-avatar">🎓</div><div class="aria-msg-bubble">' + (options && options.raw ? text : text.replace(/\n/g, '<br>')) + '<div class="aria-msg-time">' + (new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) + '</div></div>';
+        messagesEl.appendChild(wrap);
+        if (options && options.buttons) {
+          const btnGroup = document.createElement('div');
+          btnGroup.className = 'aria-btn-group';
+          options.buttons.forEach(b => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'aria-option-btn';
+            btn.textContent = b.label;
+            btn.addEventListener('click', () => b.onClick());
+            btnGroup.appendChild(btn);
+          });
+          wrap.querySelector('.aria-msg-bubble').appendChild(btnGroup);
+        }
+        scrollToBottom();
+      }
+
+      function appendUserMessage(text) {
+        const wrap = document.createElement('div');
+        wrap.className = 'aria-msg user';
+        wrap.innerHTML = '<div class="aria-msg-avatar">👤</div><div class="aria-msg-bubble">' + (text || '').replace(/\n/g, '<br>') + '<div class="aria-msg-time">' + (new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) + '</div></div>';
+        messagesEl.appendChild(wrap);
+        scrollToBottom();
+      }
+
+      function showTyping() {
+        const wrap = document.createElement('div');
+        wrap.className = 'aria-msg bot';
+        wrap.id = 'aria-typing-wrap';
+        wrap.innerHTML = '<div class="aria-msg-avatar">🎓</div><div class="aria-typing"><span class="aria-typing-dot"></span><span class="aria-typing-dot"></span><span class="aria-typing-dot"></span></div>';
+        messagesEl.appendChild(wrap);
+        scrollToBottom();
+      }
+
+      function hideTyping() {
+        const t = document.getElementById('aria-typing-wrap');
+        if (t) t.remove();
+        scrollToBottom();
+      }
+
+      function showWelcome() {
+        appendBotMessage("Hello! 👋 Which exam are you targeting?", {
+          buttons: EXAM_BUTTONS.map(b => ({
+            label: b.emoji + ' ' + b.label,
+            onClick: () => selectExam(b.id)
+          }))
+        });
+      }
+
+      function selectExam(id) {
+        state.examTarget = id;
+        state.step = 'stage';
+        state.messageCount++;
+        appendUserMessage(EXAM_BUTTONS.find(x => x.id === id).emoji + ' ' + id);
+        hideTyping();
+        setTimeout(() => {
+          appendBotMessage("Which stage are you at?", {
+            buttons: STAGE_BUTTONS.map(s => ({
+              label: s.label,
+              onClick: () => selectStage(s.id)
+            }))
+          });
+        }, 600);
+      }
+
+      function selectStage(id) {
+        state.preparationStage = id;
+        state.step = 'qa';
+        state.qaQuestionCount = 0;
+        state.messageCount++;
+        appendUserMessage(id);
+        setTimeout(() => {
+          appendBotMessage("Great! You can ask me anything about " + (state.examTarget === 'Other' ? 'exams' : state.examTarget) + "—syllabus, strategy, batches, or fees. I'm here to help! 🎯");
+        }, 500);
+      }
+
+      function sendToBackend(message) {
+        return fetch(CONFIG.apiBaseUrl + '/api/v1/chatbot/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: message,
+            tenant_id: CONFIG.tenantId,
+            visitor_id: state.visitorId,
+            exam_target: state.examTarget || undefined,
+            preparation_stage: state.preparationStage || undefined
+          })
+        }).then(r => r.json());
+      }
+
+      function handleSend() {
+        const raw = (inputEl && inputEl.value || '').trim();
+        if (!raw) return;
+
+        // ─── Welcome: interpret exam selection or greeting from typed text ───
+        if (state.step === 'welcome') {
+          const examId = detectExamFromText(raw);
+          if (examId) {
+            appendUserMessage(raw);
+            if (inputEl) inputEl.value = '';
+            showTyping();
+            hideTyping();
+            selectExam(examId);
+            return;
+          }
+          if (isGreeting(raw)) {
+            appendUserMessage(raw);
+            if (inputEl) inputEl.value = '';
+            showTyping();
+            setTimeout(() => {
+              hideTyping();
+              appendBotMessage("Hello! 😊 Welcome! I'm Aria, your AI Academic Advisor. I can help you with competitive exam preparation — UPSC, NEET, JEE, CAT/MBA, and GMAT. Which exam are you targeting?", {
+                buttons: EXAM_BUTTONS.map(b => ({ label: b.emoji + ' ' + b.label, onClick: () => selectExam(b.id) }))
+              });
+            }, 600);
+            return;
+          }
+          // For any other text at welcome, send to backend for intelligent response
+          appendUserMessage(raw);
+          if (inputEl) inputEl.value = '';
+          showTyping();
+          sendToBackend(raw).then(data => {
+            hideTyping();
+            const reply = (data && data.response) ? data.response : "I'd love to help! Which exam are you preparing for?";
+            appendBotMessage(reply, {
+              buttons: EXAM_BUTTONS.map(b => ({ label: b.emoji + ' ' + b.label, onClick: () => selectExam(b.id) }))
+            });
+          }).catch(() => {
+            hideTyping();
+            appendBotMessage("Welcome! I'm Aria, your AI Academic Advisor. Which exam are you targeting?", {
+              buttons: EXAM_BUTTONS.map(b => ({ label: b.emoji + ' ' + b.label, onClick: () => selectExam(b.id) }))
+            });
+          });
+          return;
+        }
+
+        // ─── Stage: interpret stage selection from typed text ───
+        if (state.step === 'stage') {
+          const stageId = detectStageFromText(raw);
+          if (stageId) {
+            appendUserMessage(raw);
+            if (inputEl) inputEl.value = '';
+            showTyping();
+            hideTyping();
+            selectStage(stageId);
+            return;
+          }
+        }
+
+        // ─── QA: Send everything to backend, show response directly ───
+        if (state.step === 'qa') state.qaQuestionCount++;
+        state.messageCount++;
+        appendUserMessage(raw);
+        if (inputEl) inputEl.value = '';
+        showTyping();
+
+        sendToBackend(raw).then(data => {
+          hideTyping();
+          const reply = (data && data.response) ? data.response : "I couldn't process that. Can you rephrase?";
+          appendBotMessage(reply);
+
+          // Check if backend detected a lead was captured from the conversation
+          if (data && data.lead_captured) {
+            state.leadCaptured = true;
+            console.log('[Aria] Lead captured from conversation');
+          }
+        }).catch(() => {
+          hideTyping();
+          // Fallback to local knowledge base
+          appendBotMessage(getAnswer(raw, state.examTarget));
+        });
+      }
+
+      function toggleChat() {
+        fab.classList.toggle('open');
+        chat.classList.toggle('open');
+        const badge = document.getElementById('aria-badge');
+        if (badge) badge.style.display = 'none';
+        if (chat.classList.contains('open') && messagesEl.children.length === 0) showWelcome();
+      }
+
+      fab.addEventListener('click', toggleChat);
+      if (closeBtn) closeBtn.addEventListener('click', toggleChat);
+      sendBtn.addEventListener('click', handleSend);
+      inputEl.addEventListener('keydown', function (e) { if (e.key === 'Enter') handleSend(); });
+
+      if (DEMO_MODE) {
+        setTimeout(() => {
+          if (!chat.classList.contains('open')) {
+            const badge = document.getElementById('aria-badge');
+            if (badge) { badge.textContent = '1'; badge.style.display = 'flex'; }
+          }
+        }, 5000);
+      }
+    })();
+  </script>
+</body>
+
+</html>

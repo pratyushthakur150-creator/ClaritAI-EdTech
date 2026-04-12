@@ -1,0 +1,218 @@
+=== GMAT EXAM OVERVIEW ===
+Full form: Graduate Management Admission Test
+Conducting body: GMAC (Graduate Management Admission Council)
+Current version: GMAT Focus Edition (launched November 2023)
+Purpose: Admission to MBA/Masters programs worldwide
+Frequency: Can be taken anytime (online or test center)
+Total attempts: 5 per rolling 12 months, max 8 lifetime
+Score validity: 5 years
+Eligibility: No specific degree requirement; typically taken by graduates
+Test centers: Available in 100+ countries, 600+ test centers
+Also available: Online proctored test from home
+Score range: 205-805 (GMAT Focus Edition)
+Accepted by: 2,400+ business schools worldwide
+
+=== GMAT FOCUS EDITION EXAM PATTERN ===
+Total Sections: 3 (45 minutes each)
+Total Duration: 2 hours 15 minutes + breaks
+
+Section 1 - Quantitative Reasoning:
+- 21 questions, 45 minutes
+- Problem Solving only (no Data Sufficiency — moved to DI section)
+- Topics: Arithmetic, Algebra, Word Problems, Geometry, Number Properties
+- Difficulty: Adaptive — questions get harder/easier based on performance
+
+Section 2 - Verbal Reasoning:
+- 23 questions, 45 minutes
+- Critical Reasoning (CR) and Reading Comprehension (RC) only
+- NO Sentence Correction in GMAT Focus Edition
+- CR: Strengthen, Weaken, Assumption, Inference, Evaluate, Boldface
+- RC: Main idea, Detail, Inference, Tone, Structure questions
+
+Section 3 - Data Insights:
+- 20 questions, 45 minutes
+- Data Sufficiency (DS): moved here from Quant section
+- Multi-Source Reasoning, Table Analysis, Graphics Interpretation
+- Two-Part Analysis
+- Mix of quantitative and verbal data analysis
+
+Scoring:
+- Each section scored 60-90 (in 1-point increments)
+- Total composite score: 205-805
+- Section order: Student's choice (choose at start of exam)
+- No penalty for wrong answers (no negative marking)
+- Computer Adaptive: difficulty adjusts per question
+
+=== GMAT FOCUS VS OLD GMAT ===
+Changes in Focus Edition:
+- Removed AWA (Analytical Writing Assessment) — no essay
+- Removed Sentence Correction from Verbal
+- Data Sufficiency moved to Data Insights section
+- Shorter exam: 2h15m vs 3h7m
+- Score range: 205-805 vs 200-800
+- Can review and change up to 3 answers per section
+- Bookmark questions to revisit
+- Choose section order before starting
+
+=== GMAT SYLLABUS DETAILS ===
+Quantitative Reasoning:
+- Arithmetic: Number properties, fractions, decimals, percentages, ratios
+- Algebra: Linear equations, quadratic equations, inequalities, functions
+- Word Problems: Rate/work, mixtures, interest, profit/loss, age problems
+- Geometry: Lines, angles, triangles, circles, quadrilaterals, coordinate geometry
+- Statistics: Mean, median, mode, standard deviation, range
+- Counting and Probability: Permutations, combinations, basic probability
+- No calculus, no trigonometry, no advanced mathematics
+
+Verbal Reasoning:
+Critical Reasoning:
+- Argument structure: Premise, Conclusion, Assumption
+- Strengthen the argument
+- Weaken the argument
+- Find the assumption
+- Draw an inference
+- Evaluate the argument
+- Boldface questions (identify role of statements)
+- Paradox/Explain questions
+
+Reading Comprehension:
+- Passages: Business, social science, biological science, physical science
+- Question types: Main idea, Supporting idea, Inference, Application, Tone
+- Passage length: Short (200-250 words) and Long (300-350 words)
+
+Data Insights:
+- Data Sufficiency: Given a question and two statements, determine if sufficient
+- Multi-Source Reasoning: Analyze data from multiple tabs/sources
+- Table Analysis: Sort and analyze data tables
+- Graphics Interpretation: Read graphs, charts, and fill in statements
+- Two-Part Analysis: Two-component answer in a table format
+
+=== GMAT STRATEGY ===
+Target Scores:
+- ISB Hyderabad: 700+ (average admits around 710-720)
+- IIM Ahmedabad/Bangalore (1-year EPGP): 700+
+- Top US MBAs (HBS, Wharton, Stanford): 730-760+ (but holistic admission)
+- Top European MBAs (INSEAD, LBS): 710+
+- Good admits possible: 680-700 with strong profile
+
+Timeline:
+- Full preparation: 3-4 months (dedicated), 4-6 months (working professionals)
+- Quick preparation (strong quant background): 2-3 months
+
+Phase-wise Plan:
+Phase 1 (Weeks 1-4): Foundations
+- Learn all question types and strategies
+- Review fundamental math concepts
+- Start reading practice for RC
+- Take a diagnostic test to identify baseline
+
+Phase 2 (Weeks 5-8): Topic-wise Practice
+- Deep dive into each section
+- 50+ CR questions, 30+ RC passages, 100+ Quant problems
+- Data Sufficiency focused practice
+- Weekly sectional practice tests
+
+Phase 3 (Weeks 9-12): Full-length Practice
+- 2 full-length mocks per week
+- Thorough analysis after each mock
+- Error log maintenance
+- Time management optimization
+
+Phase 4 (Weeks 13-16): Peak Performance
+- 3 mocks per week
+- Focus on weak areas only
+- Timed sectional drills
+- Final strategy refinement
+
+Study Hours: 2-3 hours daily for working professionals, 4-6 hours for dedicated prep
+
+=== GMAT HIGH-YIELD TOPICS ===
+Quantitative (Most Tested):
+- Number Properties and Divisibility rules
+- Word Problems (Rate, Work, Mixtures)
+- Inequalities and Absolute Values
+- Geometry (Triangles, Circles)
+- Statistics (Mean, Median, Standard Deviation)
+
+Verbal (Most Tested):
+- Critical Reasoning: Assumption and Weaken questions (30% of CR)
+- RC: Inference and Main Idea questions
+- Argument structure understanding
+
+Data Insights (Most Tested):
+- Data Sufficiency: Number properties, inequalities
+- Multi-Source Reasoning: Cross-referencing data
+- Two-Part Analysis: Algebraic and logical reasoning
+
+=== GMAT COURSE OFFERINGS ===
+Comprehensive GMAT Course (3-4 months):
+- Complete Quant, Verbal, DI preparation
+- 150+ hours of video lessons/live classes
+- 2000+ practice questions, OG-level difficulty
+- 15+ full-length mock tests with analysis
+- Personal mentor and weekly strategy calls
+- Score improvement guarantee
+
+Intensive Course (6-8 weeks):
+- Accelerated syllabus, daily classes
+- Focus on strategy and shortcuts
+- 10+ full mocks, 1000+ practice questions
+- Ideal for retakers or strong foundations
+
+Self-Paced Online Course:
+- Recorded video lectures
+- Adaptive practice question bank
+- Mobile app for on-the-go practice
+- Community doubt forum
+
+Test Series:
+- 20 full-length GMAT Focus Edition mock tests
+- Section-wise practice tests
+- Detailed analytics and score prediction
+- Percentile comparison
+
+One-on-One Tutoring:
+- Personalized study plan
+- Flexible scheduling
+- Focus on individual weak areas
+- Score guarantee programs
+
+=== GMAT FEES ===
+GMAT Exam Fee: $275 USD (~Rs 23,000)
+Comprehensive Course (Online): Rs 30,000 - Rs 60,000
+Intensive Course (6-8 weeks): Rs 20,000 - Rs 40,000
+Self-Paced Course: Rs 10,000 - Rs 25,000
+Test Series Only: Rs 5,000 - Rs 12,000
+One-on-One Tutoring: Rs 3,000 - Rs 8,000 per hour
+Score Enhancement Rescoring: $50 USD
+Additional Score Report: $35 USD
+Scholarship: Up to 50% based on diagnostic test
+EMI options available for all courses
+
+=== COMMON GMAT QUESTIONS AND ANSWERS ===
+Q: What is a good GMAT score?
+A: 700+ is competitive for top global MBA programs. Average GMAT at top schools: HBS 730, Wharton 733, Stanford 738, INSEAD 710, ISB 710. However, GMAT is one part of a holistic application. A 680 with exceptional work experience and essays can beat a 760 with a weak profile.
+
+Q: GMAT vs GRE — which should I take?
+A: GMAT is preferred by top B-Schools and signals commitment to MBA. GRE is accepted by most B-Schools now but some admissions committees still prefer GMAT. If you are 100% focused on MBA, take GMAT. If you want flexibility to apply to other graduate programs too, GRE might be better.
+
+Q: How long to prepare for GMAT?
+A: Most candidates need 3-4 months of dedicated preparation (2-3 hours daily). With strong quant background, 2 months may suffice. Working professionals typically take 4-6 months. Take a diagnostic first — your baseline score determines how much time you need.
+
+Q: Is GMAT Focus Edition easier than old GMAT?
+A: Not necessarily easier, but different. Removing Sentence Correction helps some. Moving Data Sufficiency to DI changes strategy. The shorter duration (2h15m vs 3h7m) means less fatigue. The ability to review/change answers is new and powerful. Overall, similar difficulty but better testing experience.
+
+Q: Can I prepare for GMAT without coaching?
+A: Yes, many 700+ scorers are self-prepared. Use Official Guide (OG), GMAT Club forums, and official practice tests. However, coaching provides strategy frameworks, structured preparation, and accountability. At minimum, take official mock tests from mba.com.
+
+Q: What is Data Sufficiency and how to approach it?
+A: DS gives you a question and two statements. You must determine if the statements (individually or together) provide sufficient information to answer — you do NOT need to solve completely. Key approach: Use the AD/BCE method. If Statement 1 alone is sufficient, answer is A or D. If not, check Statement 2 alone.
+
+Q: How many times can I take the GMAT?
+A: Up to 5 times in a rolling 12-month period, maximum 8 lifetime attempts. There must be a 16-day gap between attempts. Schools see all scores unless you cancel. Most improvement happens between 1st and 2nd attempts.
+
+Q: What is the GMAT scoring algorithm?
+A: GMAT Focus is computer-adaptive at the section level. Your initial questions establish a difficulty baseline. Correct answers lead to harder questions (higher potential score). The final score considers difficulty level and accuracy. You can bookmark and review up to 3 changes per section.
+
+Q: When should I apply after getting my GMAT score?
+A: Most MBA programs have Round 1 (Sep-Oct), Round 2 (Jan), Round 3 (Mar-Apr). Round 1 and 2 are best for scholarships. Take GMAT at least 2-3 months before application deadlines to have time for essays and recommendations. GMAT scores are valid for 5 years.

@@ -1,0 +1,214 @@
+=== JEE EXAM OVERVIEW ===
+Full form: Joint Entrance Examination
+Conducting body: NTA (National Testing Agency)
+Types: JEE Main and JEE Advanced
+JEE Main: Gateway to NITs, IIITs, and other centrally funded institutions
+JEE Advanced: Gateway to IITs (only top 2.5 lakh JEE Main qualifiers can appear)
+Frequency: JEE Main held twice a year (January and April sessions)
+JEE Advanced: Once a year (usually May/June)
+Total attempts: JEE Main — 6 consecutive attempts (3 years x 2 sessions)
+JEE Advanced: Maximum 2 attempts in consecutive years
+Age limit: Should have passed Class 12 in current or previous year
+Eligibility: Passed Class 12 with Physics, Chemistry, and Mathematics
+Minimum marks: 75% in Class 12 (65% for SC/ST) OR top 20 percentile in board exam
+Total seats through JEE: ~60,000 in NITs/IIITs/GFTIs + ~16,000 in IITs
+
+=== JEE MAIN EXAM PATTERN ===
+Paper 1 (B.E./B.Tech):
+- Physics: 20 MCQs (4 marks each) + 10 numerical (4 marks each, attempt any 5) = 100 marks
+- Chemistry: 20 MCQs (4 marks each) + 10 numerical (4 marks each, attempt any 5) = 100 marks
+- Mathematics: 20 MCQs (4 marks each) + 10 numerical (4 marks each, attempt any 5) = 100 marks
+- Total: 300 marks, 3 hours duration
+- Negative marking: -1 for wrong MCQs, no negative for numerical
+- Mode: Computer Based Test (CBT) only
+
+Paper 2A (B.Arch):
+- Mathematics: 20 MCQs + 10 numerical = 100 marks
+- Aptitude Test: 50 MCQs = 200 marks
+- Drawing Test: 2 questions = 100 marks
+- Total: 400 marks, 3 hours
+
+Paper 2B (B.Planning):
+- Mathematics: 20 MCQs + 10 numerical = 100 marks
+- Aptitude Test: 50 MCQs = 200 marks
+- Planning Based Questions: 25 MCQs = 100 marks
+- Total: 400 marks, 3 hours
+
+=== JEE ADVANCED EXAM PATTERN ===
+Paper 1: Physics, Chemistry, Mathematics (3 hours)
+Paper 2: Physics, Chemistry, Mathematics (3 hours)
+- Both papers are mandatory
+- Each paper has multiple sections: MCQ single correct, MCQ multiple correct, numerical, matching
+- Total marks vary each year (typically 360 per paper)
+- Both papers count for ranking
+- Negative marking varies by question type
+- Known for conceptual depth and unconventional problem formats
+- IIT organizing the exam changes each year (IIT Bombay, Delhi, Kharagpur, etc. rotate)
+
+=== JEE SYLLABUS ===
+Physics:
+- Mechanics: Kinematics, Newton's Laws, Work-Energy-Power, Rotational Motion, Gravitation
+- Waves and Oscillations: SHM, Wave Motion, Sound Waves, Superposition
+- Thermodynamics: Laws of Thermodynamics, KTG, Heat Transfer, Calorimetry
+- Electromagnetism: Electrostatics, Current Electricity, Magnetism, EMI, AC Circuits
+- Optics: Ray Optics, Wave Optics, Interference, Diffraction, Polarization
+- Modern Physics: Photoelectric Effect, Atomic Structure, Nuclear Physics, Radioactivity
+- Semiconductor Devices, Communication Systems (JEE Main only)
+
+Chemistry:
+Physical Chemistry:
+- Mole Concept, Stoichiometry, Atomic Structure, Chemical Bonding
+- Thermodynamics, Chemical Equilibrium, Ionic Equilibrium
+- Electrochemistry, Chemical Kinetics, Solutions, Surface Chemistry
+- Solid State, Gaseous State, Nuclear Chemistry
+
+Organic Chemistry:
+- General Organic Chemistry (GOC), Hydrocarbons, Isomerism
+- Alkyl Halides, Alcohols, Phenols, Ethers, Aldehydes, Ketones
+- Carboxylic Acids, Amines, Polymers, Biomolecules
+- Named Reactions, Reaction Mechanisms, Stereochemistry
+
+Inorganic Chemistry:
+- Periodic Table and Properties, Chemical Bonding
+- s-block, p-block, d-block, f-block Elements
+- Coordination Compounds, Metallurgy, Qualitative Analysis
+- Environmental Chemistry, Hydrogen and its compounds
+
+Mathematics:
+- Algebra: Complex Numbers, Quadratic Equations, Sequences & Series, Binomial Theorem, Matrices, Determinants, Permutations & Combinations, Probability
+- Calculus: Limits, Continuity, Differentiability, Applications of Derivatives, Indefinite & Definite Integration, Differential Equations, Area Under Curves
+- Coordinate Geometry: Straight Lines, Circles, Parabola, Ellipse, Hyperbola
+- Trigonometry: Functions, Equations, Inverse Trig, Properties of Triangles
+- Vectors and 3D Geometry: Vector Algebra, 3D Coordinates, Lines and Planes
+- Statistics: Mean, Median, Mode, Standard Deviation (JEE Main)
+- Mathematical Reasoning (JEE Main)
+
+=== JEE STRATEGY ===
+Timeline: Ideally start from Class 11 (2 years preparation)
+For Class 12 students (1 year crash): Focus on high-weightage topics first
+For droppers: Structured 8-10 month intensive plan
+
+Phase-wise Preparation:
+Phase 1 (Months 1-4): Build strong fundamentals in all three subjects
+- Focus on NCERT thoroughly for Chemistry
+- HC Verma / Irodov concepts for Physics
+- RD Sharma / Cengage for Mathematics basics
+Phase 2 (Months 5-8): Problem solving and advanced topics
+- Solve previous year JEE Main and Advanced papers
+- Topic-wise practice with increasing difficulty
+- Mock tests begin — weekly full-length tests
+Phase 3 (Months 9-10): Revision and mock tests
+- 2-3 full mock tests per week
+- Focus on weak areas identified from mocks
+- Formula revision sheets, error log review
+Phase 4 (Last 1-2 months): Final revision and exam strategy
+- Daily full-length mock tests
+- Only revision, no new topics
+- Time management practice, accuracy focus
+
+Daily Study Plan (for dedicated JEE aspirant):
+- 8-10 hours total study time
+- 3 hours Physics, 3 hours Chemistry, 3 hours Mathematics
+- 1 hour for revision and problem solving
+- Rotate subjects to avoid monotony
+- Weekend: Full-length mock test + analysis
+
+=== JEE IMPORTANT TOPICS (HIGH WEIGHTAGE) ===
+Physics High Weightage:
+- Mechanics (25-30% of paper)
+- Electromagnetism (20-25%)
+- Modern Physics (10-15%)
+- Optics (10%)
+
+Chemistry High Weightage:
+- Organic Chemistry (35-40% of Chemistry)
+- Physical Chemistry (30-35%)
+- Inorganic Chemistry (25-30%)
+- Most scoring: Chemical Bonding, Thermodynamics, p-block, Named Reactions
+
+Mathematics High Weightage:
+- Calculus (30-35% of Maths)
+- Coordinate Geometry (15-20%)
+- Algebra (25-30%)
+- Most scoring: Integration, Matrices, Probability, Conic Sections
+
+=== JEE COURSE OFFERINGS ===
+2-Year Foundation Course (Class 11 start):
+- Complete JEE Main + Advanced preparation
+- Board exam preparation integrated
+- Weekly tests and doubt sessions
+- Personal mentor assigned
+- Study material and DPPs (Daily Practice Problems)
+
+1-Year Intensive Course (Class 12 / Dropper):
+- Accelerated syllabus completion
+- Focus on high-yield topics
+- Daily problem practice (DPPs)
+- Bi-weekly full-length mock tests
+- Personal performance analysis
+
+Crash Course (3-6 months before exam):
+- Rapid revision of entire syllabus
+- Focus on important topics and shortcuts
+- Mock test series (30+ tests)
+- Doubt clearing marathon sessions
+
+Test Series:
+- JEE Main Test Series: 30 full-length tests + 15 sectional tests
+- JEE Advanced Test Series: 20 full-length tests + topic-wise tests
+- Detailed performance analytics and rank prediction
+- All India ranking comparison
+
+Topic-wise Modules:
+- Individual subject/topic modules available
+- For students who need help in specific weak areas
+- Includes video lectures + practice problems + tests
+
+Online Live Interactive Classes:
+- Live classes with real-time doubt solving
+- Recorded sessions available for revision
+- Same quality as offline coaching
+- Chat and video-based doubt clearing
+
+=== JEE FEES ===
+2-Year Foundation Course (Offline): Rs 1,50,000 - Rs 2,50,000
+2-Year Foundation Course (Online): Rs 80,000 - Rs 1,50,000
+1-Year Intensive Course (Offline): Rs 1,00,000 - Rs 1,80,000
+1-Year Intensive Course (Online): Rs 60,000 - Rs 1,00,000
+Crash Course (3-6 months): Rs 30,000 - Rs 60,000
+Test Series Only: Rs 5,000 - Rs 15,000
+Topic-wise Modules: Rs 3,000 - Rs 8,000 per module
+Online Live Classes: Rs 50,000 - Rs 90,000
+Scholarship: Up to 90% based on entrance test performance
+EMI options: Available for all courses above Rs 20,000
+
+=== COMMON JEE QUESTIONS AND ANSWERS ===
+Q: What is the difference between JEE Main and JEE Advanced?
+A: JEE Main is the first-level exam for admission to NITs, IIITs, and GFTIs (~60,000 seats). JEE Advanced is the second-level exam for admission to IITs (~16,000 seats). Only the top 2.5 lakh qualifiers from JEE Main are eligible for JEE Advanced. JEE Advanced is significantly more difficult and tests deeper conceptual understanding.
+
+Q: Can I prepare for JEE without coaching?
+A: Yes, it is possible but challenging. Many rankers have prepared through self-study using good books and online resources. However, coaching provides structured preparation, expert guidance, peer competition, and regular testing which significantly helps. At minimum, a good test series is recommended for self-study students.
+
+Q: How many hours should I study daily for JEE?
+A: For serious JEE aspirants, 6-8 hours of focused study daily is recommended during Class 11-12. During the final few months, this should increase to 10-12 hours. Quality matters more than quantity — solve problems rather than just reading theory. Use the Pomodoro technique for better focus.
+
+Q: Is NCERT enough for JEE?
+A: NCERT is the foundation but not sufficient alone. For Chemistry (especially Inorganic and some Physical Chemistry), NCERT is very important. For Physics and Mathematics, you need additional reference books like HC Verma, Irodov, Cengage, Arihant etc. NCERT provides the base; advanced problem solving requires more practice.
+
+Q: What is the cutoff for top NITs?
+A: Top NITs (Trichy, Warangal, Surathkal, Allahabad) typically require JEE Main ranks between 1,000-8,000 for popular branches like CSE. For newer NITs, ranks up to 30,000-50,000 may suffice for core branches. Cutoffs vary by category, home state, and branch preference. Check JoSAA counseling data for exact cutoffs.
+
+Q: Should I take a drop year for JEE?
+A: Consider dropping only if you scored reasonably in your first attempt and genuinely believe you can improve significantly. A structured drop year plan with coaching, regular testing, and avoiding previous mistakes can help. Many rankers are droppers. However, also have a backup plan — consider applying to other good colleges.
+
+Q: What are the best books for JEE preparation?
+A: Physics: HC Verma (concepts), DC Pandey (problems), Irodov (Advanced). Chemistry: NCERT (must), OP Tandon (Physical), Morrison Boyd (Organic), JD Lee (Inorganic). Mathematics: RD Sharma (basics), Cengage series, Arihant (practice). Previous year papers are the single most important resource.
+
+Q: How important are mock tests for JEE?
+A: Extremely important. Mock tests help you: 1) Practice time management (3 hours for 300 marks), 2) Identify weak areas, 3) Learn to handle exam pressure, 4) Develop question selection strategy. Start with fortnightly mocks, move to weekly, and do daily mocks in the last month. Always analyze every mock test thoroughly.
+
+Q: What is the role of board exams in JEE admission?
+A: You need 75% in Class 12 boards (65% for SC/ST) OR be in the top 20 percentile of your board. Board marks are used only as eligibility — they don't affect your JEE rank. However, boards are important for backup options and some private colleges. Balance board preparation with JEE preparation.
+
+Q: What is JoSAA counseling and how does it work?
+A: JoSAA (Joint Seat Allocation Authority) conducts centralized counseling for admission to IITs, NITs, IIITs, and GFTIs. After JEE results, you fill choices of colleges and branches. Seats are allocated through multiple rounds based on rank, category, and preferences. Understanding counseling strategy is crucial — fill choices wisely with a mix of aspirational and safe options.

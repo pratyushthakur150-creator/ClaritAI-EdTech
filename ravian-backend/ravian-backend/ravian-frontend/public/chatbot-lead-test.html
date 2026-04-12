@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 ClariAI Chatbot - Lead Capture Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            max-width: 900px;
+            width: 100%;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #4f46e5;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #4f46e5;
+        }
+        .test-section h2 {
+            color: #1e293b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .step-number {
+            background: #4f46e5;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .code {
+            background: #1e293b;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .success {
+            background: #dcfce7;
+            border-left: 4px solid #22c55e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #ecfccb;
+            border-radius: 8px;
+            border-left: 4px solid #84cc16;
+            font-size: 1.1em;
+        }
+        .btn {
+            background: #4f46e5;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+        }
+        .links {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .link-btn {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: #f1f5f9;
+            color: #1e293b;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .link-btn:hover {
+            background: #e2e8f0;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 ClariAI Chatbot Test</h1>
+        <p class="subtitle">Lead Capture & CRM Integration Testing</p>
+
+        <div class="test-section">
+            <h2>📋 Testing Instructions</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Open the chatbot</strong><br>
+                Look for the purple chat icon in the bottom-right corner of this page
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Send lead information</strong><br>
+                Type exactly (copy-paste this):
+                <div class="code">Test User, testlead@example.com, Python</div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Check bot response</strong><br>
+                Bot should say: <em>"Thank you, Test User! I've captured your details for Python..."</em>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Verify in CRM</strong><br>
+                Click "Open CRM Dashboard" below and wait 5 seconds for auto-refresh
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Confirm lead appears</strong><br>
+                You should see "Test User" in the leads list with email and course
+            </div>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Backend Must Be Running</strong><br>
+      Make sure your backend is running on <strong>http://127.0.0.1:8001</strong><br>
+            Check the terminal where you ran: <code>uvicorn main:app --reload</code>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 Alternative Test Formats</h2>
+            <p>Try these variations to test lead capture:</p>
+            
+            <div class="code">Sarah Johnson, sarah@test.com, Data Science</div>
+            <div class="code">capture my lead: John Doe, john@example.com, Web Development</div>
+            <div class="code">I'm interested! Name: Alice Smith, Email: alice@test.com, Course: Python</div>
+        </div>
+
+        <div class="status" id="chatbot-status">
+            ⏳ Initializing chatbot...
+        </div>
+
+        <div class="links">
+            <a href="http://localhost:3000/dashboard/crm" target="_blank" class="link-btn">
+                📊 Open CRM Dashboard
+            </a>
+            <a href="http://localhost:3000/dashboard/chatbot" target="_blank" class="link-btn">
+                💬 View Chatbot Sessions
+            </a>
+            <button class="btn" onclick="location.reload()">🔄 Reload Test Page</button>
+        </div>
+
+        <div class="success" style="margin-top: 30px;">
+            <strong>✅ Expected Results:</strong>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Chatbot icon appears in bottom-right</li>
+                <li>Can send and receive messages</li>
+                <li>Bot confirms lead capture with name</li>
+                <li>Lead appears in CRM within 5 seconds</li>
+                <li>Lead shows: Name, Email, Course, Source = "chatbot_widget"</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Load chatbot widget -->
+    <script src="/chatbot.js"></script>
+    <script>
+        console.log('[TEST] Loading chatbot widget...');
+        
+        window.addEventListener('load', function() {
+            const statusDiv = document.getElementById('chatbot-status');
+            
+            if (typeof EdTechChatbot !== 'undefined') {
+                try {
+                    EdTechChatbot.init({
+                        tenantId: "0f1162ba-3b8a-46ab-b334-dbb251ccde3b",
+                        apiBaseUrl: "http://127.0.0.1:8001",
+                        theme: {
+                            primaryColor: "#4F46E5",
+                            position: "bottom-right",
+                            greeting: "Hi! Ready to test lead capture? 🎓"
+                        }
+                    });
+                    
+                    statusDiv.innerHTML = '✅ <strong>Chatbot loaded successfully!</strong> Look for the purple icon in the bottom-right corner.';
+                    statusDiv.style.background = '#dcfce7';
+                    statusDiv.style.borderLeftColor = '#22c55e';
+                    
+                    console.log('[TEST] ✅ Chatbot initialized successfully');
+                    console.log('[TEST] Tenant ID:', "0f1162ba-3b8a-46ab-b334-dbb251ccde3b");
+                    console.log('[TEST] API Base URL:', "http://127.0.0.1:8001");
+                } catch (error) {
+                    statusDiv.innerHTML = '❌ <strong>Chatbot initialization failed:</strong> ' + error.message;
+                    statusDiv.style.background = '#fee2e2';
+                    statusDiv.style.borderLeftColor = '#ef4444';
+                    console.error('[TEST] ❌ Chatbot error:', error);
+                }
+            } else {
+                statusDiv.innerHTML = '❌ <strong>Chatbot script not loaded.</strong> Check if /chatbot.js exists.';
+                statusDiv.style.background = '#fee2e2';
+                statusDiv.style.borderLeftColor = '#ef4444';
+                console.error('[TEST] ❌ EdTechChatbot not found - /chatbot.js not loaded');
+            }
+        });
+
+        // Monitor chatbot messages for debugging
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'chatbot-message') {
+                console.log('[TEST] Chatbot message:', event.data);
+            }
+        });
+    </script>
+</body>
+</html>
