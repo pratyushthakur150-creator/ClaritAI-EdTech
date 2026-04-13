@@ -18,7 +18,7 @@ from app.middleware.auth import JWTAuthenticationMiddleware
 from app.middleware.rate_limiter import RateLimitMiddleware
 from app.routers.health import router as health_router
 from app.routers.v1 import api_router as v1_api_router
-from app.routers.v1 import usage, workflows, test_minimal
+from app.routers.v1 import usage, workflows
 
 # Configure logging so logs always appear in the terminal
 LOG_FORMAT = "%(asctime)s | %(levelname)-7s | %(name)s | %(message)s"
