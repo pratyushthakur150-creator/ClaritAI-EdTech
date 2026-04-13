@@ -1,0 +1,32 @@
+# Ignore secrets
+.env
+.env.*
+google-calendar-key.json
+alembic/apikey.py
+
+# Ignore heavy data
+chroma_db/
+storage/
+static/audio/
+*.pdf
+*.mp3
+*.wav
+*.webm
+
+# Ignore dev files
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitignore
+.gitattributes
+node_modules/
+
+# Ignore docs/scripts
+docs/
+*.md
+*.ps1
+*.bat
+validate_deployment.ps1
