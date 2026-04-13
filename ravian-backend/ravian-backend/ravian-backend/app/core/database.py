@@ -63,8 +63,6 @@ class DatabaseManager:
         with dbapi_connection.cursor() as cursor:
             # Set timezone to UTC
             cursor.execute("SET timezone TO 'UTC'")
-            # Enable better JSON handling
-            cursor.execute("SET session_replication_role = 'origin'")
             
     def _on_checkout(self, dbapi_connection, connection_record, connection_proxy):
         """Called when a connection is retrieved from the pool"""
