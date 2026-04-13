@@ -144,20 +144,20 @@ app.add_middleware(
     }
 )
 
-# Add rate limiting middleware (register after auth so it runs before auth).
-if settings.rate_limit_enabled and redis_client:
-    app.add_middleware(
-        RateLimitMiddleware,
-        redis_client=redis_client,
-        exempt_paths=set(settings.rate_limit_exempt_paths),
-        exempt_ips=set(settings.rate_limit_exempt_ips),
-        exempt_user_agents=set(settings.rate_limit_exempt_user_agents),
-        fail_open=settings.rate_limit_fail_open,
-        log_violations=settings.rate_limit_log_violations
-    )
-    logger.info("✓ Rate limiting middleware enabled")
-else:
-    logger.warning("⚠ Rate limiting middleware disabled")
+# Rate limiting middleware DISABLED - BaseHTTPMiddleware deadlocks with sync endpoints
+# TODO: Convert to pure ASGI middleware (like JWTAuthenticationMiddleware) to re-enable
+# if settings.rate_limit_enabled and redis_client:
+#     app.add_middleware(
+#         RateLimitMiddleware,
+#         redis_client=redis_client,
+#         exempt_paths=set(settings.rate_limit_exempt_paths),
+#         exempt_ips=set(settings.rate_limit_exempt_ips),
+#         exempt_user_agents=set(settings.rate_limit_exempt_user_agents),
+#         fail_open=settings.rate_limit_fail_open,
+#         log_violations=settings.rate_limit_log_violations
+#     )
+#     logger.info("✓ Rate limiting middleware enabled")
+logger.info("⚠ Rate limiting middleware disabled (BaseHTTPMiddleware incompatible with sync endpoints)")
 
 # Add CORS middleware LAST in code so it runs FIRST and adds headers even on 401/403.
 # CORS origins: use CORS_ORIGINS env var (comma-separated) or fallback to localhost
