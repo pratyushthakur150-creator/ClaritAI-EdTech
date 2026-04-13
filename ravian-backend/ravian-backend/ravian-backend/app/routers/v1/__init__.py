@@ -5,7 +5,7 @@ from . import (
     chatbot, confusion, nudges, risk, heatmap,
     voice, assistant, content,
     teaching_assistant,
-    usage, workflows, test_minimal,
+    usage, workflows,
     dashboard, students, courses,
 )
 
@@ -45,6 +45,3 @@ api_router.include_router(courses.router, tags=["Courses"])
 # NEW: Usage & Workflows
 api_router.include_router(usage.router, prefix="/usage", tags=["Usage"])
 api_router.include_router(workflows.router, prefix="/workflows", tags=["Workflows"])
-
-# Test minimal router
-api_router.include_router(test_minimal.router, prefix="/test", tags=["Test"])
