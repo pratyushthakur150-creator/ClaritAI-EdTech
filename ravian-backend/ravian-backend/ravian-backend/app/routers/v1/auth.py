@@ -29,7 +29,7 @@ router = APIRouter()
 
 
 @router.post('/auth/register', response_model=UserProfile, status_code=status.HTTP_201_CREATED)
-async def register(
+def register(
     request: RegisterRequest,
     db: Session = Depends(get_db_session)
 ) -> UserProfile:
@@ -84,7 +84,7 @@ async def register(
 
 
 @router.post('/auth/login')
-async def login(
+def login(
     request: LoginRequest,
     db: Session = Depends(get_db_session)
 ) -> Dict:
@@ -133,7 +133,7 @@ async def login(
 
 
 @router.post('/auth/refresh', response_model=TokenResponse)
-async def refresh_token(
+def refresh_token(
     refresh_token: str,
     db: Session = Depends(get_db_session)
 ) -> TokenResponse:
@@ -185,13 +185,13 @@ async def refresh_token(
 
 
 @router.post('/auth/logout')
-async def logout() -> Dict[str, str]:
+def logout() -> Dict[str, str]:
     """Logout user (client should delete tokens)"""
     return {"message": "Successfully logged out"}
 
 
 @router.get("/auth/me")
-async def get_current_user_info(
+def get_current_user_info(
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db_session)
 ):
