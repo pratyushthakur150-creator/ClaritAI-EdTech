@@ -230,7 +230,8 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         return response
 
 
-app.add_middleware(RequestLoggingMiddleware)
+# DISABLED: RequestLoggingMiddleware also uses BaseHTTPMiddleware which deadlocks with sync def endpoints
+# app.add_middleware(RequestLoggingMiddleware)
 
 # Teaching Assistant: static files for TTS audio
 # Use absolute paths anchored to the backend root so they resolve correctly
