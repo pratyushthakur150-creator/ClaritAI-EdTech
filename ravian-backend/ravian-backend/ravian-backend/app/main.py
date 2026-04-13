@@ -37,6 +37,14 @@ async def lifespan(app: FastAPI):
     
     logger.info("Starting up Ravian Backend API...")
     
+    # Auto-create database tables on startup
+    try:
+        from app.core.database import create_tables
+        create_tables()
+        logger.info("✓ Database tables created/verified")
+    except Exception as e:
+        logger.error(f"✗ Failed to create database tables: {e}")
+    
     try:
         # Try Redis but don't crash if it fails
         if hasattr(redis_client, "ping"):
