@@ -75,6 +75,18 @@ async def lifespan(app: FastAPI):
                 logger.info("Continuing without Redis - rate limiting disabled")
         
         logger.info("✓ Application startup completed successfully")
+
+        # ── Auto-load SSSi RAG knowledge into ChromaDB ───────────────
+        # Railway filesystem is ephemeral — we reload on every startup
+        try:
+            from app.rag.chatbot_rag.exam_knowledge_loader import load_exam_document
+            sssi_loaded = await load_exam_document("sssi", force_reload=False)
+            if sssi_loaded:
+                logger.info("✓ SSSi knowledge loaded into ChromaDB")
+            else:
+                logger.warning("⚠ SSSi knowledge failed to load (check sssi_knowledge.txt exists and OPENAI_API_KEY is set)")
+        except Exception as e:
+            logger.warning(f"⚠ SSSi knowledge auto-load skipped: {e}")
         
     except Exception as e:
         logger.error(f"✗ Application startup failed: {e}")

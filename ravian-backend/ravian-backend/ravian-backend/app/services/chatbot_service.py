@@ -519,6 +519,7 @@ class ChatbotService:
         session_id: str,
         conversation_history: Optional[List[Dict[str, Any]]] = None,
         context: Optional[List[Dict[str, Any]]] = None,
+        tenant_id: Optional[UUID] = None,
     ) -> Dict[str, Any]:
         """
         Generate AI-powered response for a chatbot message.
@@ -637,36 +638,56 @@ class ChatbotService:
             try:
                 from app.rag.chatbot_rag.chatbot_retriever import retrieve_exam_context
                 from app.rag.chatbot_rag.context_builder import (
-                    build_rag_context, build_chatbot_system_prompt, detect_cross_exam_query
+                    build_rag_context, build_chatbot_system_prompt,
+                    detect_cross_exam_query, build_sssi_system_prompt, SSSI_TENANT_ID
                 )
 
-                # Detect if user is asking about a different exam
-                _cross_exam_detected = None
-                _rag_exam_target = _exam_target  # which exam to retrieve knowledge from
-                detected_exam, is_cross = detect_cross_exam_query(message, _exam_target)
-                if is_cross and detected_exam:
-                    _cross_exam_detected = detected_exam
-                    _rag_exam_target = detected_exam  # retrieve from the asked-about exam
-                    logger.info(f"Cross-exam detected: target={_exam_target}, asked_about={detected_exam}")
+                # ── SSSi tenant: use SSSi knowledge collection ───────
+                _is_sssi = tenant_id and str(tenant_id) == SSSI_TENANT_ID
 
-                retrieved_chunks = await retrieve_exam_context(
-                    query=message,
-                    exam_target=_rag_exam_target,
-                    top_k=3,
-                )
-                rag_context = build_rag_context(retrieved_chunks)
-                system_prompt = build_chatbot_system_prompt(
-                    exam_target=_exam_target,
-                    preparation_stage=_prep_stage,
-                    rag_context=rag_context,
-                    cross_exam_detected=_cross_exam_detected,
-                    message_count=message_count,
-                )
-                logger.info(
-                    f"RAG prompt built: exam={_exam_target}, rag_target={_rag_exam_target}, "
-                    f"cross_exam={_cross_exam_detected}, chunks={len(retrieved_chunks)}, "
-                    f"context_len={len(rag_context)}, msg_count={message_count}"
-                )
+                if _is_sssi:
+                    retrieved_chunks = await retrieve_exam_context(
+                        query=message,
+                        exam_target="SSSI",
+                        top_k=4,
+                    )
+                    rag_context = build_rag_context(retrieved_chunks)
+                    system_prompt = build_sssi_system_prompt(
+                        message_count=message_count,
+                        rag_context=rag_context,
+                    )
+                    logger.info(
+                        f"[SSSi RAG] chunks={len(retrieved_chunks)}, "
+                        f"context_len={len(rag_context)}, msg_count={message_count}"
+                    )
+                else:
+                    # Detect if user is asking about a different exam
+                    _cross_exam_detected = None
+                    _rag_exam_target = _exam_target
+                    detected_exam, is_cross = detect_cross_exam_query(message, _exam_target)
+                    if is_cross and detected_exam:
+                        _cross_exam_detected = detected_exam
+                        _rag_exam_target = detected_exam
+                        logger.info(f"Cross-exam detected: target={_exam_target}, asked_about={detected_exam}")
+
+                    retrieved_chunks = await retrieve_exam_context(
+                        query=message,
+                        exam_target=_rag_exam_target,
+                        top_k=3,
+                    )
+                    rag_context = build_rag_context(retrieved_chunks)
+                    system_prompt = build_chatbot_system_prompt(
+                        exam_target=_exam_target,
+                        preparation_stage=_prep_stage,
+                        rag_context=rag_context,
+                        cross_exam_detected=_cross_exam_detected,
+                        message_count=message_count,
+                    )
+                    logger.info(
+                        f"RAG prompt built: exam={_exam_target}, rag_target={_rag_exam_target}, "
+                        f"cross_exam={_cross_exam_detected}, chunks={len(retrieved_chunks)}, "
+                        f"context_len={len(rag_context)}, msg_count={message_count}"
+                    )
             except Exception as rag_err:
                 logger.warning(f"RAG retrieval failed, using fallback prompt: {rag_err}")
                 system_prompt = self._build_system_prompt(context, intent_data)

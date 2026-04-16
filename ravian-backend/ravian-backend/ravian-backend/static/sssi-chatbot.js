@@ -1,6 +1,7 @@
 /**
  * ClaritAI Chatbot Widget for SSSi Online Tutoring
- * Embed: <script src="https://ravian-backend-production.railway.app/static/sssi-chatbot.js" defer></script>
+ * Production RAG AI-powered widget — backed by GPT-4o-mini + ChromaDB
+ * Embed: <script src="https://claritai-edtech-production.up.railway.app/static/sssi-chatbot.js" defer></script>
  */
 (function () {
   "use strict";
@@ -10,7 +11,7 @@
     apiBaseUrl: "https://claritai-edtech-production.up.railway.app",
     botName: "SSSI BOT",
     greeting:
-      "Welcome to SSSi Online Tutoring — India's No.1 personalized online learning platform since 2015.\n\nI'm your AI assistant. I can help you with:\n\n• **Online Tuition:** Class 1 to 12 (CBSE, ICSE, State Boards)\n• **Competitive Exams:** IIT JEE, NEET, KVPY, NTSE, GATE\n• **Foreign Languages:** French, German, Spanish, Japanese & more\n• **Beyond Academics:** Abacus, Vedic Maths, Music, Robotics, AI\n• **Study Abroad Prep:** IELTS, PTE, TOEFL, GMAT, GRE prep\n\nHow can I help you today?",
+      "Welcome to SSSi Online Tutoring — India's No.1 personalized online learning platform since 2015.\n\nI'm your AI assistant. I can help you with:\n\n• **Online Tuition:** Class 1 to 12 (CBSE, ICSE, State Boards)\n• **Competitive Exams:** IIT JEE, NEET, KVPY, NTSE, GATE\n• **Foreign Languages:** French, German, Spanish, Japanese & more\n• **Beyond Academics:** Abacus, Vedic Maths, Robotics, Music, AI\n• **Study Abroad Prep:** IELTS, PTE, TOEFL, GMAT, GRE\n\nHow can I help you today?",
   };
 
   // ── Inject Styles ──────────────────────────────────────────────────────────
@@ -54,6 +55,10 @@
     }
     ._sssi-name { font-size:15px; font-weight:600; color:#1e293b; }
     ._sssi-status { font-size:11px; color:#22c55e; margin-top:1px; }
+    ._sssi-ai-badge {
+      font-size:10px; background:#eef2ff; color:#4f46e5; padding:2px 7px;
+      border-radius:10px; font-weight:600; margin-left:4px; letter-spacing:.3px;
+    }
     ._sssi-topicons { display:flex; gap:10px; align-items:center; }
     ._sssi-tbtn {
       background:#f1f5f9; border:none; cursor:pointer;
@@ -112,6 +117,7 @@
       background:transparent; min-width:0; font-family:inherit;
     }
     ._sssi-inputinner input::placeholder { color:#94a3b8; }
+    ._sssi-inputinner input:disabled { opacity:0.5; }
     ._sssi-sendbtn {
       width:32px; height:32px; background:#e2e8f0; border-radius:50%;
       display:flex; align-items:center; justify-content:center;
@@ -125,13 +131,7 @@
     ._sssi-footer span   { font-size:11px; color:#94a3b8; }
     ._sssi-footer strong { font-size:11px; color:#0f172a; font-weight:600; }
 
-    ._sssi-sugg-wrap { display:flex; flex-direction:column; gap:7px; margin-top:10px; align-items:flex-end; }
-    ._sssi-sugg {
-      background:#0062ff; color:#fff; border:none; border-radius:8px;
-      padding:7px 14px; font-size:13px; cursor:pointer; font-family:inherit;
-      font-weight:500; transition:background .2s;
-    }
-    ._sssi-sugg:hover { background:#004de8; }
+    ._sssi-err { font-size:12px; color:#ef4444; padding:6px 10px; background:#fef2f2; border-radius:8px; margin-bottom:4px; }
   `;
 
   // ── Inject font + styles ───────────────────────────────────────────────────
@@ -162,7 +162,7 @@
         <div class="_sssi-pill">
           <div class="_sssi-av">${BOT_SVG}</div>
           <div>
-            <div class="_sssi-name">${CONFIG.botName}</div>
+            <div class="_sssi-name">${CONFIG.botName} <span class="_sssi-ai-badge">AI</span></div>
             <div class="_sssi-status">● Online</div>
           </div>
         </div>
@@ -194,153 +194,138 @@
   `;
   document.body.appendChild(wrapper);
 
-  // ── Knowledge Base ─────────────────────────────────────────────────────────
-  const KB = [
-    {
-      kw: ["hello","hi","hey","hii","namaste","good morning","good afternoon","good evening"],
-      res: "Hello! Welcome to SSSi Online Tutoring.\n\nI'm here to help you find the perfect learning path. We offer personalized 1-on-1 online tuition for students from Class 1 to 12, competitive exam prep, foreign languages, and much more.\n\nWhat would you like to know?",
-      sugg: ["What courses do you offer?", "Book a FREE trial class"]
-    },
-    {
-      kw: ["course","courses","offer","subjects","program","tuition","class","classes","what do you"],
-      res: "We offer a wide range of courses:\n\n• **Academic Tuition (Class 1-12):** All subjects across CBSE, ICSE, and State Boards.\n• **Competitive Exams:** IIT JEE, NEET, KVPY, NTSE, SSC, GATE.\n• **Foreign Languages:** French, German, Spanish, Chinese, Japanese, Turkish.\n• **Beyond Academics:** Abacus, Vedic Maths, Music, Robotics, AI, Python.\n• **Study Abroad Prep:** IELTS, PTE, TOEFL, GMAT, GRE.\n\nWould you like details on any specific course?",
-      sugg: ["Pricing & fees", "How does it work?"]
-    },
-    {
-      kw: ["price","pricing","fee","fees","cost","how much","payment","affordable","charge"],
-      res: "Our fees are designed to be affordable and flexible:\n\n• **Personalized 1-on-1 classes:** Pricing varies by subject, class, and frequency.\n• **FREE trial class:** Available for every course — no commitment.\n• **Flexible payment plans:** Monthly packages available.\n• **Multi-subject discounts:** Bundle subjects to save more.\n\nFor an exact quote, book a free trial and our counselor will guide you.",
-      sugg: ["Book a FREE trial class", "What courses do you offer?"]
-    },
-    {
-      kw: ["trial","demo","book","enroll","register","sign up","free class","start"],
-      res: "Yes, FREE trial class available!\n\nHere's what you'll experience:\n• Live 1-on-1 session with an expert tutor.\n• Interactive whiteboard for real-time learning.\n• Personalized attention to your learning style.\n\nTo book your slot, please share your details.",
-      sugg: []
-    },
-    {
-      kw: ["neet","jee","iit","medical","engineering","competitive"],
-      res: "We provide comprehensive preparation for JEE and NEET:\n\n• **Subjects:** Physics, Chemistry, Biology, and Mathematics.\n• **Approach:** NCERT-focused with chapter-wise mock tests and PYQ practice.\n• **Guidance:** Expert 1-on-1 tutors to clear doubts instantly.\n\nStart your preparation with a free demo class!",
-      sugg: ["Book a FREE trial class", "Pricing & fees"]
-    },
-    {
-      kw: ["language","french","german","spanish","japanese","foreign","ielts","toefl","gmat","gre","pte"],
-      res: "We offer expert coaching for foreign languages and study abroad tests:\n\n• **Languages:** French, German, Spanish, Chinese, Japanese, Turkish, Portuguese.\n• **Test Prep:** IELTS, PTE, TOEFL, GMAT, GRE — all levels.\n• **Experienced tutors** with proven track records.\n\nInterested? Book a FREE demo class today.",
-      sugg: ["Book a FREE trial class"]
-    },
-    {
-      kw: ["contact","call me","call","reach","speak","human","counselor","support"],
-      res: "Our academic counselor will be happy to contact you!\n\nYou can also reach us directly:\n• **Phone/WhatsApp:** +91-742-867-2376\n• **Website:** www.sssi.in\n\nOr share your details and we'll call you back.",
-      sugg: []
-    },
-    {
-      kw: ["how does it work","how it works","how","process","platform","online"],
-      res: "Here's how SSSi works:\n\n**Step 1:** Book a FREE trial class (no commitment).\n**Step 2:** Get matched with an expert tutor suited to your needs.\n**Step 3:** Learn live via our interactive online platform with HD video and a shared whiteboard.\n**Step 4:** Track your progress with regular assessments.\n\nAll sessions are recorded so you can revise anytime.",
-      sugg: ["Book a FREE trial class", "Pricing & fees"]
-    }
-  ];
+  // ── State ──────────────────────────────────────────────────────────────────
+  let visitorId = getVisitorId();
+  let isOpen = false, firstOpen = true, sending = false;
 
-  // ── Lead Capture State Machine ─────────────────────────────────────────────
-  let leadState = "none";
-  let leadData = { name: "", email: "", phone: "" };
+  // ── DOM refs ───────────────────────────────────────────────────────────────
+  const fab     = document.getElementById("_sssi-fab");
+  const win     = document.getElementById("_sssi-win");
+  const msgs    = document.getElementById("_sssi-msgs");
+  const input   = document.getElementById("_sssi-input");
+  const sendBtn = document.getElementById("_sssi-send");
 
-  function getResponse(userMsg) {
-    const msg = userMsg.toLowerCase().trim();
+  // ── Event Listeners ────────────────────────────────────────────────────────
+  input.addEventListener("input", () => {
+    const hasText = input.value.trim().length > 0;
+    sendBtn.classList.toggle("on", hasText);
+    sendBtn.disabled = !hasText;
+  });
 
-    if (leadState === "asking_name") {
-      leadData.name = userMsg.trim();
-      leadState = "asking_email";
-      return { res: `Thanks, **${leadData.name}**! What's your best **email address**?`, sugg: [] };
-    }
-    if (leadState === "asking_email") {
-      if (!userMsg.includes("@") || !userMsg.includes(".")) {
-        return { res: "That doesn't look like a valid email. Please enter a valid **email address**.", sugg: [] };
-      }
-      leadData.email = userMsg.trim();
-      leadState = "asking_phone";
-      return { res: "Got it! What's your **phone number** so our counselor can reach you?", sugg: [] };
-    }
-    if (leadState === "asking_phone") {
-      const clean = userMsg.replace(/[^0-9+]/g, "");
-      if (clean.length < 8) {
-        return { res: "That phone number seems too short. Please enter a valid **phone number**.", sugg: [] };
-      }
-      leadData.phone = userMsg.trim();
-      leadState = "none";
-      submitLead(leadData);
-      return {
-        res: "Thank you! We've received your details.\n\nOur academic counselor will get in touch with you shortly.\n\nIs there anything else I can help you with?",
-        sugg: ["What courses do you offer?", "Pricing & fees"]
-      };
-    }
+  fab.addEventListener("click", () => {
+    isOpen = true;
+    win.classList.add("open");
+    fab.classList.add("open");
+    input.focus();
+    if (firstOpen) { firstOpen = false; showGreeting(); }
+  });
 
-    // Lead capture triggers
-    const enrollKw = ["trial","demo","book","enroll","register","sign up","free class","start","call me","call","contact","human","counselor"];
-    for (const kw of enrollKw) {
-      if (msg.includes(kw)) {
-        leadState = "asking_name";
-        return {
-          res: "I'd love to help you get started!\n\nCould you please share your **full name**?",
-          sugg: []
-        };
-      }
-    }
+  document.getElementById("_sssi-close").addEventListener("click", () => {
+    isOpen = false;
+    win.classList.remove("open");
+    fab.classList.remove("open");
+  });
 
-    // Detect email/phone shared directly
-    const hasEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(msg);
-    const hasPhone = /(?:\+?91[\s\-]?)?[6-9]\d{9}/.test(msg) || /\+?\d[\d\s\-()]{9,}/.test(msg);
-    if (hasEmail || hasPhone) {
-      return {
-        res: "Thank you for sharing your contact details! Our counselor will reach out to you very soon.\n\nCan I help you with anything else?",
-        sugg: ["What courses do you offer?"]
-      };
-    }
+  document.getElementById("_sssi-refresh").addEventListener("click", () => {
+    msgs.innerHTML = "";
+    visitorId = "vid_" + Math.random().toString(36).substr(2, 12) + "_" + Date.now();
+    localStorage.setItem("_sssi_vid", visitorId);
+    showGreeting();
+  });
 
-    // KB matching
-    let best = null, bestScore = 0;
-    for (const entry of KB) {
-      let score = 0;
-      for (const kw of entry.kw) {
-        if (msg.includes(kw)) score += kw.length;
-      }
-      if (score > bestScore) { bestScore = score; best = entry; }
-    }
-    if (best && bestScore > 0) return { res: best.res, sugg: best.sugg || [] };
+  sendBtn.addEventListener("click", () => send(input.value));
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input.value); }
+  });
 
-    return {
-      res: "Thank you for reaching out!\n\nWe provide a comprehensive suite of learning solutions. Could you tell me a bit more about what you're looking for?",
-      sugg: ["What courses do you offer?", "Book a FREE trial class"]
-    };
+  // ── Greeting (local, no API call) ──────────────────────────────────────────
+  function showGreeting() {
+    botMessage(CONFIG.greeting, false); // false = no stream, instant render
   }
 
-  // ── Submit Lead to Backend ─────────────────────────────────────────────────
-  function submitLead(data) {
-    const visitorId = getVisitorId();
-    fetch(CONFIG.apiBaseUrl + "/api/v1/chatbot/capture-lead", {
+  // ── Call AI Backend ────────────────────────────────────────────────────────
+  async function callAI(userMessage) {
+    const response = await fetch(CONFIG.apiBaseUrl + "/api/v1/chatbot/message", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         tenant_id: CONFIG.tenantId,
         visitor_id: visitorId,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        source_url: window.location.href
-      })
-    })
-      .then(r => console.log("[SSSi ClaritAI] Lead sync:", r.ok ? "SUCCESS ✓" : "FAILED ✗", r.status))
-      .catch(e => console.error("[SSSi ClaritAI] Lead sync error:", e));
+        message: userMessage,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("API error " + response.status);
+    }
+
+    const data = await response.json();
+    return data.response || "I'm sorry, I didn't understand that. Could you rephrase?";
   }
 
-  function getVisitorId() {
-    let vid = localStorage.getItem("_sssi_vid");
-    if (!vid) {
-      vid = "vid_" + Math.random().toString(36).substr(2, 12) + "_" + Date.now();
-      localStorage.setItem("_sssi_vid", vid);
+  // ── Send message ───────────────────────────────────────────────────────────
+  async function send(text) {
+    if (!text || !text.trim() || sending) return;
+    sending = true;
+    input.value = "";
+    input.disabled = true;
+    sendBtn.classList.remove("on");
+    sendBtn.disabled = true;
+
+    // User bubble
+    const wrap = document.createElement("div");
+    wrap.className = "_sssi-user-wrap";
+    wrap.innerHTML = `
+      <div class="_sssi-user-bubble">${text.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+      <div class="_sssi-read">Read</div>`;
+    msgs.appendChild(wrap);
+    scrollDown();
+
+    // Show typing indicator
+    showTyping();
+
+    try {
+      const aiText = await callAI(text);
+      hideTyping();
+      await botMessage(aiText, true); // true = stream words
+    } catch (err) {
+      hideTyping();
+      console.error("[SSSi AI] Error:", err);
+      // Graceful fallback message
+      await botMessage(
+        "I'm having trouble connecting right now. Please call us directly at **+91-742-867-2376** or visit **www.sssi.in** — our counselors are available 8 AM to 10 PM daily.",
+        true
+      );
+    } finally {
+      sending = false;
+      input.disabled = false;
+      input.focus();
     }
-    return vid;
+  }
+
+  // ── Render bot message ─────────────────────────────────────────────────────
+  async function botMessage(text, stream = true) {
+    const html = renderMarkdown(text);
+
+    if (!stream) {
+      const row = document.createElement("div");
+      row.className = "_sssi-bot-row";
+      row.innerHTML = `<div class="_sssi-bot-av">${BOT_SVG}</div><div class="_sssi-bot-text">${html}</div>`;
+      msgs.appendChild(row);
+      scrollDown();
+      return;
+    }
+
+    const row = document.createElement("div");
+    row.className = "_sssi-bot-row";
+    row.innerHTML = `<div class="_sssi-bot-av">${BOT_SVG}</div><div class="_sssi-bot-text"></div>`;
+    msgs.appendChild(row);
+    await streamIn(html, row.querySelector("._sssi-bot-text"));
   }
 
   // ── Markdown renderer ──────────────────────────────────────────────────────
   function renderMarkdown(text) {
+    if (!text) return "";
     const lines = text.split("\n");
     let html = "", inList = false;
     for (const rawLine of lines) {
@@ -359,85 +344,7 @@
     return html;
   }
 
-  // ── DOM refs ───────────────────────────────────────────────────────────────
-  const fab     = document.getElementById("_sssi-fab");
-  const win     = document.getElementById("_sssi-win");
-  const msgs    = document.getElementById("_sssi-msgs");
-  const input   = document.getElementById("_sssi-input");
-  const sendBtn = document.getElementById("_sssi-send");
-
-  let isOpen = false, firstOpen = true, sending = false;
-
-  input.addEventListener("input", () => {
-    const hasText = input.value.trim().length > 0;
-    sendBtn.classList.toggle("on", hasText);
-    sendBtn.disabled = !hasText;
-  });
-
-  fab.addEventListener("click", () => {
-    isOpen = true;
-    win.classList.add("open");
-    fab.classList.add("open");
-    input.focus();
-    if (firstOpen) { firstOpen = false; botMessage(CONFIG.greeting); }
-  });
-
-  document.getElementById("_sssi-close").addEventListener("click", () => {
-    isOpen = false;
-    win.classList.remove("open");
-    fab.classList.remove("open");
-  });
-
-  document.getElementById("_sssi-refresh").addEventListener("click", () => {
-    msgs.innerHTML = "";
-    leadState = "none";
-    leadData = { name: "", email: "", phone: "" };
-    botMessage(CONFIG.greeting);
-  });
-
-  sendBtn.addEventListener("click", () => send(input.value));
-  input.addEventListener("keydown", e => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input.value); }
-  });
-
-  // ── Messaging ──────────────────────────────────────────────────────────────
-  async function botMessage(text, sugg = []) {
-    const html = renderMarkdown(text);
-    showTyping();
-    await delay(650);
-    hideTyping();
-
-    const row = document.createElement("div");
-    row.className = "_sssi-bot-row";
-    row.innerHTML = `<div class="_sssi-bot-av">${BOT_SVG}</div><div class="_sssi-bot-text"></div>`;
-    msgs.appendChild(row);
-    await streamIn(html, row.querySelector("._sssi-bot-text"));
-
-    if (sugg && sugg.length) renderSugg(sugg);
-  }
-
-  async function send(text) {
-    if (!text || !text.trim() || sending) return;
-    sending = true;
-    input.value = "";
-    sendBtn.classList.remove("on");
-    sendBtn.disabled = true;
-
-    document.querySelectorAll("._sssi-sugg-wrap").forEach(el => el.remove());
-
-    const wrap = document.createElement("div");
-    wrap.className = "_sssi-user-wrap";
-    wrap.innerHTML = `
-      <div class="_sssi-user-bubble">${text.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
-      <div class="_sssi-read">Read</div>`;
-    msgs.appendChild(wrap);
-    scrollDown();
-
-    const result = getResponse(text);
-    await botMessage(result.res, result.sugg);
-    sending = false;
-  }
-
+  // ── Word streaming ─────────────────────────────────────────────────────────
   async function streamIn(htmlStr, container) {
     container.innerHTML = htmlStr;
     const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
@@ -464,26 +371,14 @@
 
     const spans = container.querySelectorAll("._sw");
     for (let i = 0; i < spans.length; i++) {
-      await delay(18);
+      await delay(16);
       spans[i].style.opacity = "1";
-      scrollDown();
+      if (i % 5 === 0) scrollDown();
     }
-  }
-
-  function renderSugg(items) {
-    const wrap = document.createElement("div");
-    wrap.className = "_sssi-sugg-wrap";
-    items.forEach(t => {
-      const b = document.createElement("button");
-      b.className = "_sssi-sugg";
-      b.textContent = t;
-      b.addEventListener("click", () => { b.style.opacity = "0.5"; b.style.pointerEvents = "none"; send(t); });
-      wrap.appendChild(b);
-    });
-    msgs.appendChild(wrap);
     scrollDown();
   }
 
+  // ── Typing indicator ───────────────────────────────────────────────────────
   function showTyping() {
     const row = document.createElement("div");
     row.className = "_sssi-typing-row";
@@ -493,7 +388,18 @@
     scrollDown();
   }
   function hideTyping() { const t = document.getElementById("_sssi-typing"); if (t) t.remove(); }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
   function scrollDown() { msgs.scrollTop = msgs.scrollHeight; }
   function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function getVisitorId() {
+    let vid = localStorage.getItem("_sssi_vid");
+    if (!vid) {
+      vid = "vid_" + Math.random().toString(36).substr(2, 12) + "_" + Date.now();
+      localStorage.setItem("_sssi_vid", vid);
+    }
+    return vid;
+  }
 
 })();

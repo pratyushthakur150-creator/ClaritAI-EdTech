@@ -124,6 +124,7 @@ async def chatbot_message(
             session_id=session_id,
             conversation_history=conversation_history,
             context=extra_context,
+            tenant_id=tenant_id,
         )
 
         # ── Save bot response to DB (non-critical) ──────────────────

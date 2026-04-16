@@ -25,9 +25,10 @@ _EXAM_ALIASES = {
     "CAT/MBA": "cat_mba",
     "MBA": "cat_mba",
     "GMAT": "gmat",
+    "SSSI": "sssi",
 }
 
-ALL_EXAMS = ["upsc", "jee", "neet", "cat_mba", "gmat"]
+ALL_EXAMS = ["upsc", "jee", "neet", "cat_mba", "gmat", "sssi"]
 
 
 def _get_openai_client():

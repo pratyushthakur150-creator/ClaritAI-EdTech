@@ -29,6 +29,7 @@ EXAM_DOCUMENTS = {
     "neet": "neet_knowledge.txt",
     "cat_mba": "cat_mba_knowledge.txt",
     "gmat": "gmat_knowledge.txt",
+    "sssi": "sssi_knowledge.txt",  # SSSi Online Tutoring pilot tenant
 }
 
 
