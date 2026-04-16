@@ -36,7 +36,7 @@ export default function CRMPage() {
     const { data, isLoading } = useQuery({
         queryKey: ['leads', statusFilter],
         queryFn: async () => {
-            const res = await apiClient.get(`/api/v1/leads`, {
+            const res = await apiClient.get(`/api/v1/leads/`, {
                 params: { status: statusFilter !== 'all' ? statusFilter.toUpperCase() : undefined },
             })
             return res.data

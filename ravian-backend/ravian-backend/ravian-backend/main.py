@@ -159,7 +159,8 @@ else:
 # even on 401/403 responses returned by auth middleware.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8080"],
+    allow_origin_regex=".*", # Allow widgets from any site (SSSi, etc.)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
