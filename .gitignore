@@ -20,6 +20,7 @@ Thumbs.db
 # Secrets
 google-calendar-key.json
 *.pem
+apikey.py
 
 # IDE
 .vscode/
