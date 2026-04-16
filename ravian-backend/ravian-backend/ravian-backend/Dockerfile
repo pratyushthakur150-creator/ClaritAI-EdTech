@@ -46,7 +46,7 @@ RUN rm -rf \
     .git/
 
 # Create required directories
-RUN mkdir -p storage/audio/tts storage/documents chroma_db
+RUN mkdir -p storage/audio/tts storage/documents chroma_db static
 
 # Expose port
 EXPOSE 8000
