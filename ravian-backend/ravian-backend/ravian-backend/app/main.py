@@ -249,6 +249,13 @@ _AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 logger.info(f"Static audio directory: {_AUDIO_DIR}")
 app.mount("/static/audio", StaticFiles(directory=str(_AUDIO_DIR)), name="audio")
 
+# Mount the full /static directory so widget HTML/JS files are reachable
+# e.g. http://127.0.0.1:8000/static/sia-test.html
+_STATIC_DIR = _Path(__file__).resolve().parent.parent / "static"
+_STATIC_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
+logger.info(f"Static files directory mounted: {_STATIC_DIR}")
+
 # Chatbot demo page — served at /chatbot-demo
 @app.get("/chatbot-demo", tags=["Chatbot Demo"])
 async def chatbot_demo_page():

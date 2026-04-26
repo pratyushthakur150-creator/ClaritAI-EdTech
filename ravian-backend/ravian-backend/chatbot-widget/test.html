@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClariAI Chatbot - Test Page</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .hero {
+      text-align: center;
+      padding: 40px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      opacity: 0.85;
+    }
+    .hero .arrow {
+      margin-top: 40px;
+      font-size: 2rem;
+      animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>💬 ClariAI Chatbot Test</h1>
+    <p>Click the chat button in the bottom-right corner to open the chatbot.</p>
+    <div class="arrow">↘</div>
+  </div>
+
+  <!-- Load the built chatbot widget -->
+  <script src="dist/chatbot-widget.js"></script>
+  <script>
+    // Initialize the chatbot widget
+    // It will connect to the local backend at port 8001
+    EdTechChatbot.init({
+      apiBaseUrl: 'http://127.0.0.1:8001',
+      tenantId: 'sssi',
+      theme: {
+        primaryColor: '#4F46E5',
+        position: 'bottom-right',
+        greeting: 'Hi! 👋 Welcome to SSSi. Ask me anything about our courses, exams, or admissions!',
+      },
+    });
+  </script>
+</body>
+</html>

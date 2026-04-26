@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SSSi Chatbot — Test Page</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 560px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: .5px;
+    }
+    h1 { font-size: 1.8rem; color: #1e293b; margin-bottom: 10px; }
+    p  { font-size: 0.95rem; color: #64748b; line-height: 1.6; margin-bottom: 24px; }
+    .status-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: left;
+      margin-bottom: 24px;
+      font-size: 13px;
+    }
+    .status-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f0f0f0; }
+    .status-row:last-child { border-bottom: none; }
+    .status-label { color: #64748b; font-weight: 500; }
+    .status-val   { color: #1e293b; font-weight: 600; word-break: break-all; text-align: right; max-width: 280px; }
+    .pill-green { color: #16a34a; }
+    .pill-yellow { color: #ca8a04; }
+    .test-btn {
+      background: #0062ff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .test-btn:hover { background: #004de8; }
+    .hint { font-size: 12px; color: #94a3b8; margin-top: 16px; }
+    #lead-result {
+      display: none;
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">ClaritAI — SSSi Integration Test</div>
+    <h1>Chatbot Test Page</h1>
+    <p>Click the blue chat button in the bottom-right corner to open the chatbot and test it. Use the checks below to verify the backend connection.</p>
+
+    <div class="status-box">
+      <div class="status-row">
+        <span class="status-label">Tenant ID</span>
+        <span class="status-val" style="font-size:11px">8a19c99f-3ebe-4c47-b483-b8796d122716</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Backend URL</span>
+        <span class="status-val" style="font-size:11px">ravian-backend-production.railway.app</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Backend Health</span>
+        <span class="status-val" id="health-status">Checking...</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Chatbot Script</span>
+        <span class="status-val" id="script-status">Checking...</span>
+      </div>
+    </div>
+
+    <button class="test-btn" onclick="testLeadCapture()">
+      ⚡ Test Lead Capture (send dummy lead)
+    </button>
+    <div id="lead-result"></div>
+    <p class="hint">After chatting, check your CRM dashboard to see if the lead appeared.</p>
+  </div>
+
+  <script>
+    const API = "http://127.0.0.1:8000";
+    const TENANT_ID = "8a19c99f-3ebe-4c47-b483-b8796d122716";
+
+    // Check backend health
+    fetch(API + "/health")
+      .then(r => {
+        document.getElementById("health-status").textContent = r.ok ? "✓ Online" : "✗ Error " + r.status;
+        document.getElementById("health-status").className = r.ok ? "status-val pill-green" : "status-val";
+      })
+      .catch(() => {
+        document.getElementById("health-status").textContent = "✗ Unreachable";
+        document.getElementById("health-status").style.color = "#dc2626";
+      });
+
+    // Check chatbot script
+    fetch(API + "/static/sssi-chatbot.js", { method: "HEAD" })
+      .then(r => {
+        document.getElementById("script-status").textContent = r.ok ? "✓ Deployed" : "⏳ Not yet (deploying...)";
+        document.getElementById("script-status").className = r.ok ? "status-val pill-green" : "status-val pill-yellow";
+      })
+      .catch(() => {
+        document.getElementById("script-status").textContent = "⏳ Not yet (deploying...)";
+        document.getElementById("script-status").style.color = "#ca8a04";
+      });
+
+    // Test lead capture directly
+    function testLeadCapture() {
+      const box = document.getElementById("lead-result");
+      box.style.display = "block";
+      box.className = "";
+      box.textContent = "Sending test lead...";
+
+      fetch(API + "/api/v1/chatbot/capture-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tenant_id: TENANT_ID,
+          visitor_id: "test_visitor_" + Date.now(),
+          name: "Test User",
+          email: "test@sssi.in",
+          phone: "+91-9999999999",
+          source_url: window.location.href
+        })
+      })
+      .then(async r => {
+        const data = await r.json().catch(() => ({}));
+        if (r.ok) {
+          box.className = "success";
+          box.textContent = "✓ Lead captured successfully! Check CRM dashboard to confirm.";
+        } else {
+          box.className = "error";
+          box.textContent = "✗ Error " + r.status + ": " + (data.detail || JSON.stringify(data));
+        }
+      })
+      .catch(e => {
+        box.className = "error";
+        box.textContent = "✗ Network error: " + e.message;
+      });
+    }
+  </script>
+
+  <!-- Load the Sia v3.0 widget with full lead capture + chips -->
+  <script
+    src="./ravian-backend/ravian-backend/ravian-backend/static/sia-widget.js?v=20260426v4"
+    data-org="8a19c99f-3ebe-4c47-b483-b8796d122716"
+    data-api="http://localhost:8000"
+    data-color="#d11c5d"
+    data-secondary="#7d3384"
+    data-name="Sia"
+    defer></script>
+</body>
+</html>

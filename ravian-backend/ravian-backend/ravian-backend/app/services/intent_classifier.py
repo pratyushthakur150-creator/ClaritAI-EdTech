@@ -31,37 +31,56 @@ INTENTS = [
 ]
 
 def _rule_based_classify(message: str, conversation_history: Optional[List[Dict]] = None) -> Dict[str, Any]:
-    """Rule-based fallback when OpenAI is unavailable or disabled."""
+    """Rule-based fallback when OpenAI is unavailable or disabled.
+    Includes SSSi/Sia v2.0 intent mappings (INT-01 through INT-10)."""
     text = (message or "").lower().strip()
     if not text:
         return {"intent": "RANDOM_CHAT", "confidence": 0.0, "exam_context": None}
 
-    # Greeting / random
-    if any(w in text for w in ["hello", "hi", "hey", "hii", "namaste", "good morning", "good afternoon"]):
+    # Greeting / random (Sia INT-10)
+    if any(w in text for w in ["hello", "hi", "hey", "hii", "namaste", "good morning", "good afternoon", "good evening", "good night"]):
         return {"intent": "RANDOM_CHAT", "confidence": 0.9, "exam_context": None}
-    if any(w in text for w in ["bye", "thanks", "thank you"]):
+    if any(w in text for w in ["bye", "thanks", "thank you", "goodbye"]):
         return {"intent": "RANDOM_CHAT", "confidence": 0.85, "exam_context": None}
 
-    # Lead / contact
-    if any(w in text for w in ["capture", "register", "sign up", "call me", "contact me", "my number", "my name", "reach out", "interested"]):
-        return {"intent": "LEAD_CAPTURE", "confidence": 0.85, "exam_context": None}
-    if any(w in text for w in ["speak to", "human", "agent", "representative", "real person"]):
+    # Counselor / human handoff (Sia INT-07) — check BEFORE lead capture
+    if any(w in text for w in ["counselor", "counsellor", "speak to", "human", "agent", "representative", "real person", "talk to someone", "call me back"]):
         return {"intent": "HUMAN_ESCALATION", "confidence": 0.9, "exam_context": None}
 
-    # Fee / price
-    if any(w in text for w in ["price", "fee", "fees", "cost", "charges", "kitna", "pay", "payment"]):
+    # Demo booking / trial class (Sia INT-01)
+    if any(w in text for w in ["demo", "trial", "free class", "book a class", "book class", "try a class", "start learning", "register", "enroll", "join"]):
+        return {"intent": "ADMISSION_QUERY", "confidence": 0.9, "exam_context": _infer_exam(text)}
+
+    # Parent flow (Sia INT-08)
+    if any(w in text for w in ["my child", "my son", "my daughter", "my kid", "parent", "for my child", "child's"]):
+        return {"intent": "LEAD_CAPTURE", "confidence": 0.85, "exam_context": None}
+
+    # Lead / contact (Sia lead capture triggers)
+    if any(w in text for w in ["capture", "sign up", "call me", "contact me", "my number", "my name", "reach out", "interested"]):
+        return {"intent": "LEAD_CAPTURE", "confidence": 0.85, "exam_context": None}
+
+    # Offers / discounts (Sia INT-09)
+    if any(w in text for w in ["discount", "offer", "deal", "cashback", "cheap", "sale", "promo", "coupon"]):
+        return {"intent": "FEE_QUERY", "confidence": 0.85, "exam_context": None}
+
+    # Fee / price (Sia INT-03)
+    if any(w in text for w in ["price", "fee", "fees", "cost", "charges", "kitna", "pay", "payment", "budget", "expensive", "afford"]):
         return {"intent": "FEE_QUERY", "confidence": 0.85, "exam_context": _infer_exam(text)}
 
-    # Course / syllabus / batch
-    if any(w in text for w in ["course", "syllabus", "batch", "subject", "curriculum", "what do you offer"]):
+    # Tutor selection (Sia INT-04)
+    if any(w in text for w in ["tutor", "teacher", "who will teach", "best teacher", "find tutor", "choose teacher"]):
+        return {"intent": "COURSE_INQUIRY", "confidence": 0.85, "exam_context": _infer_exam(text)}
+
+    # Course / syllabus / batch (Sia INT-02)
+    if any(w in text for w in ["course", "syllabus", "batch", "subject", "curriculum", "what do you offer", "what do you teach"]):
         return {"intent": "COURSE_INQUIRY", "confidence": 0.85, "exam_context": _infer_exam(text)}
 
     # Admission
-    if any(w in text for w in ["admission", "enroll", "eligibility", "how to join", "apply"]):
+    if any(w in text for w in ["admission", "eligibility", "how to join", "apply"]):
         return {"intent": "ADMISSION_QUERY", "confidence": 0.8, "exam_context": _infer_exam(text)}
 
-    # Academic doubt
-    if any(w in text for w in ["doubt", "explain", "concept", "question about", "why does", "how does"]):
+    # Doubt (Sia INT-05)
+    if any(w in text for w in ["doubt", "don't understand", "explain", "concept", "question about", "why does", "how does", "stuck on", "help with"]):
         return {"intent": "ACADEMIC_DOUBT", "confidence": 0.8, "exam_context": _infer_exam(text)}
 
     # Study plan
@@ -73,7 +92,7 @@ def _rule_based_classify(message: str, conversation_history: Optional[List[Dict]
         return {"intent": "MOCK_ANALYSIS", "confidence": 0.75, "exam_context": _infer_exam(text)}
 
     # Complaint
-    if any(w in text for w in ["complaint", "issue", "problem", "not working", "bad", "refund"]):
+    if any(w in text for w in ["complaint", "issue", "problem", "not working", "bad", "refund", "frustrated", "angry"]):
         return {"intent": "COMPLAINT", "confidence": 0.85, "exam_context": None}
 
     return {"intent": "RANDOM_CHAT", "confidence": 0.5, "exam_context": _infer_exam(text)}

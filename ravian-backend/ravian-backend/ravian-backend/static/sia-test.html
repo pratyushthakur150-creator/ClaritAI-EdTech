@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSSi — Sia Chatbot Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0d0d1a;
+            min-height: 100vh;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(209,28,93,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(125,51,132,0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(79,70,229,0.08) 0%, transparent 50%);
+            animation: bg-shift 8s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes bg-shift {
+            0% { opacity: 1; }
+            100% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        /* Grid pattern overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .test-card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 56px 48px;
+            max-width: 640px;
+            width: 90%;
+            text-align: center;
+            animation: card-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes card-in {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .test-card h1 {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #d11c5d 0%, #e84393 40%, #a855f7 70%, #7d3384 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 14px;
+            letter-spacing: -0.5px;
+        }
+        .test-card p {
+            font-size: 16px;
+            color: #a0a0b8;
+            line-height: 1.7;
+            margin-bottom: 28px;
+            font-weight: 400;
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: 24px;
+            background: rgba(209,28,93,0.12);
+            border: 1px solid rgba(209,28,93,0.20);
+            color: #f0a0c0;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .badge:hover {
+            background: rgba(209,28,93,0.22);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(209,28,93,0.2);
+        }
+
+        .test-info {
+            margin-top: 32px;
+            text-align: left;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 24px;
+            font-size: 13px;
+            color: #888;
+            line-height: 2;
+        }
+        .test-info strong {
+            color: #e0e0e0;
+            font-weight: 600;
+        }
+        .test-info code {
+            background: rgba(209,28,93,0.15);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            color: #f0a0c0;
+            font-size: 12px;
+        }
+
+        .arrow {
+            font-size: 44px;
+            margin-top: 28px;
+            animation: bounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 4px 12px rgba(209,28,93,0.4));
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(12px); }
+        }
+
+        /* Floating particles in background */
+        .bg-particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .bg-particle:nth-child(1) {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(209,28,93,0.08) 0%, transparent 70%);
+            top: -50px; left: -50px;
+            animation: float1 12s ease-in-out infinite;
+        }
+        .bg-particle:nth-child(2) {
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(125,51,132,0.10) 0%, transparent 70%);
+            bottom: 100px; right: -30px;
+            animation: float2 10s ease-in-out infinite;
+        }
+        .bg-particle:nth-child(3) {
+            width: 150px; height: 150px;
+            background: radial-gradient(circle, rgba(168,85,247,0.06) 0%, transparent 70%);
+            top: 50%; left: 60%;
+            animation: float3 14s ease-in-out infinite;
+        }
+        @keyframes float1 {
+            0%, 100% { transform: translate(0,0); }
+            50% { transform: translate(30px, 20px); }
+        }
+        @keyframes float2 {
+            0%, 100% { transform: translate(0,0); }
+            50% { transform: translate(-20px, -30px); }
+        }
+        @keyframes float3 {
+            0%, 100% { transform: translate(0,0); }
+            50% { transform: translate(15px, -15px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-particle"></div>
+    <div class="bg-particle"></div>
+    <div class="bg-particle"></div>
+
+    <div class="test-card">
+        <h1>🎓 SSSi — Sia Chatbot Test</h1>
+        <p>Click the chat bubble in the bottom-right corner to test the Sia v3.0 chatbot. It connects to your local backend CRM.</p>
+        <div class="badges">
+            <span class="badge">✦ Typewriter Animation</span>
+            <span class="badge">🎨 Premium Dark UI</span>
+            <span class="badge">💬 Quick-Reply Chips</span>
+            <span class="badge">🌙 Time-of-Day Greetings</span>
+            <span class="badge">🌐 Hindi/English</span>
+            <span class="badge">📊 Lead Capture → CRM</span>
+        </div>
+        <div class="test-info">
+            <strong style="color:#e0e0e0;">Test Checklist:</strong><br>
+            1. <code>Welcome message</code> — should show time-of-day greeting + 4 chips<br>
+            2. <code>Click "Book Free Trial"</code> — should start grade selection<br>
+            3. <code>Select grade → board → subject → goal</code> — chips at each step<br>
+            4. <code>Type your name</code> — Sia asks for WhatsApp<br>
+            5. <code>Type a 10-digit phone</code> — Lead auto-captured in CRM 🎉<br>
+            6. <code>Check CRM dashboard</code> — lead appears with grade, board, subjects<br>
+            7. <code>Hindi test</code> — type "मुझे maths पढ़ना है" and verify response matches<br>
+            8. <code>Reload page</code> — session should persist (return visitor greeting)
+        </div>
+        <div class="arrow">↘️</div>
+    </div>
+
+    <!-- Clear old chats on every refresh for fresh testing -->
+    <script>Object.keys(localStorage).filter(k=>k.startsWith('sia_session')).forEach(k=>localStorage.removeItem(k));</script>
+
+    <!-- Sia Widget v3.0 — connects to local backend -->
+    <script
+        src="./sia-widget.js?v=20260426v5"
+        data-org="8a19c99f-3ebe-4c47-b483-b8796d122716"
+        data-api="http://localhost:8000"
+        data-color="#d11c5d"
+        data-secondary="#7d3384"
+        data-name="Sia">
+    </script>
+</body>
+</html>

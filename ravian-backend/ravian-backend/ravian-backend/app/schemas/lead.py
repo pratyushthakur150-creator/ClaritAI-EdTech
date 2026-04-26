@@ -89,12 +89,26 @@ class LeadCreate(BaseModel):
         
         return v
 
-    @field_validator('interested_courses')
+    @field_validator('interested_courses', mode='before')
     @classmethod
     def validate_courses(cls, v):
         if not v:
             raise ValueError('At least one interested course is required')
-        return [course.strip() for course in v if course.strip()]
+        # Flatten nested lists and ensure all items are strings
+        result = []
+        if isinstance(v, list):
+            for item in v:
+                if isinstance(item, list):
+                    result.extend([str(i).strip() for i in item if str(i).strip()])
+                else:
+                    result.append(str(item).strip())
+        else:
+            result.append(str(v).strip())
+        # Remove empty strings after stripping
+        result = [c for c in result if c]
+        if not result:
+            raise ValueError('At least one interested course is required')
+        return result
 
     model_config = {
         "json_schema_extra": {
@@ -124,6 +138,26 @@ class LeadCreate(BaseModel):
 class LeadUpdate(BaseModel):
     """Schema for updating an existing lead"""
     
+    name: Optional[str] = Field(
+        None,
+        min_length=1,
+        max_length=200,
+        description="Full name of the lead",
+        examples=["John Smith"]
+    )
+    
+    phone: Optional[str] = Field(
+        None,
+        description="Phone number in any standard format",
+        examples=["+1-555-123-4567"]
+    )
+    
+    email: Optional[EmailStr] = Field(
+        None,
+        description="Email address",
+        examples=["john.smith@email.com"]
+    )
+    
     status: Optional[Literal["NEW", "CONTACTED", "QUALIFIED", "DEMO_SCHEDULED", "DEMO_COMPLETED", "ENROLLED", "LOST", "NURTURING"]] = Field(
         None,
         description="Current status of the lead (must match database enum)",
@@ -144,6 +178,12 @@ class LeadUpdate(BaseModel):
         examples=["MEDIUM"]
     )
     
+    interested_courses: Optional[List[str]] = Field(
+        None,
+        description="List of courses the lead is interested in",
+        examples=[["English", "Maths"]]
+    )
+    
     assigned_to: Optional[UUID] = Field(
         None, 
         description="UUID of the team member assigned to this lead"
@@ -155,11 +195,28 @@ class LeadUpdate(BaseModel):
         description="Additional notes about the lead"
     )
 
+    @field_validator('phone')
+    @classmethod
+    def validate_phone(cls, v):
+        """Validate phone number format if provided"""
+        if v is None:
+            return v
+        if not isinstance(v, str):
+            raise TypeError('Phone must be a string')
+        cleaned = re.sub(r'[\s\-\.\(\)]', '', v)
+        if not re.match(r'^\+?\d{10,15}$', cleaned):
+            raise ValueError('Invalid phone number format')
+        return v
+
     model_config = {
         "json_schema_extra": {
             "example": {
+                "name": "Jane Doe Updated",
+                "phone": "+1-555-987-6543",
+                "email": "jane.new@email.com",
                 "status": "QUALIFIED",
                 "urgency": "HIGH",
+                "interested_courses": ["English", "Maths"],
                 "assigned_to": "123e4567-e89b-12d3-a456-426614174000",
                 "notes": "Strong technical background, ready to start immediately"
             }
@@ -220,8 +277,26 @@ class LeadResponse(BaseModel):
     def coerce_interested_courses(cls, v):
         if v is None:
             return []
-        return v
+        # Flatten nested lists and ensure all items are strings
+        result = []
+        if isinstance(v, list):
+            for item in v:
+                if isinstance(item, list):
+                    result.extend([str(i) for i in item])
+                elif isinstance(item, str):
+                    result.append(item)
+                else:
+                    result.append(str(item))
+            return result
+        if isinstance(v, str):
+            return [v]
+        return [str(v)]
     urgency: str = Field("MEDIUM", description="Urgency level")
+    chatbot_context: Optional[Dict[str, Any]] = Field(None, description="Chatbot conversation context (grade, board, subjects, goal, user_type, preferred_time, language, lead_temperature)")
+    notes: Optional[str] = Field(None, description="Additional notes about the lead")
+    tags: Optional[List[str]] = Field(default_factory=list, description="Lead tags")
+    engagement_score: Optional[int] = Field(None, description="Lead engagement score 0-100")
+    conversion_probability: Optional[int] = Field(None, description="Conversion probability 0-100")
     created_at: datetime = Field(..., description="Timestamp when lead was created")
     updated_at: datetime = Field(..., description="Timestamp when lead was last updated")
     assigned_user: Optional[AssignedUser] = Field(None, serialization_alias="assigned_to", description="Information about assigned team member")

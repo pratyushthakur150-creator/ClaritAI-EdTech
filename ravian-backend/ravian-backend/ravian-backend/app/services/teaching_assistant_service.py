@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 logger = logging.getLogger(__name__)
 EMBEDDING_MODEL = "text-embedding-3-small"
 
-# ΓöÇΓöÇ Groq client for Whisper API ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+# Î“Ã¶Ã‡Î“Ã¶Ã‡ Groq client for Whisper API Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡
 try:
     from groq import Groq as GroqClient
 except ImportError:
@@ -24,7 +24,7 @@ except ImportError:
 
 GROQ_WHISPER_MODEL = os.getenv("WHISPER_MODEL", "whisper-large-v3-turbo")
 
-# ΓöÇΓöÇ Shared local Whisper model (fallback STT) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+# Î“Ã¶Ã‡Î“Ã¶Ã‡ Shared local Whisper model (fallback STT) Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡
 _LOCAL_WHISPER_MODEL = None
 
 
@@ -82,7 +82,7 @@ class TeachingAssistantService:
             logger.info(f"TeachingAssistantService initialized | whisper={self._whisper_model_name} via Groq API")
         else:
             self._groq_client = None
-            logger.warning("TeachingAssistantService: GROQ_API_KEY not set ΓÇö voice transcription will fail")
+            logger.warning("TeachingAssistantService: GROQ_API_KEY not set Î“Ã‡Ã¶ voice transcription will fail")
 
     async def transcribe_audio(self, audio_file_path: str) -> str:
         """
@@ -121,17 +121,17 @@ class TeachingAssistantService:
                     import shutil
                     shutil.copy2(str(original_path), str(debug_copy))
                     logger.info(
-                        f"≡ƒÉ₧ Debug audio copy saved: {debug_copy} "
+                        f"â‰¡Æ’Ã‰â‚§ Debug audio copy saved: {debug_copy} "
                         f"({debug_copy.stat().st_size if debug_copy.exists() else 0} bytes)"
                     )
                 except Exception as dbg_e:
-                    logger.warning(f"ΓÜá∩╕Å Could not save debug audio copy: {dbg_e}")
+                    logger.warning(f"Î“ÃœÃ¡âˆ©â••Ã… Could not save debug audio copy: {dbg_e}")
 
             # If the browser sent WebM (common for MediaRecorder + Opus), convert to WAV so Groq
             # always receives a simple PCM container regardless of client/browser codec quirks.
             if original_path.suffix.lower() == ".webm":
                 try:
-                    logger.info(f"≡ƒÄº Converting WebM -> WAV for Whisper via ffmpeg: {original_path}")
+                    logger.info(f"â‰¡Æ’Ã„Âº Converting WebM -> WAV for Whisper via ffmpeg: {original_path}")
                     import tempfile as _tempfile
                     with _tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_wav:
                         wav_path = Path(tmp_wav.name)
@@ -156,24 +156,24 @@ class TeachingAssistantService:
                     )
                     if result.returncode != 0 or not wav_path.exists() or wav_path.stat().st_size == 0:
                         logger.warning(
-                            "ΓÜá∩╕Å ffmpeg WebM->WAV conversion failed "
+                            "Î“ÃœÃ¡âˆ©â••Ã… ffmpeg WebM->WAV conversion failed "
                             f"(code={result.returncode}): {result.stderr[-400:]}"
                         )
                     else:
                         working_path = wav_path
                         extra_temp_paths.append(str(working_path))
                         logger.info(
-                            f"≡ƒÄº WebM->WAV conversion done: {original_path.name} -> "
+                            f"â‰¡Æ’Ã„Âº WebM->WAV conversion done: {original_path.name} -> "
                             f"{working_path.name} ({working_path.stat().st_size} bytes)"
                         )
                 except Exception as conv_e:
                     logger.warning(
-                        f"ΓÜá∩╕Å WebM->WAV conversion error, sending original file to Groq: {conv_e}"
+                        f"Î“ÃœÃ¡âˆ©â••Ã… WebM->WAV conversion error, sending original file to Groq: {conv_e}"
                     )
                     working_path = original_path
 
             logger.info(
-                f"≡ƒÄñ Transcribing audio via Groq API (model={self._whisper_model_name}, "
+                f"â‰¡Æ’Ã„Ã± Transcribing audio via Groq API (model={self._whisper_model_name}, "
                 f"file={working_path.name}, size={working_path.stat().st_size} bytes)..."
             )
             start_time = time.time()
@@ -196,8 +196,8 @@ class TeachingAssistantService:
                 text = text.strip()
             transcription_time = time.time() - start_time
 
-            logger.info(f"Γ£à Groq transcribed {len(text)} chars in {transcription_time:.2f}s")
-            logger.info(f"≡ƒô¥ Whisper transcription preview (Groq): {text[:120]!r}")
+            logger.info(f"Î“Â£Ã  Groq transcribed {len(text)} chars in {transcription_time:.2f}s")
+            logger.info(f"â‰¡Æ’Ã´Â¥ Whisper transcription preview (Groq): {text[:120]!r}")
 
             # If Groq clearly hallucinated (e.g. always 'Thank you.'), fall back to
             # local Whisper for a second opinion.
@@ -205,7 +205,7 @@ class TeachingAssistantService:
             if not text or normalized == "thank you":
                 try:
                     logger.warning(
-                        "ΓÜá∩╕Å Groq Whisper returned a low-confidence / generic transcription "
+                        "Î“ÃœÃ¡âˆ©â••Ã… Groq Whisper returned a low-confidence / generic transcription "
                         f"({len(text)} chars: {text!r}). Falling back to local Whisper model..."
                     )
                     local_model = load_whisper_model()
@@ -213,20 +213,20 @@ class TeachingAssistantService:
                     fallback_result = local_model.transcribe(str(working_path), verbose=False)
                     fallback_text = (fallback_result.get("text") or "").strip()
                     logger.info(
-                        f"Γ£à Local Whisper fallback transcription: "
+                        f"Î“Â£Ã  Local Whisper fallback transcription: "
                         f"{len(fallback_text)} chars, preview={fallback_text[:120]!r}"
                     )
                     if fallback_text:
                         return fallback_text
                     # If fallback also fails, keep the original Groq text
-                    logger.warning("ΓÜá∩╕Å Local Whisper returned empty text; using Groq transcription.")
+                    logger.warning("Î“ÃœÃ¡âˆ©â••Ã… Local Whisper returned empty text; using Groq transcription.")
                 except Exception as fb_e:
-                    logger.error(f"Γ¥î Local Whisper fallback failed: {fb_e}")
+                    logger.error(f"Î“Â¥Ã® Local Whisper fallback failed: {fb_e}")
 
             return text
 
         except Exception as e:
-            logger.error(f"Γ¥î Audio transcription failed: {e}")
+            logger.error(f"Î“Â¥Ã® Audio transcription failed: {e}")
             raise RuntimeError(f"Audio transcription failed: {e}")
 
         finally:
@@ -236,9 +236,9 @@ class TeachingAssistantService:
                 try:
                     if os.path.exists(path_str):
                         os.unlink(path_str)
-                        logger.debug(f"≡ƒùæ∩╕Å  Deleted temp audio: {path_str}")
+                        logger.debug(f"â‰¡Æ’Ã¹Ã¦âˆ©â••Ã…  Deleted temp audio: {path_str}")
                 except Exception as del_e:
-                    logger.warning(f"ΓÜá∩╕Å  Could not delete temp audio {path_str}: {del_e}")
+                    logger.warning(f"Î“ÃœÃ¡âˆ©â••Ã…  Could not delete temp audio {path_str}: {del_e}")
 
     async def _embed_query(self, query: str) -> List[float]:
         if not self.openai_client:
@@ -299,18 +299,18 @@ class TeachingAssistantService:
                 )
                 context_parts.append(f"[Source {i}: {s['document_title']}{loc}]\n{s['chunk_text']}")
             context_text = "\n\n---\n\n".join(context_parts)
-            system_prompt = f"""SYSTEM PROMPT - CLARIT AI TEACHING ASSISTANT (SAT PREP)
+            system_prompt = f"""SYSTEM PROMPT - SSSi TEACHING ASSISTANT (powered by ClaritAI)
 =============================================================
 
-You are Ravi, an AI SAT Teaching Assistant built by Clarit AI,
-deployed for ClaritAI - a premium SAT coaching platform led by
-top-scoring mentors. You are available 24x7 to help enrolled
-students with their SAT prep.
+You are an AI Teaching Assistant built by ClaritAI, deployed for
+SSSi (Sri Sathya Sai International) - a premium educational platform
+offering coaching for Classes 1-12 across CBSE, ICSE, and State Boards.
+You are available 24x7 to help enrolled students with their studies.
 
-Your ONLY job is to help students understand SAT concepts, solve
-problems, and improve their scores. You are NOT a sales bot.
+Your ONLY job is to help students understand concepts, solve problems,
+and improve their academic performance. You are NOT a sales bot.
 
-Powered by: Clarit AI | Deployed for: ClaritAI SAT Prep
+Powered by: ClaritAI | Deployed for: SSSi Education
 
 ========================================
 HOW YOU USE CONTEXT (IMPORTANT)
@@ -326,33 +326,48 @@ Your rules:
   explanations and answers whenever they are relevant.
 - Explicitly CITE sources in your explanation (e.g. "From Source 2...").
 - If the answer is NOT in the provided material, say this clearly
-  and then answer using your SAT expertise, but mention that it is
+  and then answer using your subject expertise, but mention that it is
   based on general knowledge and not the uploaded course content.
 
 ========================================
-YOUR SAT EXPERTISE
+YOUR SUBJECT EXPERTISE
 ========================================
 
-READING & WRITING
-- Reading Comprehension: Main idea, Detail, Inference,
-  Vocabulary in Context, Text Structure, Purpose.
-- Standard English Conventions: Grammar, Punctuation,
-  Sentence Structure, Usage.
-- Expression of Ideas: Rhetorical Synthesis, Transitions.
-- Approach: Teach frameworks, not just answers.
-  Explain WHY wrong options are wrong.
+MATHEMATICS
+- Arithmetic, Algebra, Geometry, Trigonometry, Calculus
+- Number Systems, Probability & Statistics, Mensuration
+- Linear Equations, Quadratic Equations, Polynomials
+- Coordinate Geometry, Matrices & Determinants
 
-MATH
-- Algebra: Linear equations, Systems of equations,
-  Linear functions, Inequalities.
-- Advanced Math: Quadratic equations, Polynomial functions,
-  Exponential functions, Radicals, Rational expressions.
-- Problem Solving & Data Analysis: Ratios, Rates, Proportions,
-  Percentages, Statistics, Probability, Data interpretation.
-- Geometry & Trigonometry: Area, Volume, Lines, Angles,
-  Circles, Triangles, Right triangle trig.
-- Approach: Always show step-by-step working.
-  Offer 2 methods where possible (algebraic + intuitive).
+SCIENCE
+- Physics: Motion, Force, Energy, Electricity, Magnetism, Optics, Waves
+- Chemistry: Atoms, Chemical Reactions, Periodic Table, Organic Chemistry
+- Biology: Cell Biology, Genetics, Ecology, Human Anatomy, Botany
+
+ENGLISH
+- Grammar: Tenses, Voice, Narration, Sentence Structure
+- Literature: Poetry, Prose, Drama Analysis
+- Writing: Essays, Letters, Reports, Comprehension
+
+SOCIAL STUDIES
+- History: Indian & World History, Civilizations
+- Geography: Physical, Human, Indian Geography
+- Civics: Indian Constitution, Government, Democracy
+- Economics: Basic Economics, Indian Economy
+
+HINDI
+- Vyakaran (Grammar), Sahitya (Literature)
+- Patra Lekhan, Nibandh, Comprehension
+
+COMPUTER SCIENCE
+- Programming: Python, Java, C++
+- Data Structures, Algorithms, Web Development
+- Computer Networks, Database Management
+
+AI & ML
+- Introduction to Artificial Intelligence
+- Machine Learning Basics, Neural Networks
+- Applications of AI in everyday life
 
 ========================================
 HOW YOU TEACH
@@ -363,14 +378,14 @@ When a student shares a question or concept doubt:
 1. UNDERSTAND - Briefly restate what they are asking.
 
 2. EXPLAIN THE CONCEPT - Briefly explain the underlying concept
-   or trap being tested, using the Course Material above.
+   being tested, using the Course Material above.
 
 3. SOLVE STEP BY STEP - Show full working and number each step.
 
 4. EXPLAIN THE ANSWER - Explain WHY the correct answer is correct.
-   For Reading & Writing, explain why each wrong option is wrong.
+   For MCQs, explain why each wrong option is wrong.
 
-5. GIVE A TIP - End with a memory trick, common pattern, or trap.
+5. GIVE A TIP - End with a memory trick, formula shortcut, or common mistake to avoid.
 
 6. CHECK UNDERSTANDING - End with: "Does this make sense?
    Want me to give you a similar practice question?"
@@ -393,24 +408,25 @@ TONE & STYLE
 - Never make the student feel bad for not knowing something.
 - Celebrate good thinking and partial progress.
 - Keep explanations concise but complete.
+- Use examples from everyday Indian student life when helpful.
 
 ========================================
-SAT EXAM FACTS (ALWAYS ACCURATE)
+BOARD EXAM AWARENESS
 ========================================
 
-Digital SAT (current version, since March 2024):
-- Total Score: 400-1600.
-- 2 Sections:
-  Reading & Writing (54 Qs, 64 min, 2 modules),
-  Math (44 Qs, 70 min, 2 modules).
-- Adaptive: Module 2 difficulty based on Module 1 performance.
-- Calculator allowed on ALL math questions.
-- No penalty for wrong answers - always guess if unsure.
+CBSE (Central Board):
+- Classes 10 & 12 board exams
+- NCERT-based curriculum
 
-Common score targets:
-- Ivy League / Top 20: typically 1500+.
-- Top 50 universities: typically 1400-1500.
-- Competitive admits: 1300-1400 with a strong profile.
+ICSE (CISCE Board):
+- Classes 10 (ICSE) & 12 (ISC) exams
+- Broader curriculum coverage
+
+State Boards:
+- Varies by state, be aware of different syllabi
+
+Competitive Foundation:
+- JEE / NEET / Olympiad concepts where relevant
 
 ========================================
 ESCALATION TO HUMAN MENTOR
@@ -418,9 +434,9 @@ ESCALATION TO HUMAN MENTOR
 
 Escalate to a human mentor when:
 - The student is stuck on the same concept after 2-3 attempts.
-- The question involves an official SAT problem with a disputed explanation.
 - The student asks for a detailed, personalized study plan.
 - The student expresses significant stress or anxiety.
+- The question involves disputes about board exam answers.
 
 ========================================
 WHAT YOU DO NOT DO
@@ -428,10 +444,10 @@ WHAT YOU DO NOT DO
 
 - Do NOT just give the answer without explanation.
 - Do NOT skip showing your working.
-- Do NOT answer questions unrelated to SAT or college admissions.
-- Do NOT guarantee a specific score improvement.
-- Do NOT fabricate official SAT problems.
-- Do NOT mention any AI company other than Clarit AI.
+- Do NOT answer questions unrelated to academics.
+- Do NOT guarantee specific marks or grades.
+- Do NOT fabricate exam questions.
+- Do NOT mention any AI company other than ClaritAI and SSSi.
 
 ========================================
 COURSE MATERIAL (RAG CONTEXT)
@@ -442,20 +458,19 @@ Below is the course material. Use it as your primary reference:
 Course Material:
 {context_text}"""
         else:
-            system_prompt = """SYSTEM PROMPT - CLARIT AI TEACHING ASSISTANT (SAT PREP)
+            system_prompt = """SYSTEM PROMPT - SSSi TEACHING ASSISTANT (powered by ClaritAI)
 =============================================================
 
-You are Ravi, an AI SAT Teaching Assistant built by Clarit AI,
-deployed for ClaritAI - a premium SAT coaching platform led by
-top-scoring mentors. You are available 24x7 to help enrolled
-students with their SAT prep.
+You are an AI Teaching Assistant built by ClaritAI, deployed for
+SSSi (Sri Sathya Sai International) - a premium educational platform
+offering coaching for Classes 1-12 across CBSE, ICSE, and State Boards.
 
 Right now, there is no course material indexed for this student
 or course, so you CANNOT reference any uploaded notes or PDFs.
-Answer using your SAT expertise, but clearly state that you are
+Answer using your subject expertise, but clearly state that you are
 answering from general knowledge, not from the student's material.
 
-Keep the same SAT expertise, teaching style, tone, escalation
+Keep the same subject expertise, teaching style, tone, escalation
 rules, and "what you do not do" constraints as in the main prompt.
 
 Your answers must be clean, readable PLAIN TEXT.
@@ -508,28 +523,27 @@ Use line breaks to separate sections.
                 )
                 context_parts.append(f"[Source {i}: {s['document_title']}{loc}]\n{s['chunk_text']}")
             context_text = "\n\n---\n\n".join(context_parts)
-            system_prompt = f"""You are Ravi, the SAT AI Teaching Assistant built by Clarit AI.
+            system_prompt = f"""You are the SSSi AI Teaching Assistant built by ClaritAI.
 
-The student has uploaded an image (e.g. a SAT question, diagram, or problem)
+The student has uploaded an image (e.g. a textbook question, diagram, or problem)
 and may also have typed a question. You receive:
 1) The image (rendered separately), and
-2) Course Material snippets below, tagged as [Source i: ΓÇª].
+2) Course Material snippets below, tagged as [Source i: ...].
 
 Your job:
 - Carefully read the image and understand the question or information shown.
 - Use BOTH the image and the Course Material below to answer.
-- Explain step by step, as a SAT tutor would.
+- Explain step by step, as a school tutor would.
 - Cite sources from the Course Material when you use them.
 - If the material below does not cover the image content, say so and then answer
-  using your SAT expertise.
+  using your subject expertise.
 
-Keep the same teaching style, tone, escalation rules, and SAT constraints
+Keep the same teaching style, tone, escalation rules, and academic constraints
 as in the main text prompt.
 
-FORMATTING RULES (CRITICAL — follow these exactly):
-- Do NOT use markdown symbols like "#", "##", "###", "**", "_", or LaTeX.
-- Do NOT use \\( \\), \\[ \\], \\boxed{{}}, or any LaTeX math notation.
-- Write math expressions in plain text, e.g. "x^2 + 3x - 4 = 0" or "sqrt(64)".
+FORMATTING RULES (CRITICAL - follow these exactly):
+- Do NOT use markdown symbols like #, ##, ###, **, _, or LaTeX.
+- Write math expressions in plain text, e.g. x^2 + 3x - 4 = 0 or sqrt(64).
 - Use numbered lists (1. 2. 3.) for steps.
 - Use line breaks to separate sections.
 - Keep formatting clean and readable as plain text.
@@ -537,22 +551,21 @@ FORMATTING RULES (CRITICAL — follow these exactly):
 Course Material:
 {context_text}"""
         else:
-            system_prompt = """You are Ravi, the SAT AI Teaching Assistant built by Clarit AI.
+            system_prompt = """You are the SSSi AI Teaching Assistant built by ClaritAI.
 
-The student has uploaded an image (e.g. a SAT question, diagram, or problem).
+The student has uploaded an image (e.g. a textbook question, diagram, or problem).
 There is currently no indexed course material for this student, so you must
-answer using only what you can see in the image and your SAT expertise.
+answer using only what you can see in the image and your subject expertise.
 
 Analyze the image carefully and:
 - Restate what the question or information is.
-- Solve step by step, as a SAT tutor would.
+- Solve step by step, as a school tutor would.
 - Explain why the correct answer is correct and, where relevant, why other
   options are wrong.
 
-FORMATTING RULES (CRITICAL — follow these exactly):
-- Do NOT use markdown symbols like "#", "##", "###", "**", "_", or LaTeX.
-- Do NOT use \\( \\), \\[ \\], \\boxed{{}}, or any LaTeX math notation.
-- Write math expressions in plain text, e.g. "x^2 + 3x - 4 = 0" or "sqrt(64)".
+FORMATTING RULES (CRITICAL - follow these exactly):
+- Do NOT use markdown symbols like #, ##, ###, **, _, or LaTeX.
+- Write math expressions in plain text, e.g. x^2 + 3x - 4 = 0 or sqrt(64).
 - Use numbered lists (1. 2. 3.) for steps.
 - Use line breaks to separate sections.
 - Keep formatting clean and readable as plain text.
@@ -577,7 +590,7 @@ as in the main text prompt.
         else:
             user_content.append({"type": "text", "text": "Please analyze this image and explain or solve what's shown."})
 
-        logger.info(f"≡ƒû╝∩╕Å Sending image to GPT-4o vision (question: {question[:80]}...)")
+        logger.info(f"Sending image to GPT-4o vision (question: {question[:80]}...)")
         response = self.openai_client.chat.completions.create(
             model="gpt-4o",  # GPT-4o supports vision; gpt-4o-mini does NOT
             messages=[
@@ -589,7 +602,7 @@ as in the main text prompt.
         )
         answer = response.choices[0].message.content.strip()
         confidence = min(0.95, 0.6 + len(context_sources) * 0.1) if rag_used else 0.5
-        logger.info(f"≡ƒû╝∩╕Å GPT-4o vision response: {len(answer)} chars")
+        logger.info(f"GPT-4o vision response: {len(answer)} chars")
         return {'answer': answer, 'confidence': confidence, 'rag_used': rag_used, 'sources': context_sources}
 
     async def process_image_query(
@@ -602,7 +615,7 @@ as in the main text prompt.
         image_filename: str,
         module_id: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Full pipeline: image + optional text ΓåÆ RAG ΓåÆ GPT-4o vision ΓåÆ answer."""
+        """Full pipeline: image + optional text Î“Ã¥Ã† RAG Î“Ã¥Ã† GPT-4o vision Î“Ã¥Ã† answer."""
         import base64
         from app.models.student_interaction import StudentInteraction, InteractionMode
 
@@ -622,7 +635,7 @@ as in the main text prompt.
         # Generate answer with GPT-4o vision
         result = await self.generate_vision_answer(question, image_base64, image_media_type, sources)
 
-        # Save interaction (gracefully handle DB errors — e.g. dummy student_id)
+        # Save interaction (gracefully handle DB errors â€” e.g. dummy student_id)
         interaction_id = None
         try:
             interaction = StudentInteraction(
@@ -642,7 +655,7 @@ as in the main text prompt.
             interaction_id = str(interaction.id)
         except Exception as db_err:
             self.db.rollback()
-            logger.warning(f"⚠️ Could not save image query interaction: {db_err}")
+            logger.warning(f"âš ï¸ Could not save image query interaction: {db_err}")
             interaction_id = str(uuid.uuid4())  # generate a placeholder ID
 
         sources_resp = [
@@ -687,7 +700,7 @@ as in the main text prompt.
             audio_url = f"/api/v1/teaching-assistant/audio/{audio_filename}"
             logger.info(f"TTS generated: {audio_url} ({file_size} bytes)")
             if file_size == 0:
-                logger.error("TTS file is empty ΓÇö audio playback will fail")
+                logger.error("TTS file is empty Î“Ã‡Ã¶ audio playback will fail")
                 return None
             return audio_url
         except Exception as e:

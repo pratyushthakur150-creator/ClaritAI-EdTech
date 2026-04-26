@@ -9,8 +9,8 @@ import { Send, BookOpen, Sparkles, Mic, StopCircle, Upload, FileText, Trash2, Im
 interface Message { role: 'user' | 'assistant'; content: string; audioUrl?: string | null }
 interface CourseDoc { document_id: string; title: string; document_type: string; status: string; chunk_count: number; file_size: number; upload_timestamp: string }
 
-const quickPrompts = ['Explain quadratic equations', 'Help with organic chemistry', 'Review my essay structure', 'Solve this physics problem']
-const subjects = ['Mathematics', 'Physics', 'Chemistry', 'English', 'Computer Science']
+const quickPrompts = ['Explain quadratic equations step by step', 'What is photosynthesis?', 'Help me with English grammar tenses', 'Explain Newton\'s laws of motion', 'What is the water cycle?', 'Help me solve this maths problem']
+const subjects = ['Mathematics', 'Science', 'English', 'Social Studies', 'Computer Science', 'Hindi', 'AI & ML']
 const docTypes = [
   { value: 'pdf', label: 'PDF', accept: '.pdf' },
   { value: 'pptx', label: 'PowerPoint', accept: '.pptx,.ppt' },
@@ -34,7 +34,7 @@ export default function TeachingAssistantPage() {
   const queryClient = useQueryClient()
   const [selectedSubject, setSelectedSubject] = useState('Mathematics')
   const [input, setInput] = useState('')
-  const [messages, setMessages] = useState<Message[]>([{ role: 'assistant', content: 'Hello! I\'m your ClaritAI Teaching Assistant. Select a subject and ask me anything — I\'m here to help you learn!' }])
+  const [messages, setMessages] = useState<Message[]>([{ role: 'assistant', content: 'Hello! 👋 I\'m your SSSi Teaching Assistant, powered by ClaritAI. Select a subject and ask me anything — I\'m here to help you learn and ace your exams! 📚' }])
   const abortControllerRef = useRef<AbortController | null>(null)
 
   // ── Upload modal state ──
@@ -190,13 +190,13 @@ export default function TeachingAssistantPage() {
       const res = await apiClient.post('/api/v1/teaching-assistant/ask', {
         question,
         subject: selectedSubject,
-        use_voice: true,
+        use_voice: false,
         history,
       }, { signal: controller.signal })
       return res.data
     },
     onSuccess: (data) => {
-      const audioUrl = data.audio_url ? `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8001'}${data.audio_url}` : null
+      const audioUrl = data.audio_url ? `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}${data.audio_url}` : null
       setMessages(prev => [...prev, { role: 'assistant', content: data.answer || 'I couldn\'t generate a response.', audioUrl }])
       setImageFiles([])
       setImagePreviews([])
@@ -220,7 +220,7 @@ export default function TeachingAssistantPage() {
     onSuccess: (data) => {
       const transcribedQ = data.question || data.transcribed_question || 'Voice question'
       setMessages(prev => [...prev, { role: 'user', content: `🎤 ${transcribedQ}` }])
-      const audioUrl = data.audio_url ? `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8001'}${data.audio_url}` : null
+      const audioUrl = data.audio_url ? `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}${data.audio_url}` : null
       setMessages(prev => [...prev, { role: 'assistant', content: data.answer || 'I couldn\'t generate a response.', audioUrl }])
     },
     onError: (error: any) => {
@@ -363,7 +363,7 @@ export default function TeachingAssistantPage() {
             </button>
             <div className="ml-auto flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#A855F7] to-[#D946EF] flex items-center justify-center shadow-lg shadow-purple-900/30"><Sparkles className="w-3.5 h-3.5 text-white" /></div>
-              <div><p className="text-xs font-semibold text-white">ClaritAI Assistant</p><p className="text-[10px] text-gray-500">{selectedSubject} • Online</p></div>
+              <div><p className="text-xs font-semibold text-white">SSSi Teaching Assistant</p><p className="text-[10px] text-gray-500">{selectedSubject} • Online</p></div>
             </div>
           </div>
 

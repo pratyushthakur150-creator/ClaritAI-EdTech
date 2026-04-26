@@ -205,6 +205,15 @@ class ChatbotService:
                 ).first()
             
             if existing_lead:
+                # If the new data has a better name, update it
+                is_fallback = "Phone Lead" in existing_lead.name or "Unknown" in existing_lead.name or "Lead" in existing_lead.name
+                new_name = lead_data.get('name')
+                
+                if new_name and is_fallback and "Lead" not in new_name:
+                    existing_lead.name = new_name
+                    self.db.commit()
+                    logger.info(f"Updated existing lead {existing_lead.id} with new name: {new_name}")
+                
                 return existing_lead.id
             
             # Find system user (or create one) for created_by
@@ -240,6 +249,19 @@ class ChatbotService:
                 except Exception as e:
                     logger.warning(f"Could not find chatbot session {session_id}: {e}")
             
+            # ── Sanitize subjects using a known whitelist ──────────────
+            VALID_SUBJECTS = {
+                "Maths", "Physics", "Chemistry", "Biology", "English",
+                "Hindi", "Social Studies", "Social Science", "Computer Science",
+                "Accountancy", "Economics", "Business Studies", "Coding",
+                "Data Science/AI", "Digital Marketing", "AI & ML",
+                "Machine Learning", "All Subjects",
+            }
+            raw_subjects = lead_data.get("subjects") or []
+            if isinstance(raw_subjects, str):
+                raw_subjects = [s.strip() for s in raw_subjects.split(",")]
+            sanitized_subjects = [s for s in raw_subjects if s in VALID_SUBJECTS]
+
             # Build intent and interested_courses from course/exam_target
             course_or_exam = lead_data.get('course') or lead_data.get('exam_target') or 'Website Chatbot'
             intent_parts = [f"Exam/interest: {course_or_exam}"]
@@ -248,7 +270,13 @@ class ChatbotService:
             if lead_data.get('city'):
                 intent_parts.append(f"City: {lead_data['city']}")
             intent_str = "; ".join(intent_parts)
-            interested_courses = [course_or_exam] if course_or_exam and course_or_exam != 'Website Chatbot' else ['Chatbot inquiry']
+            # Prefer sanitized subjects as interested_courses when available
+            if sanitized_subjects:
+                interested_courses = list(sanitized_subjects)
+            elif course_or_exam and course_or_exam != 'Website Chatbot':
+                interested_courses = [course_or_exam]
+            else:
+                interested_courses = ['Chatbot inquiry']
 
             # Chatbot context for Aria/widget: session_id, exam_target, preparation_stage, city, source
             chatbot_ctx = {
@@ -261,11 +289,20 @@ class ChatbotService:
                 chatbot_ctx["preparation_stage"] = lead_data["preparation_stage"]
             if lead_data.get("city"):
                 chatbot_ctx["city"] = lead_data["city"]
+            # Sia v2.0 enrichment fields
+            for _k in ("grade", "board", "goal", "user_type",
+                       "preferred_time", "language", "lead_temperature"):
+                if lead_data.get(_k):
+                    chatbot_ctx[_k] = lead_data[_k]
+            # Store sanitized subjects (not raw) in chatbot context
+            if sanitized_subjects:
+                chatbot_ctx["subjects"] = sanitized_subjects
 
             # Lead score from exam_target + preparation_stage (production architecture)
             engagement_score, conversion_probability = self._compute_lead_score(
                 lead_data.get("exam_target"),
                 lead_data.get("preparation_stage"),
+                lead_data.get("lead_temperature"),
             )
 
             # Create new lead
@@ -432,6 +469,26 @@ class ChatbotService:
                 lead_data['name'] = name_match.group(1).strip().title()
                 break
 
+        # Context-aware: if the last bot message asked for a name and the user
+        # replied with just a plain name (1-3 words, all alpha), capture it.
+        if not lead_data['name'] and conversation:
+            # Get last bot message from conversation
+            bot_msgs = [m for m in conversation if m.get('sender') == 'bot']
+            if bot_msgs:
+                last_bot = bot_msgs[-1].get('message', '')
+                name_ask_pattern = re.compile(
+                    r'(what.{0,5}(is|\'s) your (good )?name|share your name|'
+                    r'may i (have|know|get) your name|could you (tell|share|give).{0,20}name|'
+                    r'your (good )?name|tell me your name|name please|'
+                    r'can i get your name|let me know your name|know your name)',
+                    re.IGNORECASE
+                )
+                if name_ask_pattern.search(last_bot):
+                    # Check if the user's current message looks like a name (1-3 words, all alpha)
+                    clean_msg = message.strip()
+                    if re.match(r'^[A-Za-z]{2,20}(\s+[A-Za-z]{2,20}){0,2}$', clean_msg):
+                        lead_data['name'] = clean_msg.title()
+
         # Fallback: if user typed "name email ..." in one line (common in widget),
         # infer the name from the token(s) immediately before the email.
         if not lead_data['name'] and lead_data['email']:
@@ -454,7 +511,7 @@ class ChatbotService:
         # Final fallback: derive a readable name from email local-part
         if not lead_data['name'] and lead_data['email']:
             local_part = lead_data['email'].split('@', 1)[0]
-            local_part = re.sub(r'[_\\-.]+', ' ', local_part).strip()
+            local_part = re.sub(r'[_.+-]+', ' ', local_part).strip()
             lead_data['name'] = (local_part[:1].upper() + local_part[1:]) if local_part else 'Website Lead'
         
         # If no name but phone is available, set a fallback name
@@ -462,7 +519,7 @@ class ChatbotService:
             lead_data['name'] = f'Phone Lead ({lead_data["phone"][-4:]})'
         
         # Extract course interest — only from USER messages, not bot listings
-        # Sorted longest-first so "full stack" matches before "stack", etc.
+        # SSSi (Sia v2.0) + generic course keywords, sorted longest-first
         course_keywords = [
             ('full stack', 'Full Stack Web Dev (MERN)'),
             ('mern', 'Full Stack Web Dev (MERN)'),
@@ -473,7 +530,46 @@ class ChatbotService:
             ('machine learning', 'Data Science & AI'),
             ('python', 'Python Programming'),
             ('ml', 'Data Science & AI'),
-            ('ai', 'Data Science & AI'),
+            # SSSi/Sia competitive exams
+            ('iit jee', 'IIT JEE'),
+            ('jee main', 'JEE Main'),
+            ('jee advanced', 'JEE Advanced'),
+            ('jee', 'IIT JEE'),
+            ('neet', 'NEET'),
+            ('upsc', 'UPSC'),
+            ('ssc', 'SSC'),
+            ('banking', 'Banking Exams'),
+            ('ibps', 'Banking (IBPS)'),
+            ('clat', 'CLAT'),
+            ('nda', 'NDA'),
+            ('cat', 'CAT/MBA'),
+            ('gmat', 'GMAT'),
+            # SSSi K-12 subjects
+            ('physics', 'Physics'),
+            ('chemistry', 'Chemistry'),
+            ('biology', 'Biology'),
+            ('maths', 'Maths'),
+            ('math', 'Maths'),
+            ('science', 'Science'),
+            ('english', 'English'),
+            ('hindi', 'Hindi'),
+            ('accountancy', 'Accountancy'),
+            ('economics', 'Economics'),
+            ('computer science', 'Computer Science'),
+            # SSSi Olympiads
+            ('olympiad', 'Olympiad Preparation'),
+            ('imo', 'Maths Olympiad (IMO)'),
+            ('nso', 'Science Olympiad (NSO)'),
+            # SSSi Skill/Language
+            ('coding', 'Coding'),
+            ('java', 'Java Programming'),
+            ('french', 'French Language'),
+            ('german', 'German Language'),
+            ('spanish', 'Spanish Language'),
+            ('spoken english', 'Spoken English'),
+            ('artificial intelligence', 'AI & Machine Learning'),
+            ('machine learning', 'AI & Machine Learning'),
+            ('cybersecurity', 'Cybersecurity'),
         ]
 
         # Build text from USER messages only (exclude bot replies)
@@ -485,7 +581,12 @@ class ChatbotService:
         # Check current message first, then user history
         for source in [message.lower(), user_msgs.lower()]:
             for keyword, course_name in course_keywords:
-                if keyword in source:
+                # Use word boundary check for short keywords (<=3 chars)
+                if len(keyword) <= 3:
+                    if re.search(r'\b' + re.escape(keyword) + r'\b', source):
+                        lead_data['course'] = course_name
+                        break
+                elif keyword in source:
                     lead_data['course'] = course_name
                     break
             if lead_data['course']:
@@ -497,10 +598,21 @@ class ChatbotService:
         self,
         exam_target: Optional[str],
         preparation_stage: Optional[str],
+        lead_temperature: Optional[str] = None,
     ) -> tuple:
-        """Set lead_score (engagement_score, conversion_probability) from exam + stage. 0-100."""
+        """Set lead_score (engagement_score, conversion_probability) from exam + stage + Sia temperature. 0-100."""
         score = 50  # base
-        if exam_target and str(exam_target).strip().upper() in ("UPSC", "NEET", "JEE", "CAT", "GMAT"):
+
+        # Sia v2.0 lead temperature boost
+        temp = (lead_temperature or "").upper()
+        if temp == "HOT":
+            score += 30
+        elif temp == "WARM":
+            score += 15
+        elif temp == "COLD":
+            score += 0
+
+        if exam_target and str(exam_target).strip().upper() in ("UPSC", "NEET", "JEE", "CAT", "GMAT", "IIT-JEE", "SSC", "BANKING", "NDA", "CLAT"):
             score += 15
         stage = (preparation_stage or "").strip().lower()
         if "appearing this year" in stage or "dropper" in stage:
@@ -520,6 +632,7 @@ class ChatbotService:
         conversation_history: Optional[List[Dict[str, Any]]] = None,
         context: Optional[List[Dict[str, Any]]] = None,
         tenant_id: Optional[UUID] = None,
+        session_state: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         Generate AI-powered response for a chatbot message.
@@ -655,10 +768,12 @@ class ChatbotService:
                     system_prompt = build_sssi_system_prompt(
                         message_count=message_count,
                         rag_context=rag_context,
+                        session_state=session_state or {},
                     )
                     logger.info(
-                        f"[SSSi RAG] chunks={len(retrieved_chunks)}, "
-                        f"context_len={len(rag_context)}, msg_count={message_count}"
+                        f"[SSSi/Sia RAG] chunks={len(retrieved_chunks)}, "
+                        f"context_len={len(rag_context)}, msg_count={message_count}, "
+                        f"session_state_keys={list((session_state or {}).keys())}"
                     )
                 else:
                     # Detect if user is asking about a different exam

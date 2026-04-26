@@ -486,3 +486,42 @@ async def convert_lead(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to convert lead"
         )
+
+
+@router.delete("/{lead_id}", status_code=status.HTTP_200_OK)
+async def delete_lead(
+    lead_id: UUID,
+    db: Session = Depends(get_db_session),
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Delete a single lead by ID."""
+    from app.models.lead import Lead
+    from sqlalchemy import text
+    tenant_id = get_tenant_id(current_user)
+    lead = db.query(Lead).filter(Lead.id == lead_id, Lead.tenant_id == tenant_id).first()
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    # Clear FK references before deleting
+    lead.chatbot_session_id = None
+    db.flush()
+    db.execute(text("DELETE FROM call_logs WHERE lead_id = :lid"), {"lid": str(lead_id)})
+    db.execute(text("DELETE FROM enrollments WHERE lead_id = :lid"), {"lid": str(lead_id)})
+    db.delete(lead)
+    db.commit()
+    logger.info(f"Lead {lead_id} deleted by user {get_user_id(current_user)}")
+    return {"message": "Lead deleted", "id": str(lead_id)}
+
+
+@router.delete("/", status_code=status.HTTP_200_OK)
+async def delete_all_leads(
+    db: Session = Depends(get_db_session),
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Delete ALL leads for the current tenant."""
+    from app.models.lead import Lead
+    tenant_id = get_tenant_id(current_user)
+    count = db.query(Lead).filter(Lead.tenant_id == tenant_id).delete()
+    db.commit()
+    logger.info(f"Deleted {count} leads for tenant {tenant_id}")
+    return {"message": f"Deleted {count} leads", "count": count}
+
