@@ -332,6 +332,7 @@ export default function CRMPage() {
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
+                                                    setSelectedLead(null);
                                                     setActionMenuLeadId(actionMenuLeadId === lead.id ? null : lead.id);
                                                 }}
                                                 style={{
@@ -352,7 +353,7 @@ export default function CRMPage() {
                                                     <div style={{
                                                         position: 'absolute', right: 0, top: '100%', marginTop: 4,
                                                         width: 200, background: '#1A1930', border: '1px solid rgba(168,85,247,0.2)',
-                                                        borderRadius: 12, padding: '6px 0', zIndex: 50,
+                                                        borderRadius: 12, padding: '6px 0', zIndex: 9999,
                                                         boxShadow: '0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
                                                         animation: 'fadeIn 0.15s ease-out',
                                                     }}>
