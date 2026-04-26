@@ -351,10 +351,10 @@ export default function CRMPage() {
                                                     />
                                                     {/* Dropdown Menu */}
                                                     <div style={{
-                                                        position: 'absolute', right: 0, top: '100%', marginTop: 4,
+                                                        position: 'absolute', right: 0, bottom: '100%', marginBottom: 4,
                                                         width: 200, background: '#1A1930', border: '1px solid rgba(168,85,247,0.2)',
                                                         borderRadius: 12, padding: '6px 0', zIndex: 9999,
-                                                        boxShadow: '0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
+                                                        boxShadow: '0 -12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
                                                         animation: 'fadeIn 0.15s ease-out',
                                                     }}>
                                                         {[
