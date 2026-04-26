@@ -460,7 +460,8 @@ function LeadDetailDrawer({ lead, onClose, formatDate }: { lead: Lead; onClose: 
     const subjects = ctx.subjects
     const subjectList = Array.isArray(subjects) ? subjects : (subjects ? [subjects] : [])
 
-    const sections = [
+    type StatItem = { icon: any; label: string; value: string; highlight?: boolean; badgeColor?: string }
+    const sections: { title: string; items: StatItem[] }[] = [
         {
             title: '📞 Contact Information',
             items: [
