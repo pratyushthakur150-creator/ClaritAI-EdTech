@@ -1,8 +1,7 @@
 [build]
   # Build command for Next.js
   command = "npm run build"
-  # Publish directory — Netlify Next.js plugin handles this automatically
-  publish = ".next"
+  # @netlify/plugin-nextjs handles the publish directory automatically
 
 # Essential Next.js plugin for SSR/ISR/API routes on Netlify
 [[plugins]]
@@ -10,7 +9,7 @@
 
 # ── API Proxy: Route /api/v1/* to Railway backend ────────────────────────────
 # These run at the Netlify CDN edge — no CORS, no serverless cold starts.
-# The browser calls sssi-crm.netlify.app/api/v1/auth/login
+# Browser calls sssi-crm.netlify.app/api/v1/auth/login
 # Netlify proxies it to claritai-edtech-production.up.railway.app/api/v1/auth/login
 
 [[redirects]]
@@ -18,9 +17,6 @@
   to = "https://claritai-edtech-production.up.railway.app/api/v1/:splat"
   status = 200
   force = true
-  # Forward all headers (including Authorization)
-  [redirects.headers]
-    X-Forwarded-Host = "sssi-crm.netlify.app"
 
 # ── Security & Performance Headers ───────────────────────────────────────────
 [[headers]]
