@@ -198,6 +198,85 @@
   let visitorId = getVisitorId();
   let isOpen = false, firstOpen = true, sending = false;
 
+  // ── Session State (tracks what user said — authoritative, prevents hallucination)
+  let sessionState = {
+    grade: null,        // "Class 1-5", "Class 6-8", etc.
+    board: null,        // "CBSE", "ICSE", etc.
+    subjects: null,     // "Physics", "Maths", etc.
+    goal: null,         // "Score better in school exams", etc.
+    user_type: null,    // "student", "parent", "professional"
+    name: null,
+    phone: null,
+    email: null,
+    preferred_time: null,
+    language: null,
+    lead_captured: false,
+  };
+
+  // ── Detect & update session state from user messages ──────────────────────
+  function updateSessionState(text) {
+    const t = text.trim();
+    const tl = t.toLowerCase();
+
+    // Grade detection
+    const gradeMatch = tl.match(/class\s*([\d]+-[\d]+|\d+)/i);
+    if (gradeMatch || /class 1|class 2|class 3|class 4|class 5/i.test(tl)) {
+      if (/class\s*1[\s-–]+5|class\s*[1-5](?!\d)/i.test(tl)) sessionState.grade = "Class 1-5";
+      else if (/class\s*6[\s-–]+8|class\s*[6-8](?!\d)/i.test(tl)) sessionState.grade = "Class 6-8";
+      else if (/class\s*9[\s-–]+10|class\s*(?:9|10)(?!\d)/i.test(tl)) sessionState.grade = "Class 9-10";
+      else if (/class\s*11[\s-–]+12|class\s*(?:11|12)(?!\d)/i.test(tl)) sessionState.grade = "Class 11-12";
+    }
+    if (/college|grad|graduation/i.test(tl)) sessionState.grade = "College/Grad";
+    if (/working professional|professional/i.test(tl)) sessionState.grade = "Working Professional";
+
+    // Board detection
+    const boards = ["CBSE", "ICSE", "IB", "IGCSE", "Cambridge", "State Board"];
+    boards.forEach(b => { if (tl.includes(b.toLowerCase())) sessionState.board = b; });
+
+    // Subject detection (exact match from button clicks)
+    const subjects = ["Physics", "Chemistry", "Maths", "Biology", "English", "Hindi",
+      "Computer", "Social Science", "Accountancy", "Economics", "Business Studies",
+      "Science", "Computer Science", "Social Studies", "All Subjects",
+      "Coding/Tech", "Data Science/AI", "Digital Marketing", "Business/Management"];
+    subjects.forEach(s => {
+      if (tl === s.toLowerCase() || tl === s.toLowerCase().replace(/\//g, "/")) {
+        sessionState.subjects = s;
+      }
+    });
+
+    // Goal detection
+    const goals = ["Score better in school exams", "IIT-JEE preparation", "NEET preparation",
+      "Olympiad prep", "General improvement", "Skill building"];
+    goals.forEach(g => { if (tl === g.toLowerCase()) sessionState.goal = g; });
+
+    // Phone detection (Indian mobile: 10 digits starting with 6-9)
+    const phoneMatch = t.match(/(?:\+?91[\s-]?)?([6-9]\d{9})/)
+      || t.match(/(\d{10,})/);  // fallback: any 10+ digit number
+    if (phoneMatch) sessionState.phone = phoneMatch[0].replace(/[\s-]/g, "");
+
+    // Email detection
+    const emailMatch = t.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+    if (emailMatch) sessionState.email = emailMatch[0];
+
+    // Name detection: if the previous bot message asked for name
+    // and user replies with 1-3 words (all alphabetic)
+    if (!sessionState.name && /^[A-Za-z]{2,20}(\s+[A-Za-z]{2,20}){0,2}$/.test(t)) {
+      // Check if last bot message was a name prompt
+      const lastBotTexts = msgs.querySelectorAll("._sssi-bot-text");
+      if (lastBotTexts.length > 0) {
+        const lastBot = lastBotTexts[lastBotTexts.length - 1].textContent || "";
+        if (/name|what.*call you|who am i speaking/i.test(lastBot)) {
+          sessionState.name = t.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ");
+        }
+      }
+    }
+
+    // Preferred time detection
+    if (/morning|8\s*am|9\s*am|10\s*am|11\s*am/i.test(tl)) sessionState.preferred_time = "Morning 8AM-12PM";
+    if (/afternoon|12\s*pm|1\s*pm|2\s*pm|3\s*pm/i.test(tl)) sessionState.preferred_time = "Afternoon 12PM-4PM";
+    if (/evening|4\s*pm|5\s*pm|6\s*pm|7\s*pm|8\s*pm/i.test(tl)) sessionState.preferred_time = "Evening 4PM-8PM";
+  }
+
   // ── DOM refs ───────────────────────────────────────────────────────────────
   const fab     = document.getElementById("_sssi-fab");
   const win     = document.getElementById("_sssi-win");
@@ -230,6 +309,8 @@
     msgs.innerHTML = "";
     visitorId = "vid_" + Math.random().toString(36).substr(2, 12) + "_" + Date.now();
     localStorage.setItem("_sssi_vid", visitorId);
+    // Reset session state on new conversation
+    sessionState = { grade:null, board:null, subjects:null, goal:null, user_type:null, name:null, phone:null, email:null, preferred_time:null, language:null, lead_captured:false };
     showGreeting();
   });
 
@@ -245,6 +326,10 @@
 
   // ── Call AI Backend ────────────────────────────────────────────────────────
   async function callAI(userMessage) {
+    // Build clean session_state (only non-null values)
+    const cleanState = {};
+    Object.entries(sessionState).forEach(([k, v]) => { if (v != null) cleanState[k] = v; });
+
     const response = await fetch(CONFIG.apiBaseUrl + "/api/v1/chatbot/message", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -252,6 +337,7 @@
         tenant_id: CONFIG.tenantId,
         visitor_id: visitorId,
         message: userMessage,
+        session_state: cleanState,
       }),
     });
 
@@ -266,6 +352,8 @@
   // ── Send message ───────────────────────────────────────────────────────────
   async function send(text) {
     if (!text || !text.trim() || sending) return;
+    // Track user data from this message BEFORE sending to backend
+    updateSessionState(text.trim());
     sending = true;
     input.value = "";
     input.disabled = true;

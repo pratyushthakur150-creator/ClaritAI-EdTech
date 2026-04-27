@@ -1,17 +1,19 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
-// Create axios instance with default config
-// In production (Vercel), use /api/proxy to route through server-side proxy (avoids CORS)
-// Locally, call the backend directly via NEXT_PUBLIC_API_URL
-const isServer = typeof window === 'undefined';
-const isProd = process.env.NODE_ENV === 'production';
-
-// In production browser, use the proxy route; server-side or local dev hits backend directly
+// ── API Client Configuration ────────────────────────────────────────────────
+// Production (Netlify/Vercel): baseURL = '' (empty)
+//   → Browser calls /api/v1/* on the SAME domain
+//   → Netlify CDN rewrites proxy them to the Railway backend
+//   → No CORS issues since browser never talks cross-origin
+//
+// Local development: baseURL = NEXT_PUBLIC_API_URL (e.g. http://127.0.0.1:8000)
+//   → Browser calls the FastAPI backend directly
 const getBaseURL = () => {
-  if (isProd && !isServer) {
-    // Browser in production: proxy through Vercel serverless to avoid CORS
-    return '';  // relative URL — calls go to /api/proxy/*
+  // In browser during production, use empty base (same-origin proxy)
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
+    return '';
   }
+  // Server-side rendering or local dev — call backend directly
   return process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 };
 
