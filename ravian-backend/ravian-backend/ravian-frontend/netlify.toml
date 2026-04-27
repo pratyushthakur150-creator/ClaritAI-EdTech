@@ -17,6 +17,20 @@
   status = 200
   force = true
 
+# Proxy Railway static files (chatbot JS, test pages) through Netlify
+[[redirects]]
+  from = "/static/*"
+  to = "https://claritai-edtech-production.up.railway.app/static/:splat"
+  status = 200
+  force = true
+
+# Proxy health check
+[[redirects]]
+  from = "/health"
+  to = "https://claritai-edtech-production.up.railway.app/health"
+  status = 200
+  force = true
+
 # ── Security & Performance Headers ───────────────────────────────────────────
 [[headers]]
   for = "/*"
