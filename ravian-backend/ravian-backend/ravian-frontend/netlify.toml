@@ -1,7 +1,6 @@
 [build]
-  # Build command for Next.js
   command = "npm run build"
-  # @netlify/plugin-nextjs handles the publish directory automatically
+  publish = ".next"
 
 # Essential Next.js plugin for SSR/ISR/API routes on Netlify
 [[plugins]]
