@@ -1,9 +1,22 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 // Create axios instance with default config
-// Set NEXT_PUBLIC_API_URL in .env.local (e.g. http://127.0.0.1:8001) if your backend runs on a different port
+// In production (Vercel), use /api/proxy to route through server-side proxy (avoids CORS)
+// Locally, call the backend directly via NEXT_PUBLIC_API_URL
+const isServer = typeof window === 'undefined';
+const isProd = process.env.NODE_ENV === 'production';
+
+// In production browser, use the proxy route; server-side or local dev hits backend directly
+const getBaseURL = () => {
+  if (isProd && !isServer) {
+    // Browser in production: proxy through Vercel serverless to avoid CORS
+    return '';  // relative URL — calls go to /api/proxy/*
+  }
+  return process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+};
+
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8001',
+  baseURL: getBaseURL(),
   timeout: 30000, // 30 seconds timeout
   headers: {
     'Content-Type': 'application/json',
