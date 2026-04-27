@@ -8,7 +8,7 @@
 
   const CONFIG = {
     tenantId: "8a19c99f-3ebe-4c47-b483-b8796d122716",
-    apiBaseUrl: "https://claritai-edtech-production.up.railway.app",
+    apiBaseUrl: "https://sssi-crm.netlify.app",
     botName: "SSSI BOT",
     greeting:
       "Welcome to SSSi Online Tutoring — India's No.1 personalized online learning platform since 2015.\n\nI'm your AI assistant. I can help you with:\n\n• **Online Tuition:** Class 1 to 12 (CBSE, ICSE, State Boards)\n• **Competitive Exams:** IIT JEE, NEET, KVPY, NTSE, GATE\n• **Foreign Languages:** French, German, Spanish, Japanese & more\n• **Beyond Academics:** Abacus, Vedic Maths, Robotics, Music, AI\n• **Study Abroad Prep:** IELTS, PTE, TOEFL, GMAT, GRE\n\nHow can I help you today?",
