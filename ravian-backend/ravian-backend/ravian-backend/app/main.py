@@ -160,12 +160,17 @@ app.add_middleware(
 logger.info("⚠ Rate limiting middleware disabled (BaseHTTPMiddleware incompatible with sync endpoints)")
 
 # Add CORS middleware LAST in code so it runs FIRST and adds headers even on 401/403.
-# CORS origins: use CORS_ORIGINS env var (comma-separated) or fallback to localhost
+# CORS origins: use CORS_ORIGINS env var (comma-separated) or fallback to defaults
 _cors_raw = getattr(settings, 'cors_origins', None) or ""
 if isinstance(_cors_raw, list):
     _cors_origins = _cors_raw
 else:
-    _cors_origins = [o.strip() for o in _cors_raw.split(",") if o.strip()] if _cors_raw else ["http://localhost:3000", "http://127.0.0.1:3000"]
+    _cors_origins = [o.strip() for o in _cors_raw.split(",") if o.strip()] if _cors_raw else [
+        "http://localhost:3000", "http://127.0.0.1:3000",
+        "https://sssi-crm.vercel.app",
+        "https://claritaiedtech.vercel.app",
+        "https://sssi.in", "https://www.sssi.in",
+    ]
 
 # When wildcard "*" is used, FastAPI requires allow_credentials=False
 _cors_allow_all = "*" in _cors_origins
@@ -175,6 +180,7 @@ if _cors_allow_all:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",  # Allow all Vercel preview deployments
     allow_credentials=not _cors_allow_all,  # Must be False when origins=["*"]
     allow_methods=["*"],
     allow_headers=["*"],

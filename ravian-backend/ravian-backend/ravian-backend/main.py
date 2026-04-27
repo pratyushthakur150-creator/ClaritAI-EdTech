@@ -171,8 +171,13 @@ else:
 # even on 401/403 responses returned by auth middleware.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8080"],
-    allow_origin_regex=".*", # Allow widgets from any site (SSSi, etc.)
+    allow_origins=[
+        "http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8080",
+        "https://sssi-crm.vercel.app",
+        "https://claritaiedtech.vercel.app",
+        "https://sssi.in", "https://www.sssi.in",
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",  # Allow all Vercel preview deployments
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
